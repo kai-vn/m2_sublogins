@@ -5,7 +5,7 @@ $redirect = $storeManager->getStore()->getBaseUrl();
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $customerSession = $objectManager->create('Magento\Customer\Model\Session');
 $sublog = $this->helper('SITC\Sublogins\Helper\Data')->getIdSub();
-$issublog = $this->helper('SITC\Sublogins\Helper\Data')->IsSublogin();
+$issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
 
 ?>
 <?php if(!$issublog ) : ?>
@@ -24,6 +24,7 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->IsSublogin();
     }
 </script>
 <?php  $_gridrecords = $block->getCollection(); ?>
+<?php if ($_gridrecords && count($_gridrecords)) : ?>
 <div class="table-wrapper orders-history">
     <table class="data table table-order-items history" id="my-orders-table">
         <caption class="table-caption"><?php echo __('Grid Record') ?></caption>
@@ -40,6 +41,7 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->IsSublogin();
             <th scope="col" class="col ">&nbsp;</th>
         </tr>
         </thead>
+
         <tbody>
 
         <?php
@@ -125,7 +127,13 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->IsSublogin();
 
         </tbody>
     </table>
-</div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); // for display pager block which we create in block file.   ?></div>
+    <?php endif ?>
+    <?php else: ?>
+        <div class="message info empty"><span><?php echo __('grid records not available.'); ?></span></div>
+    <?php endif ?>
 
+</div>
 
 

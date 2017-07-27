@@ -31,19 +31,19 @@ class SubAc extends \Magento\Framework\View\Element\Template
 
         }elseif($this->helper->getIdSub()) {
             $this->addChild(
-                'list-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'List Sub Account',
-                    'path' => 'sublogins/account/listsubaccount'
-                ]
-            );
-            $this->addChild(
                 'create-sub-account',
                 'Magento\Framework\View\Element\Html\Link\Current',
                 [
                     'label' => 'Create Sub Account',
                     'path' => 'sublogins/create/account'
+                ]
+            );
+            $this->addChild(
+                'list-sub-account',
+                'Magento\Framework\View\Element\Html\Link\Current',
+                [
+                    'label' => 'List Sub Account',
+                    'path' => 'sublogins/account/listsubaccount'
                 ]
             );
             $this->addChild(

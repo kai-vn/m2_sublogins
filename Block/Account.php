@@ -1,10 +1,6 @@
 <?php
-
-
 namespace SITC\Sublogins\Block;
-
 use Magento\Customer\Model\AccountManagement;
-
 class Account extends \Magento\Directory\Block\Data
 {
     protected $_template = 'account.phtml';
@@ -28,7 +24,6 @@ class Account extends \Magento\Directory\Block\Data
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \SITC\Sublogins\Helper\Data $helper,
-
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Directory\Helper\Data $directoryHelper,
