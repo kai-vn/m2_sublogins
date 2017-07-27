@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="sitc" translate="label" sortOrder="9000">
+            <label>SITC</label>
+        </tab>
+        <section id="sublogins" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <!-- <class>separator-top</class> -->
+            <label>Sub-Accounts</label>
+            <tab>sitc</tab>
+            <resource>SITC_Sublogins::config</resource>
+            <group id="general" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="can_view_order" sortOrder="1" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sub-Account can view order</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="can_edit_sub" sortOrder="1" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Admin can Edit/Add employees in grid form directly</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="email" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Email Notification</label>
+                <field id="email_sender" sortOrder="1" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                </field>
+                <field id="email_expired" sortOrder="10" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email notification for customer when sub account expired</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="email_new_sub" sortOrder="3" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New Sub-Account Email Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="email_new_password" sortOrder="4" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New Password Sub-Account</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+
+            </group>
+
+        </section>
+    </system>
+</config>

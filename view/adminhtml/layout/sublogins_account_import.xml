@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <body>
+        <referenceContainer name="content">
+            <!--<block class="SITC\Sublogins\Block\Adminhtml\Account\Import\Form" name="sublogins_account_import"/>-->
+            <block class="SITC\Sublogins\Block\Adminhtml\Account\Import\Edit" name="sublogins.import.form.container"/>
+        </referenceContainer>
+    </body>
+</page>

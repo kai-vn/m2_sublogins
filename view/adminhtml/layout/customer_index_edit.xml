@@ -1,0 +1,8 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left"
+      xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="customer_form">
+            <block class="SITC\Sublogins\Block\Adminhtml\Customer\Edit\Tab\Sublogins" name="customer_edit_tab_sublogins" />
+        </referenceBlock>
+    </body>
+</page>

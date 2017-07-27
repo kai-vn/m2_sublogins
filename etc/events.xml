@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="adminhtml_customer_prepare_save">
+        <observer name="save_sublogins_data" instance="SITC\Sublogins\Observer\Adminhtml\Customer\PrepareSave" />
+    </event>
+    <event name="customer_customer_authenticated">
+        <observer name="check_sub_account_expired" instance="SITC\Sublogins\Observer\Customer\BeforeLogin" />
+    </event>
+
+</config>

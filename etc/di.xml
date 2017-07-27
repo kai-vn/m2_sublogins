@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Customer\Ui\Component\Listing\Column\Actions">
+        <plugin name="add_action_create_sublogins_customer_grid"
+                type="SITC\Sublogins\Plugin\Customer\Ui\Component\Listing\Column\Actions"/>
+    </type>
+    <type name="Magento\Customer\Model\Customer\DataProvider">
+        <plugin name="parent_id_sublogins"
+                type="SITC\Sublogins\Plugin\Customer\Model\Customer\DataProvider"/>
+    </type>
+</config>

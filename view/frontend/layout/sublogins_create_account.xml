@@ -1,0 +1,24 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <body>
+
+        <referenceContainer name="content">
+            <block class="SITC\Sublogins\Block\Account" name="account_index" template="SITC_Sublogins::account.phtml">
+                <!--<action method="setShowAddressFields">-->
+                    <!--<argument name="show.address.fields" xsi:type="boolean">true</argument>-->
+                <!--</action>-->
+            <container name="form.additional.info" as="form_additional_info"/>
+            <container name="customer.form.register.fields.before" as="form_fields_before" label="Form Fields Before" htmlTag="div" htmlClass="customer-form-before"/>
+        </block>
+        <block class="Magento\Cookie\Block\RequireCookie" name="require-cookie" template="Magento_Cookie::require_cookie.phtml">
+            <arguments>
+                <argument name="triggers" xsi:type="array">
+                    <item name="registerSubmitButton" xsi:type="string">.action.submit</item>
+                </argument>
+            </arguments>
+        </block>
+        </referenceContainer>
+
+    </body>
+</page>

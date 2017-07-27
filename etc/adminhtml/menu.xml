@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SITC_Sublogins::sublogins" title="Sublogins" module="SITC_Sublogins" sortOrder="10" resource="SITC_Sublogins::sublogins" />
+        <add id="SITC_Sublogins::account" title="All Sub-Accounts" module="SITC_Sublogins" sortOrder="10" parent="SITC_Sublogins::sublogins" action="sublogins/account" resource="SITC_Sublogins::sublogins" />
+        <add id="SITC_Sublogins::import" title="Import Sub-Accounts" module="SITC_Sublogins" sortOrder="10" parent="SITC_Sublogins::sublogins" action="sublogins/account/import" resource="SITC_Sublogins::sublogins" />
+        <add id="SITC_Sublogins::settings" title="Settings" module="SITC_Sublogins" sortOrder="10"
+             parent="SITC_Sublogins::sublogins" action="adminhtml/system_config/edit/section/sublogins"
+             resource="SITC_Sublogins::settings"/>
+    </menu>
+</config>
