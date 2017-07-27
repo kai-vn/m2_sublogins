@@ -2,12 +2,8 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
     <body>
-
         <referenceContainer name="content">
             <block class="SITC\Sublogins\Block\Account" name="account_index" template="SITC_Sublogins::account.phtml">
-                <!--<action method="setShowAddressFields">-->
-                    <!--<argument name="show.address.fields" xsi:type="boolean">true</argument>-->
-                <!--</action>-->
             <container name="form.additional.info" as="form_additional_info"/>
             <container name="customer.form.register.fields.before" as="form_fields_before" label="Form Fields Before" htmlTag="div" htmlClass="customer-form-before"/>
         </block>

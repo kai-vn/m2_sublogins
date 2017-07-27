@@ -3,25 +3,7 @@
     <update handle="customer_account"/>
     <body>
         <referenceBlock name="customer_account_navigation">
-            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-create">
-                <arguments>
-                    <argument name="path" xsi:type="string">sublogins/create/account/</argument>
-                    <argument name="label" xsi:type="string">Create Sublogin</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-list">
-                <arguments>
-                    <argument name="path" xsi:type="string">sublogins/account/listsubaccount/</argument>
-                    <argument name="label" xsi:type="string">List Sub Account</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-order-navigation-history">
-                <arguments>
-                    <argument name="path" xsi:type="string">sublogins/order/history</argument>
-                    <argument name="label" xsi:type="string">My Sub-accounts Orders</argument>
-                </arguments>
-            </block>
-
+            <block class="SITC\Sublogins\Block\SubAc" name="customer-sub-account-links" template="customer/account/links.phtml" />
         </referenceBlock>
     </body>
 </page>
