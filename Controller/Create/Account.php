@@ -5,8 +5,8 @@ namespace SITC\Sublogins\Controller\Create;
 
 use Magento\Customer\Model\Registration;
 use Magento\Customer\Model\Session;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 class Account extends \Magento\Customer\Controller\AbstractAccount
 {
@@ -25,9 +25,9 @@ class Account extends \Magento\Customer\Controller\AbstractAccount
     protected $customerFactory;
 
     /**
-     * @param \Magento\Framework\App\Action\Context      $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\CustomerFactory    $customerFactory
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      */
     public function __construct(
         Context $context,
@@ -36,12 +36,13 @@ class Account extends \Magento\Customer\Controller\AbstractAccount
         Registration $registration,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\CustomerFactory $customerFactory
-    ) {
+    )
+    {
         $this->session = $customerSession;
         $this->registration = $registration;
         $this->_resultPageFactory = $pageFactory;
-        $this->storeManager     = $storeManager;
-        $this->customerFactory  = $customerFactory;
+        $this->storeManager = $storeManager;
+        $this->customerFactory = $customerFactory;
 
         parent::__construct($context);
     }

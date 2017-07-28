@@ -1,4 +1,5 @@
 <?php
+
 namespace SITC\Sublogins\Block\Adminhtml\Account;
 
 use Magento\Backend\Block\Widget\Form\Container;
@@ -21,9 +22,24 @@ class Edit extends Container
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = []
-    ) {
+    )
+    {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Get header with Account name
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getHeaderText()
+    {
+        if ($this->_coreRegistry->registry('sublogins_account')->getId()) {
+            return __("Edit Account '%1'", $this->escapeHtml($this->_coreRegistry->registry('sublogins_account')->getName()));
+        } else {
+            return __('New Account');
+        }
     }
 
     /**
@@ -58,20 +74,6 @@ class Edit extends Container
             $this->buttonList->remove('save');
         }
 
-    }
-
-    /**
-     * Get header with Account name
-     *
-     * @return \Magento\Framework\Phrase
-     */
-    public function getHeaderText()
-    {
-        if ($this->_coreRegistry->registry('sublogins_account')->getId()) {
-            return __("Edit Account '%1'", $this->escapeHtml($this->_coreRegistry->registry('sublogins_account')->getName()));
-        } else {
-            return __('New Account');
-        }
     }
 
     /**

@@ -4,19 +4,20 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Controller\Account;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
+use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey\Validator;
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\CustomerExtractor;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
@@ -90,47 +91,14 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-    }
-
-    /**
-     * Get authentication
-     *
-     * @return AuthenticationInterface
-     */
-    private function getAuthentication()
-    {
-
-        if (!($this->authentication instanceof AuthenticationInterface)) {
-            return ObjectManager::getInstance()->get(
-                \Magento\Customer\Model\AuthenticationInterface::class
-            );
-        } else {
-            return $this->authentication;
-        }
-    }
-
-    /**
-     * Get email notification
-     *
-     * @return EmailNotificationInterface
-     * @deprecated
-     */
-    private function getEmailNotification()
-    {
-        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
-            return ObjectManager::getInstance()->get(
-                EmailNotificationInterface::class
-            );
-        } else {
-            return $this->emailNotification;
-        }
     }
 
     /**
@@ -196,36 +164,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
-     * Get scope config
-     *
-     * @return ScopeConfigInterface
-     */
-    private function getScopeConfig()
-    {
-        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
-            return ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Config\ScopeConfigInterface::class
-            );
-        } else {
-            return $this->scopeConfig;
-        }
-    }
-
-    /**
-     * Account editing action completed successfully event
-     *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject
-     * @return void
-     */
-    private function dispatchSuccessEvent(\Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject)
-    {
-        $this->_eventManager->dispatch(
-            'customer_account_edited',
-            ['email' => $customerCandidateDataObject->getEmail()]
-        );
-    }
-
-    /**
      * Get customer data object
      *
      * @param int $customerId
@@ -247,7 +185,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     private function populateNewCustomerDataObject(
         \Magento\Framework\App\RequestInterface $inputData,
         \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
-    ) {
+    )
+    {
         $attributeValues = $this->getCustomerMapper()->toFlatArray($currentCustomerData);
         $customerDto = $this->customerExtractor->extract(
             self::FORM_DATA_EXTRACTOR_CODE,
@@ -263,6 +202,61 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $customerDto;
+    }
+
+    /**
+     * Get Customer Mapper instance
+     *
+     * @return Mapper
+     *
+     * @deprecated
+     */
+    private function getCustomerMapper()
+    {
+        if ($this->customerMapper === null) {
+            $this->customerMapper = ObjectManager::getInstance()->get('Magento\Customer\Model\Customer\Mapper');
+        }
+        return $this->customerMapper;
+    }
+
+    /**
+     * Process change email request
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject
+     * @return void
+     * @throws InvalidEmailOrPasswordException
+     * @throws UserLockedException
+     */
+    private function processChangeEmailRequest(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
+    {
+        if ($this->getRequest()->getParam('change_email')) {
+            // authenticate user for changing email
+            try {
+                $this->getAuthentication()->authenticate(
+                    $currentCustomerDataObject->getId(),
+                    $this->getRequest()->getPost('current_password')
+                );
+            } catch (InvalidEmailOrPasswordException $e) {
+                throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
+            }
+        }
+    }
+
+    /**
+     * Get authentication
+     *
+     * @return AuthenticationInterface
+     */
+    private function getAuthentication()
+    {
+
+        if (!($this->authentication instanceof AuthenticationInterface)) {
+            return ObjectManager::getInstance()->get(
+                \Magento\Customer\Model\AuthenticationInterface::class
+            );
+        } else {
+            return $this->authentication;
+        }
     }
 
     /**
@@ -290,40 +284,49 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
-     * Process change email request
+     * Get email notification
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject
-     * @return void
-     * @throws InvalidEmailOrPasswordException
-     * @throws UserLockedException
+     * @return EmailNotificationInterface
+     * @deprecated
      */
-    private function processChangeEmailRequest(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
+    private function getEmailNotification()
     {
-        if ($this->getRequest()->getParam('change_email')) {
-            // authenticate user for changing email
-            try {
-                $this->getAuthentication()->authenticate(
-                    $currentCustomerDataObject->getId(),
-                    $this->getRequest()->getPost('current_password')
-                );
-            } catch (InvalidEmailOrPasswordException $e) {
-                throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
-            }
+        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
+            return ObjectManager::getInstance()->get(
+                EmailNotificationInterface::class
+            );
+        } else {
+            return $this->emailNotification;
         }
     }
 
     /**
-     * Get Customer Mapper instance
+     * Account editing action completed successfully event
      *
-     * @return Mapper
-     *
-     * @deprecated
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject
+     * @return void
      */
-    private function getCustomerMapper()
+    private function dispatchSuccessEvent(\Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject)
     {
-        if ($this->customerMapper === null) {
-            $this->customerMapper = ObjectManager::getInstance()->get('Magento\Customer\Model\Customer\Mapper');
+        $this->_eventManager->dispatch(
+            'customer_account_edited',
+            ['email' => $customerCandidateDataObject->getEmail()]
+        );
+    }
+
+    /**
+     * Get scope config
+     *
+     * @return ScopeConfigInterface
+     */
+    private function getScopeConfig()
+    {
+        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
+            return ObjectManager::getInstance()->get(
+                \Magento\Framework\App\Config\ScopeConfigInterface::class
+            );
+        } else {
+            return $this->scopeConfig;
         }
-        return $this->customerMapper;
     }
 }

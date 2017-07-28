@@ -1,4 +1,5 @@
 <?php
+
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
 use Magento\Backend\App\Action;
@@ -14,17 +15,10 @@ class Delete extends Action
     public function __construct(
         Action\Context $context,
         \SITC\Sublogins\Model\Account $model
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->_model = $model;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('SITC_Sublogins::account_delete');
     }
 
     /**
@@ -51,5 +45,13 @@ class Delete extends Action
         }
         $this->messageManager->addError(__('Account does not exist'));
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('SITC_Sublogins::account_delete');
     }
 }

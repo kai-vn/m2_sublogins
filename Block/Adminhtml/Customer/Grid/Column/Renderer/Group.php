@@ -14,7 +14,8 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
         \Magento\Backend\Block\Context $context,
         \Magento\Customer\Model\ResourceModel\Group\Collection $customerGroup,
         array $data = []
-    ){
+    )
+    {
         $this->_customerGroup = $customerGroup;
         parent::__construct($context, $data);
     }
@@ -24,9 +25,9 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
         $groupId = $row->getGroupId();
         $groupLabel = '';
         $customerGroups = $this->_customerGroup->toOptionArray();
-        array_unshift($customerGroups, array('value'=>'', 'label'=>'Any'));
-        foreach ($customerGroups as $group){
-            if($groupId == $group['value']){
+        array_unshift($customerGroups, array('value' => '', 'label' => 'Any'));
+        foreach ($customerGroups as $group) {
+            if ($groupId == $group['value']) {
                 $groupLabel = $group['label'];
             }
         }

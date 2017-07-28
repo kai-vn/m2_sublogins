@@ -3,15 +3,18 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Controller\Account;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Framework\UrlFactory;
-use Magento\Customer\Model\CustomerExtractor;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Model\CustomerExtractor;
+use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlFactory;
+
 class Deactive extends \Magento\Customer\Controller\AbstractAccount
 {
     protected $customerFactory;
@@ -48,7 +51,8 @@ class Deactive extends \Magento\Customer\Controller\AbstractAccount
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Framework\App\RequestInterface $request
 
-    ) {
+    )
+    {
         $this->_eavAttribute = $eavAttribute;
         $this->accountManagement = $accountManagement;
         $this->helper = $helper;
@@ -56,7 +60,7 @@ class Deactive extends \Magento\Customer\Controller\AbstractAccount
         $this->_customerRepository = $customerRepository;
         $this->request = $request;
         $this->urlModel = $urlFactory->create();
-        $this->customerFactory  = $customerFactory;
+        $this->customerFactory = $customerFactory;
         $this->registry = $registry;
         $this->customerUrl = $customerUrl;
         $this->session = $customerSession;
@@ -65,6 +69,7 @@ class Deactive extends \Magento\Customer\Controller\AbstractAccount
         $this->customerExtractor = $customerExtractor;
         parent::__construct($context, $registry);
     }
+
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();

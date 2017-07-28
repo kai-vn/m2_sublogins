@@ -3,30 +3,31 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Controller\Account;
 
-use Magento\Customer\Model\Account\Redirect as AccountRedirect;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Helper\Address;
-use Magento\Framework\UrlFactory;
-use Magento\Customer\Model\Metadata\FormFactory;
-use Magento\Newsletter\Model\SubscriberFactory;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Model\Url as CustomerUrl;
-use Magento\Customer\Model\Registration;
-use Magento\Framework\Escaper;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Model\CustomerExtractor;
-use Magento\Framework\Exception\StateException;
+use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Customer\Model\Registration;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -69,7 +70,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /** @var \Magento\Framework\UrlInterface */
     protected $urlModel;
 
-    /** @var DataObjectHelper  */
+    /** @var DataObjectHelper */
     protected $dataObjectHelper;
     protected $_customerSession;
     protected $_cacheTypeList;
@@ -139,7 +140,8 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         CustomerExtractor $customerExtractor,
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect
-    ) {
+    )
+    {
 
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -166,57 +168,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->_cacheFrontendPool = $cacheFrontendPool;
     }
 
-
-    /**
-     * Add address to customer during create account
-     *
-     * @return AddressInterface|null
-     */
-    protected function extractAddress()
-    {
-        if (!$this->getRequest()->getPost('create_address')) {
-            return null;
-        }
-
-        $addressForm = $this->formFactory->create('customer_address', 'customer_register_address');
-        $allowedAttributes = $addressForm->getAllowedAttributes();
-
-        $addressData = [];
-
-        $regionDataObject = $this->regionDataFactory->create();
-        foreach ($allowedAttributes as $attribute) {
-            $attributeCode = $attribute->getAttributeCode();
-            $value = $this->getRequest()->getParam($attributeCode);
-            if ($value === null) {
-                continue;
-            }
-            switch ($attributeCode) {
-                case 'region_id':
-                    $regionDataObject->setRegionId($value);
-                    break;
-                case 'region':
-                    $regionDataObject->setRegion($value);
-                    break;
-                default:
-                    $addressData[$attributeCode] = $value;
-            }
-        }
-        $addressDataObject = $this->addressDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $addressDataObject,
-            $addressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
-        );
-        $addressDataObject->setRegion($regionDataObject);
-
-        $addressDataObject->setIsDefaultBilling(
-            $this->getRequest()->getParam('default_billing', false)
-        )->setIsDefaultShipping(
-            $this->getRequest()->getParam('default_shipping', false)
-        );
-        return $addressDataObject;
-    }
-
     /**
      * Create customer account action
      *
@@ -237,7 +188,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             $customer->setAddresses($addresses);
             $currentCustomerId = $this->_customerSession->getCustomer()->getId();
             $customer->setCustomAttribute('sublogin_parent_id', $currentCustomerId);
-            $data = (int) $this->getRequest()->getPostValue('active');
+            $data = (int)$this->getRequest()->getPostValue('active');
             $customer->setCustomAttribute('is_sub_login', 1);
             $customer->setCustomAttribute('is_active_sublogin', $data);
             $password = $this->getRequest()->getParam('password');
@@ -294,7 +245,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
         $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
 
-        $types = array('config','layout','block_html','collections','reflection','db_ddl','eav','config_integration','config_integration_api','full_page','translate','config_webservice');
+        $types = array('config', 'layout', 'block_html', 'collections', 'reflection', 'db_ddl', 'eav', 'config_integration', 'config_integration_api', 'full_page', 'translate', 'config_webservice');
         foreach ($types as $type) {
             $this->_cacheTypeList->cleanType($type);
         }
@@ -303,6 +254,56 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         }
         return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount'));
 
+    }
+
+    /**
+     * Add address to customer during create account
+     *
+     * @return AddressInterface|null
+     */
+    protected function extractAddress()
+    {
+        if (!$this->getRequest()->getPost('create_address')) {
+            return null;
+        }
+
+        $addressForm = $this->formFactory->create('customer_address', 'customer_register_address');
+        $allowedAttributes = $addressForm->getAllowedAttributes();
+
+        $addressData = [];
+
+        $regionDataObject = $this->regionDataFactory->create();
+        foreach ($allowedAttributes as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $value = $this->getRequest()->getParam($attributeCode);
+            if ($value === null) {
+                continue;
+            }
+            switch ($attributeCode) {
+                case 'region_id':
+                    $regionDataObject->setRegionId($value);
+                    break;
+                case 'region':
+                    $regionDataObject->setRegion($value);
+                    break;
+                default:
+                    $addressData[$attributeCode] = $value;
+            }
+        }
+        $addressDataObject = $this->addressDataFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $addressDataObject,
+            $addressData,
+            '\Magento\Customer\Api\Data\AddressInterface'
+        );
+        $addressDataObject->setRegion($regionDataObject);
+
+        $addressDataObject->setIsDefaultBilling(
+            $this->getRequest()->getParam('default_billing', false)
+        )->setIsDefaultShipping(
+            $this->getRequest()->getParam('default_shipping', false)
+        );
+        return $addressDataObject;
     }
 
     /**

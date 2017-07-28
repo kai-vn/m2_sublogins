@@ -1,4 +1,5 @@
 <?php
+
 namespace SITC\Sublogins\Model\ResourceModel\Account;
 
 class CollectionFactory

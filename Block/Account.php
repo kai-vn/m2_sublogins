@@ -1,6 +1,9 @@
 <?php
+
 namespace SITC\Sublogins\Block;
+
 use Magento\Customer\Model\AccountManagement;
+
 class Account extends \Magento\Directory\Block\Data
 {
     protected $_template = 'account.phtml';
@@ -10,8 +13,8 @@ class Account extends \Magento\Directory\Block\Data
     protected $scopeConfig;
     protected $helper;
     protected $filterProvider;
-    protected $coreRegistry ;
-    protected $_customerSession ;
+    protected $coreRegistry;
+    protected $_customerSession;
     protected $_customerUrl;
     protected $_moduleManager;
 
@@ -51,22 +54,20 @@ class Account extends \Magento\Directory\Block\Data
             $regionCollectionFactory,
             $countryCollectionFactory,
             $data
-        ); $this->_isScopePrivate = false;
-    }
-    protected function _prepareLayout()
-    {
-        $this->pageConfig->getTitle()->set(__('Customer Login'));
-        return parent::_prepareLayout();
+        );
+        $this->_isScopePrivate = false;
     }
 
     public function getConfig($path)
     {
         return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
+
     public function getPostActionUrl()
     {
         return $this->helper->getSubRegisterPostUrl();
     }
+
     public function getBackUrl()
     {
         $url = $this->getData('back_url');
@@ -75,6 +76,16 @@ class Account extends \Magento\Directory\Block\Data
         }
         return $url;
     }
+
+    public function getCountryId()
+    {
+        $countryId = $this->getFormData()->getCountryId();
+        if ($countryId) {
+            return $countryId;
+        }
+        return parent::getCountryId();
+    }
+
     public function getFormData()
     {
         $data = $this->getData('form_data');
@@ -92,14 +103,6 @@ class Account extends \Magento\Directory\Block\Data
         }
         return $data;
     }
-    public function getCountryId()
-    {
-        $countryId = $this->getFormData()->getCountryId();
-        if ($countryId) {
-            return $countryId;
-        }
-        return parent::getCountryId();
-    }
 
     /**
      * Retrieve customer region identifier
@@ -115,6 +118,7 @@ class Account extends \Magento\Directory\Block\Data
         }
         return null;
     }
+
     public function restoreSessionData(\Magento\Customer\Model\Metadata\Form $form, $scope = null)
     {
         if ($this->getFormData()->getCustomerData()) {
@@ -125,6 +129,7 @@ class Account extends \Magento\Directory\Block\Data
 
         return $this;
     }
+
     public function getMinimumPasswordLength()
     {
         return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH);
@@ -139,12 +144,20 @@ class Account extends \Magento\Directory\Block\Data
     {
         return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
+
     public function isNewsletterEnabled()
     {
         return $this->_moduleManager->isOutputEnabled('Magento_Newsletter');
     }
+
     public function getFormAction()
     {
         return $this->getUrl('sublogins/create/account/');
+    }
+
+    protected function _prepareLayout()
+    {
+        $this->pageConfig->getTitle()->set(__('Customer Login'));
+        return parent::_prepareLayout();
     }
 }

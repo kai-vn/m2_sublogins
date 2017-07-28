@@ -3,17 +3,14 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Controller\Account;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Controller\RegistryConstants;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\RequestInterface;
-
 
 
 class Delete extends \Magento\Framework\App\Action\Action
@@ -64,7 +61,7 @@ class Delete extends \Magento\Framework\App\Action\Action
 
     )
     {
-        $this->customerFactory  = $customerFactory;
+        $this->customerFactory = $customerFactory;
         $this->request = $request;
         $this->url = $url;
         $this->_customerRepository = $customerRepository;
@@ -94,7 +91,7 @@ class Delete extends \Magento\Framework\App\Action\Action
         $this->registry->register('isSecureArea', true);
         $customer = $this->customerFactory->create()->load($customerId);
         $customer->delete();
-        $types = array('config','layout','block_html','collections','reflection','db_ddl','eav','config_integration','config_integration_api','full_page','translate','config_webservice');
+        $types = array('config', 'layout', 'block_html', 'collections', 'reflection', 'db_ddl', 'eav', 'config_integration', 'config_integration_api', 'full_page', 'translate', 'config_webservice');
         foreach ($types as $type) {
             $this->_cacheTypeList->cleanType($type);
         }
@@ -103,7 +100,6 @@ class Delete extends \Magento\Framework\App\Action\Action
         }
         return $resultRedirect->setUrl($this->url->getUrl('sublogins/create'));
     }
-
 
 
 }

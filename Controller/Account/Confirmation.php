@@ -2,19 +2,19 @@
 
 namespace SITC\Sublogins\Controller\Account;
 
-use Magento\Framework\App\Action\Context;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Framework\Exception\State\InvalidTransitionException;
 
 class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var StoreManagerInterface */
     protected $storeManager;
 
-    /** @var AccountManagementInterface  */
+    /** @var AccountManagementInterface */
     protected $customerAccountManagement;
 
     /**
@@ -40,7 +40,8 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
         PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement
-    ) {
+    )
+    {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->storeManager = $storeManager;

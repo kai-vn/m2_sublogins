@@ -5,8 +5,10 @@ namespace SITC\Sublogins\Block\Adminhtml\Account\Edit;
 /**
  * Adminhtml locator edit form block
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic {
-    protected function _prepareForm() {
+class Form extends \Magento\Backend\Block\Widget\Form\Generic
+{
+    protected function _prepareForm()
+    {
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
             array(

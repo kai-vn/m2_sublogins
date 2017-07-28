@@ -1,10 +1,11 @@
 <?php
+
 namespace SITC\Sublogins\Model\SubAccount;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Customer\Api\AccountManagementInterface;
+
 class Import extends \Magento\ImportExport\Model\AbstractModel
 {
     protected $_fileUploaderFactory;
@@ -41,7 +42,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         parent::__construct($logger, $filesystem, $data);
     }
 
-    public function importCustomer($data){
+    public function importCustomer($data)
+    {
         $parentcustomerId = $this->_customerRepositoryInterface->get($data['sub_parent_email'])->getId();
         if ($parentcustomerId) {
             $customer = $this->customerDataFactory->create();
@@ -56,8 +58,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $customer->setCustomAttribute('is_active_sublogin', 1);
             $customer->setCustomAttribute('expire_date', $data['expire_date']);
             $this->customerAccountManagement->createAccount($customer);
-        } else{
-            $this->_logger->critical('Cannot create sub account'.$data['email'].'The parent customer email does not exist.');
+        } else {
+            $this->_logger->critical('Cannot create sub account' . $data['email'] . 'The parent customer email does not exist.');
         }
     }
 }

@@ -4,20 +4,21 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Controller\Account;
 
-use Magento\Customer\Model\Url;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\Address;
-use Magento\Framework\UrlFactory;
-use Magento\Framework\Exception\StateException;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Confirm
@@ -32,10 +33,10 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
     /** @var StoreManagerInterface */
     protected $storeManager;
 
-    /** @var AccountManagementInterface  */
+    /** @var AccountManagementInterface */
     protected $customerAccountManagement;
 
-    /** @var CustomerRepositoryInterface  */
+    /** @var CustomerRepositoryInterface */
     protected $customerRepository;
 
     /** @var Address */
@@ -68,7 +69,8 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
         CustomerRepositoryInterface $customerRepository,
         Address $addressHelper,
         UrlFactory $urlFactory
-    ) {
+    )
+    {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;

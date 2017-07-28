@@ -1,8 +1,9 @@
 <?php
+
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use SITC\Sublogins\Model\ResourceModel\Account\CollectionFactory;
 
@@ -30,6 +31,7 @@ class MassDelete extends \Magento\Backend\App\Action
         $this->collectionFactory = $collectionFactory;
         parent::__construct($context);
     }
+
     /**
      * Execute action
      *

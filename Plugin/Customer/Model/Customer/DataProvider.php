@@ -13,7 +13,8 @@ class DataProvider
 
     public function __construct(
         \Magento\Framework\App\RequestInterface $request
-    ) {
+    )
+    {
         $this->_request = $request;
     }
 
@@ -21,7 +22,7 @@ class DataProvider
     {
 
         $subLoginParentId = $this->_request->getParam('sub_parent_id');
-        if(!empty($subLoginParentId)){
+        if (!empty($subLoginParentId)) {
             $this->getSession()->setSubParentId($subLoginParentId);
         }
         return $result;

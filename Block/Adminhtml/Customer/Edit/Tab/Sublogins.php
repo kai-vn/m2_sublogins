@@ -1,8 +1,10 @@
 <?php
 
 namespace SITC\Sublogins\Block\Adminhtml\Customer\Edit\Tab;
+
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
+
 /**
  * Customer account form block
  */
@@ -16,6 +18,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
     protected $_coreRegistry;
 
     protected $_customerRepositoryInterface;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -26,18 +29,13 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         array $data = []
-    ) {
+    )
+    {
         $this->_coreRegistry = $registry;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
         parent::__construct($context, $data);
     }
-    /**
-     * @return string|null
-     */
-    public function getCustomerId()
-    {
-        return $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-    }
+
     /**
      * @return \Magento\Framework\Phrase
      */
@@ -45,6 +43,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
     {
         return __('List Sub-Account');
     }
+
     /**
      * @return \Magento\Framework\Phrase
      */
@@ -53,21 +52,31 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
         return __('List Sub-Account');
     }
 
-    public function isSublogin(){
-        $customer = $this->_customerRepositoryInterface->getById($this->getCustomerId());
-        $customAttribute = $customer->getCustomAttribute('is_sub_login');
-
-        if($customAttribute == true){
-            return true;
-        }
-        return false;
-    }
     /**
      * @return bool
      */
     public function canShowTab()
     {
         if ($this->getCustomerId() && $this->isSublogin() == false) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomerId()
+    {
+        return $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+    }
+
+    public function isSublogin()
+    {
+        $customer = $this->_customerRepositoryInterface->getById($this->getCustomerId());
+        $customAttribute = $customer->getCustomAttribute('is_sub_login');
+
+        if ($customAttribute == true) {
             return true;
         }
         return false;
@@ -83,6 +92,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
         }
         return true;
     }
+
     /**
      * Tab class getter
      *
@@ -92,6 +102,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
     {
         return '';
     }
+
     /**
      * Return URL link to Tab content
      *
@@ -101,6 +112,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
     {
         return $this->getUrl('sublogins/account/listing', ['_current' => true]);
     }
+
     /**
      * Tab should be loaded trough Ajax call
      *

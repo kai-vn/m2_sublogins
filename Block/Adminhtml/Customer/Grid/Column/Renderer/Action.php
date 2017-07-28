@@ -13,7 +13,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     protected $_actions = [];
 
 
-
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Sales\Helper\Reorder $salesReorder
@@ -22,7 +21,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     public function __construct(
         \Magento\Backend\Block\Context $context,
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($context, $data);
     }
 
@@ -33,13 +33,13 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     public function render(\Magento\Framework\DataObject $row)
     {
         $this->_actions = [];
-            $action = [
-                '@' => [
-                    'href' => $this->getUrl('customer/index/edit', ['id' => $row->getId()]),
-                ],
-                '#' => __('Edit'),
-            ];
-            $this->addToActions($action);
+        $action = [
+            '@' => [
+                'href' => $this->getUrl('customer/index/edit', ['id' => $row->getId()]),
+            ],
+            '#' => __('Edit'),
+        ];
+        $this->addToActions($action);
 
         $this->_eventManager->dispatch(
             'adminhtml_customer_orders_add_action_renderer',
@@ -48,14 +48,14 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         return $this->_actionsToHtml();
     }
     /**
-     * Get escaped value
+     * Add one action array to all options data storage
      *
-     * @param string $value
-     * @return string
+     * @param array $actionArray
+     * @return void
      */
-    protected function _getEscapedValue($value)
+    public function addToActions($actionArray)
     {
-        return addcslashes(htmlspecialchars($value), '\\\'');
+        $this->_actions[] = $actionArray;
     }
 
     /**
@@ -81,13 +81,13 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     }
 
     /**
-     * Add one action array to all options data storage
+     * Get escaped value
      *
-     * @param array $actionArray
-     * @return void
+     * @param string $value
+     * @return string
      */
-    public function addToActions($actionArray)
+    protected function _getEscapedValue($value)
     {
-        $this->_actions[] = $actionArray;
+        return addcslashes(htmlspecialchars($value), '\\\'');
     }
 }

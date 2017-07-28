@@ -33,24 +33,24 @@ class BeforeLogin implements ObserverInterface
         $login = $this->request->getPost('login');
         $customer = $this->customerRepository->get($login['username'], $this->storeManager->getStore()->getWebsiteId());
         $expireDate = $customer->getCustomAttribute('expire_date');
-        if(!empty($expireDate)){
+        if (!empty($expireDate)) {
             $expireDate = $expireDate->getValue();
         }
         $isSubAccount = $customer->getCustomAttribute('is_sub_login');
-        if(!empty($isSubAccount)){
+        if (!empty($isSubAccount)) {
             $isSubAccount = $isSubAccount->getValue();
         }
         $statusAccount = $customer->getCustomAttribute('is_active_sublogin');
-        if(!empty($statusAccount)){
+        if (!empty($statusAccount)) {
             $statusAccount = $statusAccount->getValue();
         }
         if ($customer && !empty($expireDate) && $isSubAccount == 1) {
             $expireDate = new \DateTime($expireDate);
             $today = new \DateTime('today');
-            if ($expireDate < $today){
+            if ($expireDate < $today) {
                 throw new LocalizedException(__('Your account had been expired date. You can not login to our site.'));
             }
-        }elseif($statusAccount == 0 && $isSubAccount == 1) {
+        } elseif ($statusAccount == 0 && $isSubAccount == 1) {
             throw new LocalizedException(__('Your account is Deactive.'));
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
 use Magento\Backend\App\Action;
@@ -33,35 +34,12 @@ class Edit extends Action
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Registry $registry,
         \SITC\Sublogins\Model\Account $model
-    ) {
+    )
+    {
         $this->_resultPageFactory = $resultPageFactory;
         $this->_coreRegistry = $registry;
         $this->_model = $model;
         parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('SITC_Sublogins::account_save');
-    }
-
-    /**
-     * Init actions
-     *
-     * @return \Magento\Backend\Model\View\Result\Page
-     */
-    protected function _initAction()
-    {
-        // load layout, set active menu and breadcrumbs
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $this->_resultPageFactory->create();
-        $resultPage->setActiveMenu('SITC_Sublogins::account')
-            ->addBreadcrumb(__('Account'), __('Account'))
-            ->addBreadcrumb(__('Manage Accounts'), __('Manage Accounts'));
-        return $resultPage;
     }
 
     /**
@@ -105,5 +83,29 @@ class Edit extends Action
             ->prepend($model->getId() ? $model->getName() : __('New Account'));
 
         return $resultPage;
+    }
+
+    /**
+     * Init actions
+     *
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
+    protected function _initAction()
+    {
+        // load layout, set active menu and breadcrumbs
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->_resultPageFactory->create();
+        $resultPage->setActiveMenu('SITC_Sublogins::account')
+            ->addBreadcrumb(__('Account'), __('Account'))
+            ->addBreadcrumb(__('Manage Accounts'), __('Manage Accounts'));
+        return $resultPage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('SITC_Sublogins::account_save');
     }
 }

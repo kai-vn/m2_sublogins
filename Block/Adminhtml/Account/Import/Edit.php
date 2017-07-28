@@ -5,6 +5,16 @@ namespace SITC\Sublogins\Block\Adminhtml\Account\Import;
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
+     * Get header text
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getHeaderText()
+    {
+        return __('Import');
+    }
+
+    /**
      * Internal constructor
      *
      * @return void
@@ -20,15 +30,5 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_objectId = 'import_id';
         $this->_blockGroup = 'SITC_Sublogins';
         $this->_controller = 'adminhtml_account_import';
-    }
-
-    /**
-     * Get header text
-     *
-     * @return \Magento\Framework\Phrase
-     */
-    public function getHeaderText()
-    {
-        return __('Import');
     }
 }
