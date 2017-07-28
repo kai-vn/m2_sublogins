@@ -48,12 +48,6 @@ class Account extends \Magento\Customer\Controller\AbstractAccount
 
     public function execute()
     {
-        if ($this->session->isLoggedIn() || !$this->registration->isAllowed()) {
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-//        $resultRedirect = $this->resultRedirectFactory->create();
-//        $resultRedirect->setPath('sublogins/account/');
-//        return $resultRedirect;
-        }
         $resultPage = $this->_resultPageFactory->create();
 
         $resultPage->getConfig()->getTitle()->prepend(__(' Create Account '));

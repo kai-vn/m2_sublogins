@@ -6,9 +6,9 @@ $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $customerSession = $objectManager->create('Magento\Customer\Model\Session');
 $sublog = $this->helper('SITC\Sublogins\Helper\Data')->getIdSub();
 $issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
-
+$cansub = $this->helper('SITC\Sublogins\Helper\Data')->getCreateSublogin();
 ?>
-<?php if(!$issublog ) : ?>
+<?php if(!$issublog || $cansub) : ?>
     <div class="create-account">
         <a href="<?php echo $redirect . 'sublogins/create/account/' ?>"><?php echo __('Create Sub-Account') ?></a>
     </div>
@@ -23,8 +23,6 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
             return false;
     }
 </script>
-<?php  $_gridrecords = $block->getCollection(); ?>
-<?php if ($_gridrecords && count($_gridrecords)) : ?>
 <div class="table-wrapper orders-history">
     <table class="data table table-order-items history" id="my-orders-table">
         <caption class="table-caption"><?php echo __('Grid Record') ?></caption>
@@ -41,9 +39,7 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
             <th scope="col" class="col ">&nbsp;</th>
         </tr>
         </thead>
-
         <tbody>
-
         <?php
         foreach ($sublog as $sublog_id):
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -51,7 +47,7 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
             $active = $this->helper('SITC\Sublogins\Helper\Data')->getStatusSubAc($sublog_id);
             foreach ($customerObjs as $customerObj):
                 ?>
-                <?php if($customerSession->isLoggedIn() && $sublog) : ?>
+                <?php if($customerSession->isLoggedIn() && $sublog || $cansub != $issublog) : ?>
                 <tr>
                     <td class="col id"><?php echo $customerObj->getEntityId() ?></td>
                     <td class="col prefix"><?php echo $customerObj->getPrefix() ?></td>
@@ -68,17 +64,17 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
                                 </a>
                             </li>
                             <li>
-                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/delete/id/' . $customerObj->getId() ?>" onclick="return ConfirmDelete();" target="_blank" class="action delete">
+                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/delete/id/' . $customerObj->getId() ?>" onclick="return ConfirmDelete();" class="action delete">
                                     <span>Delete Account</span>
                                 </a>
                             </li>
                             <li>
-                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/active/ac/' . $customerObj->getId() ?>"  target="_blank" class="action active">
+                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/active/ac/' . $customerObj->getId() ?>" class="action active">
                                     <span>Active Account</span>
                                 </a>
                             </li>
                             <li>
-                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/deactive/deac/' . $customerObj->getId() ?>" target="_blank" class="action deactive">
+                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/deactive/deac/' . $customerObj->getId() ?>" class="action deactive">
                                     <span class="warning-subac">Deactive Account</span>
                                 </a>
                             </li>
@@ -89,7 +85,6 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
             <?php endif;?>
             <?php endforeach; ?>
         <?php endforeach; ?>
-
         <?php if(is_null($sublog) || !empty($issublog)) : ?>
             <?php
             foreach ($issublog as $is_sublog_id):
@@ -99,7 +94,6 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
                 foreach($customerObjs as $customerObj):
                     ?>
                     <?php if($customerSession->isLoggedIn() && $issublog) :  ?>
-
                     <tr>
                         <td class="col id"><?php echo $customerObj->getEntityId() ?></td>
                         <td class="col prefix"><?php echo $customerObj->getPrefix() ?></td>
@@ -127,13 +121,6 @@ $issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
 
         </tbody>
     </table>
-    <?php if ($block->getPagerHtml()): ?>
-        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); // for display pager block which we create in block file.   ?></div>
-    <?php endif ?>
-    <?php else: ?>
-        <div class="message info empty"><span><?php echo __('grid records not available.'); ?></span></div>
-    <?php endif ?>
-
 </div>
 
 

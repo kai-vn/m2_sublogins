@@ -80,18 +80,12 @@ class Start extends \Magento\Backend\App\Action
                     $data = array_combine($keys, $currentData);
                     $email = $data['email'];
                     if (!empty($email)) {
-                        $import = $this->importSubAccount->importCustomer($data);
-                        if($import == false){
-                            $this->messageManager->addErrorMessage('Cannot create customer ' .$data['email']);
-                            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-                            $resultRedirect->setPath('sublogins/account/import');
-                        }
+                        $this->importSubAccount->importCustomer($data);
                     }
 
                 }
 
             }
-            $this->messageManager->addSuccessMessage('The import successfully.');
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             $resultRedirect->setPath('sublogins/account/index');
             return $resultRedirect;

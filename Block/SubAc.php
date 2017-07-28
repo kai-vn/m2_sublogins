@@ -54,6 +54,56 @@ class SubAc extends \Magento\Framework\View\Element\Template
                     'path' => 'sublogins/order/history'
                 ]
             );
+        }elseif(!$this->helper->getIdSub()) {
+            $this->addChild(
+                'create-sub-account',
+                'Magento\Framework\View\Element\Html\Link\Current',
+                [
+                    'label' => 'Create Sub Account',
+                    'path' => 'sublogins/create/account'
+                ]
+            );
+            $this->addChild(
+                'list-sub-account',
+                'Magento\Framework\View\Element\Html\Link\Current',
+                [
+                    'label' => 'List Sub Account',
+                    'path' => 'sublogins/account/listsubaccount'
+                ]
+            );
+            $this->addChild(
+                'order-sub-account',
+                'Magento\Framework\View\Element\Html\Link\Current',
+                [
+                    'label' => 'My Sub Account Order',
+                    'path' => 'sublogins/order/history'
+                ]
+            );
+        }elseif($this->helper->getCreateSublogin()) {
+            $this->addChild(
+                'create-sub-account',
+                'Magento\Framework\View\Element\Html\Link\Current',
+                [
+                    'label' => 'Create Sub Account',
+                    'path' => 'sublogins/create/account'
+                ]
+            );
+            $this->addChild(
+                'list-sub-account',
+                'Magento\Framework\View\Element\Html\Link\Current',
+                [
+                    'label' => 'List Sub Account',
+                    'path' => 'sublogins/account/listsubaccount'
+                ]
+            );
+            $this->addChild(
+                'order-sub-account',
+                'Magento\Framework\View\Element\Html\Link\Current',
+                [
+                    'label' => 'My Sub Account Order',
+                    'path' => 'sublogins/order/history'
+                ]
+            );
         }
         return parent::_prepareLayout();
     }

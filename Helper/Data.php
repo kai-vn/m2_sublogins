@@ -48,7 +48,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
-    protected $_create;
+
     /**
      * @var \Magento\Backend\Model\UrlInterface
      */
@@ -63,7 +63,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var CustomerSession
      */
     protected $_customerSession;
-
+    protected $_customerRepositoryInterface;
     /**
      * @var \Magento\MediaStorage\Model\File\Uploader
      */
@@ -104,10 +104,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UrlInterface $urlBuilder,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
-        \SITC\Sublogins\Model\Create $create,
         CustomerExtractor $customerExtractor,
         \Magento\Framework\App\RequestInterface $request,
         CustomerCollectionFactory $customerCollectionFactory,
@@ -124,7 +124,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     )
     {
         $this->_eavAttribute = $eavAttribute;
-        $this->_create = $create;
+        $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->urlBuilder = $urlBuilder;
         $this->request = $request;
@@ -178,7 +178,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $sub_accs;
     }
 
-    public function IsSublogin() {
+    public function isSublogin() {
         $attributeId = $this->_eavAttribute->getIdByCode('customer', 'is_sub_login');
         $customerId = $this->_customerSession->getCustomerId();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -190,6 +190,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
         return $sub_accs;
+    }
+    public function getCreateSublogin() {
+        $customerId = $this->_customerSession->getCustomerId();
+        $customer = $this->_customerRepositoryInterface->getById($customerId);
+        $customAttribute = $customer->getCustomAttribute('can_create_sub_login');
+        if(!empty($customAttribute)){
+            $customAttribute = $customAttribute->getValue();
+        }
+        return $customAttribute;
     }
     public function getOrdersSubAc()
     {
@@ -221,7 +230,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
     public function getStatusSubAc($sublog_id) {
         $customer = $this->customerRepositoryInterface->getById($sublog_id);
-        $status =  $customer->getCustomAttribute('is_active_sublogin')->getValue();
+        $status = $customer->getCustomAttribute('is_active_sublogin');
+        if(!empty($status)){
+            $status = $status->getValue();
+        }
        return $status;
     }
     public function getSubRegisterPostUrl()

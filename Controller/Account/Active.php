@@ -75,7 +75,7 @@ class Active extends \Magento\Customer\Controller\AbstractAccount
         $customerData->setCustomAttribute('is_active_sublogin', 1);
         $customer->updateData($customerData);
         $customer->save();
-        return $resultRedirect->setUrl($this->url->getUrl('sublogins/create/'));
+        return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount/'));
     }
 
 }

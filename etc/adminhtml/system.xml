@@ -12,7 +12,7 @@
             <group id="general" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
                 <field id="can_view_order" sortOrder="1" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Sub-Account can view order</label>
+                    <label>View Orders of Sub-accounts</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="can_edit_sub" sortOrder="1" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">

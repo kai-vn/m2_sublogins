@@ -37,8 +37,8 @@ class Index extends Action
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('SITC_Sublogins::account');
         $resultPage->addBreadcrumb(__('Sublogins'), __('Sublogins'));
-        $resultPage->addBreadcrumb(__('Manage Sub-Accounts'), __('Manage Sub-Accounts'));
-        $resultPage->getConfig()->getTitle()->prepend(__('Manage Sub-Accounts'));
+        $resultPage->addBreadcrumb(__('Manage Accounts'), __('Manage Accounts'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Account'));
 
         return $resultPage;
     }

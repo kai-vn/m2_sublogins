@@ -4,10 +4,8 @@
     <body>
         <referenceContainer name="content">
             <block class="SITC\Sublogins\Block\Adminhtml\Account\Edit" name="sublogins_account_edit"/>
-
         </referenceContainer>
         <referenceContainer name="left">
-
             <block class="SITC\Sublogins\Block\Adminhtml\Account\Edit\Tabs" name="account_edit_tabs">
                 <block class="SITC\Sublogins\Block\Adminhtml\Account\Edit\Tab\Form" name="account_edit_tab_form"/>
                 <action method="addTab">
@@ -23,7 +21,6 @@
                         <item name="class" xsi:type="string">ajax</item>
                     </argument>
                 </action>
-
             </block>
         </referenceContainer>
     </body>
