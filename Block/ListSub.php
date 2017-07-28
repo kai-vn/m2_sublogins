@@ -1,22 +1,23 @@
 <?php
+
 namespace SITC\Sublogins\Block;
 
-use \Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template;
 
 class ListSub extends Template
 {
-    private $_objectManager;
     protected $_parrent;
     protected $_template = 'listsub.phtml';
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
-
     protected $filterProvider;
     protected $coreRegistry;
     protected $_customerSession;
     protected $_customerRepository;
+    private $_objectManager;
+
     /**
      * @param Template\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -45,6 +46,17 @@ class ListSub extends Template
         $this->setCollection($collection);
         $this->pageConfig->getTitle()->set(__('My Sub-Account List'));
     }
+
+
+    public function getPagerHtml()
+    {
+        return $this->getChildHtml('pager');
+    }
+
+    /**
+     * @return string
+     */
+    // method for get pager html
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
@@ -59,15 +71,6 @@ class ListSub extends Template
             $this->setChild('pager', $pager);// set pager block in layout
         }
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    // method for get pager html
-    public function getPagerHtml()
-    {
-        return $this->getChildHtml('pager');
     }
 
 }

@@ -18,7 +18,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_entityFactory;
 
 
-
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -33,7 +32,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -64,8 +64,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
 
-
-
         $fieldsets['upload']->addField(
             'sub_accounts_file',
             'file',
@@ -93,7 +91,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function getDownloadSampleFileHtml()
     {
         $sampleUrl = $this->getUrl('sublogins/account/download');
-        $html = '<span id="sample-file-span"><a id="sample-file-link" href="'.$sampleUrl.'">'
+        $html = '<span id="sample-file-span"><a id="sample-file-link" href="' . $sampleUrl . '">'
             . __('Download Sample File')
             . '</a></span>';
         return $html;

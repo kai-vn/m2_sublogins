@@ -25,7 +25,8 @@ class Sublogins extends \Magento\Backend\Block\Widget\Grid\Extended
         CustomerCollectionFactory $customerCollectionFactory,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
-    ) {
+    )
+    {
         $this->_coreRegistry = $coreRegistry;
         $this->customerCollectionFactory = $customerCollectionFactory;
         parent::__construct($context, $backendHelper, $data);
@@ -53,9 +54,9 @@ class Sublogins extends \Magento\Backend\Block\Widget\Grid\Extended
             ->addFieldToSelect('*')
             ->addAttributeToSelect('expire_date', true)
             ->addAttributeToFilter(
-            'sublogin_parent_id',
-            $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        );
+                'sublogin_parent_id',
+                $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+            );
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -147,16 +148,16 @@ class Sublogins extends \Magento\Backend\Block\Widget\Grid\Extended
         );
 
 
-            $this->addColumn(
-                'action',
-                [
-                    'header' => ' ',
-                    'filter' => false,
-                    'sortable' => false,
-                    'width' => '100px',
-                    'renderer' => 'SITC\Sublogins\Block\Adminhtml\Customer\Grid\Column\Renderer\Action'
-                ]
-            );
+        $this->addColumn(
+            'action',
+            [
+                'header' => ' ',
+                'filter' => false,
+                'sortable' => false,
+                'width' => '100px',
+                'renderer' => 'SITC\Sublogins\Block\Adminhtml\Customer\Grid\Column\Renderer\Action'
+            ]
+        );
 
 
         return parent::_prepareColumns();

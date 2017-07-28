@@ -1,8 +1,8 @@
 <?php
+
 namespace SITC\Sublogins\Cron;
 
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
-use function PHPSTORM_META\elementType;
 
 class EmailExpired
 {
@@ -14,7 +14,8 @@ class EmailExpired
         CustomerCollectionFactory $customerCollectionFactory,
         \SITC\Sublogins\Helper\Data $helper,
         \SITC\Sublogins\Helper\Email $email
-    ){
+    )
+    {
         $this->customerCollectionFactory = $customerCollectionFactory;
         $this->helper = $helper;
         $this->email = $email;
@@ -26,15 +27,15 @@ class EmailExpired
             ->addAttributeToSelect('expire_date', true)
             ->addAttributeToFilter('is_sub_login', 1);
         $templateExpired = $this->helper->getEmailExpired();
-        foreach ($collection as $customer){
+        foreach ($collection as $customer) {
             $date = new \DateTime($customer->getExpireDate());
-            if($date < new \DateTime('today')){
+            if ($date < new \DateTime('today')) {
                 $customerName = ['name' => $customer->getName()];
                 $sendEmail = $this->email->sendEmail($customerName, $customer->getEmail(), $templateExpired);
-                if($sendEmail == true){
+                if ($sendEmail == true) {
                     $result = "\n Sent email success to " . $customer->getEmail() . "\n";
                     echo $result;
-                } else{
+                } else {
                     $result = "\n Could not send email to " . $customer->getEmail() . "\n";
                     echo $result;
                 }

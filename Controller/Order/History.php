@@ -4,11 +4,12 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Controller\Order;
 
-use Magento\Sales\Controller\OrderInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Controller\OrderInterface;
 
 class History extends \Magento\Framework\App\Action\Action implements OrderInterface
 {
@@ -24,7 +25,8 @@ class History extends \Magento\Framework\App\Action\Action implements OrderInter
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory
-    ) {
+    )
+    {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }

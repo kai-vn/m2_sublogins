@@ -22,7 +22,8 @@ class ListSubAccounts extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         CustomerCollectionFactory $customerCollectionFactory,
         array $data = []
-    ) {
+    )
+    {
         $this->customerCollectionFactory = $customerCollectionFactory;
         parent::__construct($context, $backendHelper, $data);
     }

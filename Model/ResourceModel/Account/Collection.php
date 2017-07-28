@@ -1,7 +1,8 @@
 <?php
+
 namespace SITC\Sublogins\Model\ResourceModel\Account;
 
-use \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
 {

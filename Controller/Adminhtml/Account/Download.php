@@ -2,9 +2,9 @@
 
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Download sample file controller
@@ -48,7 +48,8 @@ class Download extends ImportController
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
-    ) {
+    )
+    {
         parent::__construct(
             $context
         );

@@ -1,4 +1,5 @@
 <?php
+
 namespace SITC\Sublogins\Helper;
 
 use Magento\Framework\App\Helper\Context;
@@ -27,7 +28,8 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
         \Psr\Log\LoggerInterface $logger,
         \SITC\Sublogins\Helper\Data $helper
 
-    ){
+    )
+    {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
         $this->inlineTranslation = $inlineTranslation;
@@ -45,7 +47,7 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
         $postObject->setData($data);
         $this->inlineTranslation->suspend();
         $senderInfo = $this->helper->getSenderEmail();
-        try{
+        try {
             $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
                 ->setTemplateOptions(['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $this->_storeManager->getStore()->getId()])
                 ->setTemplateVars(['data' => $postObject])

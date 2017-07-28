@@ -3,13 +3,10 @@
 
 namespace SITC\Sublogins\Helper;
 
-use Magento\Checkout\Exception;
 use Magento\Customer\Model\CustomerExtractor;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverInterface;
 
 
 /**
@@ -130,14 +127,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->request = $request;
         $this->customerCollectionFactory = $customerCollectionFactory;
         $this->_resource = $resource;
-        $this->customerRepositoryInterface =$customerRepositoryInterface;
+        $this->customerRepositoryInterface = $customerRepositoryInterface;
         $this->customerExtractor = $customerExtractor;
         $this->_storeManager = $storeManager;
         $this->customerRepository = $customerRepository;
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
         $this->_backendUrl = $backendUrl;
-        $this->customerFactory  = $customerFactory;
+        $this->customerFactory = $customerFactory;
         $this->storeManager = $storeManager;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_resourceHelper = $resourceHelper;
@@ -178,28 +175,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $sub_accs;
     }
 
-    public function isSublogin() {
+    public function isSublogin()
+    {
         $attributeId = $this->_eavAttribute->getIdByCode('customer', 'is_sub_login');
         $customerId = $this->_customerSession->getCustomerId();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $sub_accs = array();
         $aguments = $objectManager->create('SITC\Sublogins\Model\Parrent')->getCollection()->getData();
-        foreach ($aguments as $agument){
-            if($agument['value'] == 1 && $agument['entity_id'] == $customerId  && $agument['attribute_id'] == $attributeId){
+        foreach ($aguments as $agument) {
+            if ($agument['value'] == 1 && $agument['entity_id'] == $customerId && $agument['attribute_id'] == $attributeId) {
                 $sub_accs[] = $agument['entity_id'];
             }
         }
         return $sub_accs;
     }
-    public function getCreateSublogin() {
+
+    public function getCreateSublogin()
+    {
         $customerId = $this->_customerSession->getCustomerId();
         $customer = $this->_customerRepositoryInterface->getById($customerId);
         $customAttribute = $customer->getCustomAttribute('can_create_sub_login');
-        if(!empty($customAttribute)){
+        if (!empty($customAttribute)) {
             $customAttribute = $customAttribute->getValue();
         }
         return $customAttribute;
     }
+
     public function getOrdersSubAc()
     {
         $attributeId = $this->_eavAttribute->getIdByCode('customer', 'sublogin_parent_id');
@@ -207,13 +208,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $sub_accs = array();
         $aguments = $objectManager->create('SITC\Sublogins\Model\Parrent')->getCollection()->getData();
-        foreach ($aguments as $agument){
-            if($agument['value'] == $customerId && $agument['attribute_id'] == $attributeId){
+        foreach ($aguments as $agument) {
+            if ($agument['value'] == $customerId && $agument['attribute_id'] == $attributeId) {
                 $sub_accs[] = $agument['entity_id'];
             }
         }
         return $sub_accs;
     }
+
     public function getOrdersIsSubAc()
     {
         $attributeId = $this->_eavAttribute->getIdByCode('customer', 'is_sub_login');
@@ -221,21 +223,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $sub_accs = array();
         $aguments = $objectManager->create('SITC\Sublogins\Model\Parrent')->getCollection()->getData();
-        foreach ($aguments as $agument){
-            if($agument['value'] == 1 && $agument['entity_id'] == $customerId  && $agument['attribute_id'] == $attributeId){
+        foreach ($aguments as $agument) {
+            if ($agument['value'] == 1 && $agument['entity_id'] == $customerId && $agument['attribute_id'] == $attributeId) {
                 $sub_accs[] = $agument['entity_id'];
             }
         }
         return $sub_accs;
     }
-    public function getStatusSubAc($sublog_id) {
+
+    public function getStatusSubAc($sublog_id)
+    {
         $customer = $this->customerRepositoryInterface->getById($sublog_id);
         $status = $customer->getCustomAttribute('is_active_sublogin');
-        if(!empty($status)){
+        if (!empty($status)) {
             $status = $status->getValue();
         }
-       return $status;
+        return $status;
     }
+
     public function getSubRegisterPostUrl()
     {
         return $this->urlBuilder->getUrl('sublogins/account/createpost');

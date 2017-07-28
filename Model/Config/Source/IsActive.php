@@ -1,7 +1,6 @@
 <?php
 
 
-
 namespace SITC\Sublogins\Model\Config\Source;
 
 class IsActive implements \Magento\Framework\Option\ArrayInterface

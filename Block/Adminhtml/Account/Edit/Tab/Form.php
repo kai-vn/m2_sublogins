@@ -1,4 +1,5 @@
 <?php
+
 namespace SITC\Sublogins\Block\Adminhtml\Account\Edit\Tab;
 
 
@@ -12,6 +13,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_systemStore;
     protected $_status;
     protected $_yesNo;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -27,11 +29,43 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
         array $data = []
-    ) {
-        $this->_yesNo    = $yesNo;
-        $this->_status   = $status;
+    )
+    {
+        $this->_yesNo = $yesNo;
+        $this->_status = $status;
         $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    public function getTabLabel()
+    {
+        return __('Account Informations');
+    }
+
+    /**
+     * Prepare title for tab
+     *
+     * @return string
+     */
+    public function getTabTitle()
+    {
+        return __('Account Informations');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canShowTab()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isHidden()
+    {
+        return false;
     }
 
     /**
@@ -116,7 +150,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Subscribe'),
                 'title' => __('Subscribe'),
 
-                'values' =>$this->_yesNo->getYesnoOptions()
+                'values' => $this->_yesNo->getYesnoOptions()
             ]
         );
         $fieldset->addField(
@@ -131,32 +165,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         return parent::_prepareForm();
     }
-    public function getTabLabel() {
-        return __('Account Informations');
-    }
-
-    /**
-     * Prepare title for tab
-     *
-     * @return string
-     */
-    public function getTabTitle() {
-        return __('Account Informations');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canShowTab() {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isHidden() {
-        return false;
-    }
 
     /**
      * Check permission for passed action
@@ -164,7 +172,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $resourceId
      * @return bool
      */
-    protected function _isAllowedAction($resourceId) {
+    protected function _isAllowedAction($resourceId)
+    {
         return $this->_authorization->isAllowed($resourceId);
     }
 }

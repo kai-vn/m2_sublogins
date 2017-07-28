@@ -1,7 +1,8 @@
 <?php
+
 namespace SITC\Sublogins\Model\ResourceModel;
 
-use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Account post mysql resource

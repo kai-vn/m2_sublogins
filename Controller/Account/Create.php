@@ -4,12 +4,13 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Controller\Account;
 
 use Magento\Customer\Model\Registration;
 use Magento\Customer\Model\Session;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 class Create extends \Magento\Customer\Controller\AbstractAccount
 {
@@ -37,7 +38,8 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
         Session $customerSession,
         PageFactory $resultPageFactory,
         Registration $registration
-    ) {
+    )
+    {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->registration = $registration;

@@ -3,11 +3,11 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Block\Order;
 
-use \Magento\Framework\App\ObjectManager;
-use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
-use SITC\Sublogins\Model\Parrent;
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
  * Sales order history block
@@ -57,7 +57,8 @@ class History extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
         array $data = []
-    ) {
+    )
+    {
         $this->_parrent = $parrent;
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
@@ -65,44 +66,6 @@ class History extends \Magento\Framework\View\Element\Template
         parent::__construct($context, $data);
         $collection = $this->_parrent->getCollection();
         $this->setCollection($collection);
-    }
-
-    /**
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->pageConfig->getTitle()->set(__('My Orders'));
-    }
-
-    /**
-     * @return CollectionFactoryInterface
-     *
-     * @deprecated
-     */
-    private function getOrderCollectionFactory()
-    {
-        if ($this->orderCollectionFactory === null) {
-            $this->orderCollectionFactory = ObjectManager::getInstance()->get(CollectionFactoryInterface::class);
-        }
-        return $this->orderCollectionFactory;
-    }
-    protected function _prepareLayout()
-    {
-
-        parent::_prepareLayout();
-        if ($this->getCollection()) {
-            // create pager block for collection
-            $pager = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
-                'sitc.sublogins.record.pager'
-            )->setCollection(
-                $this->getCollection() // assign collection to pager
-            );
-            $this->setChild('pager', $pager);// set pager block in layout
-        }
-        return $this;
     }
 
     /**
@@ -136,8 +99,17 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return $this
+     * @return CollectionFactoryInterface
+     *
+     * @deprecated
      */
+    private function getOrderCollectionFactory()
+    {
+        if ($this->orderCollectionFactory === null) {
+            $this->orderCollectionFactory = ObjectManager::getInstance()->get(CollectionFactoryInterface::class);
+        }
+        return $this->orderCollectionFactory;
+    }
 
     /**
      * @param object $order
@@ -158,6 +130,10 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return $this
+     */
+
+    /**
      * @param object $order
      * @return string
      */
@@ -172,5 +148,31 @@ class History extends \Magento\Framework\View\Element\Template
     public function getBackUrl()
     {
         return $this->getUrl('customer/account/');
+    }
+
+    /**
+     * @return void
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->pageConfig->getTitle()->set(__('My Orders'));
+    }
+
+    protected function _prepareLayout()
+    {
+
+        parent::_prepareLayout();
+        if ($this->getCollection()) {
+            // create pager block for collection
+            $pager = $this->getLayout()->createBlock(
+                'Magento\Theme\Block\Html\Pager',
+                'sitc.sublogins.record.pager'
+            )->setCollection(
+                $this->getCollection() // assign collection to pager
+            );
+            $this->setChild('pager', $pager);// set pager block in layout
+        }
+        return $this;
     }
 }

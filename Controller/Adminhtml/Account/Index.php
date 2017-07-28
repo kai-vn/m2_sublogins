@@ -1,9 +1,10 @@
 <?php
+
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\App\Action;
 
 class Index extends Action
 {
@@ -21,7 +22,8 @@ class Index extends Action
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
     }

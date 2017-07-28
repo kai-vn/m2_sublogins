@@ -1,4 +1,5 @@
 <?php
+
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
 use Magento\Backend\App\Action;
@@ -17,7 +18,8 @@ class Save extends \Magento\Backend\App\Action
     public function __construct(
         Action\Context $context,
         \SITC\Sublogins\Model\Account $model
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->_model = $model;
     }
@@ -75,6 +77,7 @@ class Save extends \Magento\Backend\App\Action
         }
         return $resultRedirect->setPath('*/*/');
     }
+
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('SITC_Sublogins::account_save');

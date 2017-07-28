@@ -1,8 +1,9 @@
 <?php
+
 namespace SITC\Sublogins\Observer\Adminhtml\Customer;
 
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ObserverInterface;
 
 class PrepareSave implements ObserverInterface
 {
@@ -11,7 +12,8 @@ class PrepareSave implements ObserverInterface
 
     public function __construct(
         \Magento\Framework\Registry $coreRegistry
-    ) {
+    )
+    {
         $this->_coreRegistry = $coreRegistry;
     }
 
@@ -19,9 +21,9 @@ class PrepareSave implements ObserverInterface
     {
         $subloginParentId = $this->getSession()->getSubParentId();
         $customer = $observer->getCustomer();
-        if(!empty($subloginParentId)){
-            $customer->setCustomAttribute('sublogin_parent_id',$subloginParentId);
-            $customer->setCustomAttribute('is_sub_login',1);
+        if (!empty($subloginParentId)) {
+            $customer->setCustomAttribute('sublogin_parent_id', $subloginParentId);
+            $customer->setCustomAttribute('is_sub_login', 1);
         }
         $this->getSession()->unsSubParentId();
         return $customer;

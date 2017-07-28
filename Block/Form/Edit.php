@@ -3,9 +3,9 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Block\Form;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
 
 /**
@@ -15,6 +15,25 @@ use Magento\Customer\Model\AccountManagement;
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
+    /**
+     * Restore entity data from session. Entity and form code must be defined for the form.
+     *
+     * @param \Magento\Customer\Model\Metadata\Form $form
+     * @param null $scope
+     * @return \Magento\Customer\Block\Form\Register
+     */
+    public function restoreSessionData(\Magento\Customer\Model\Metadata\Form $form, $scope = null)
+    {
+        $formData = $this->getFormData();
+        if (isset($formData['customer_data']) && $formData['customer_data']) {
+            $request = $form->prepareRequest($formData['data']);
+            $data = $form->extractData($request, $scope, false);
+            $form->restoreData($data);
+        }
+
+        return $this;
+    }
+
     /**
      * Retrieve form data
      *
@@ -33,25 +52,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
             $this->setData('form_data', $data);
         }
         return $data;
-    }
-
-    /**
-     * Restore entity data from session. Entity and form code must be defined for the form.
-     *
-     * @param \Magento\Customer\Model\Metadata\Form $form
-     * @param null $scope
-     * @return \Magento\Customer\Block\Form\Register
-     */
-    public function restoreSessionData(\Magento\Customer\Model\Metadata\Form $form, $scope = null)
-    {
-        $formData = $this->getFormData();
-        if (isset($formData['customer_data']) && $formData['customer_data']) {
-            $request = $form->prepareRequest($formData['data']);
-            $data = $form->extractData($request, $scope, false);
-            $form->restoreData($data);
-        }
-
-        return $this;
     }
 
     /**

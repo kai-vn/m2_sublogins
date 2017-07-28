@@ -1,7 +1,8 @@
 <?php
+
 namespace SITC\Sublogins\Model;
 
-use \Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 
 class Account extends AbstractModel
 {
