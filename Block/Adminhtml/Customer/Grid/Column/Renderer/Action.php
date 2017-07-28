@@ -47,7 +47,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         );
         return $this->_actionsToHtml();
     }
-
     /**
      * Get escaped value
      *

@@ -20,6 +20,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
+
         $customerId = $this->initCurrentCustomer();
 
         $customerData = [];
@@ -50,7 +51,6 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
         }
         $customerData['customer_id'] = $customerId;
         $this->_getSession()->setCustomerData($customerData);
-
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Customer::customer_manage');
         $this->prepareDefaultCustomerTitle($resultPage);
