@@ -3,8 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace SITC\Sublogins\Controller\Adminhtml\Index;
+namespace SITC\Sublogins\Controller\Adminhtml\EditSubAc;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -21,7 +20,6 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-
         $customerId = $this->initCurrentCustomer();
 
         $customerData = [];
@@ -52,6 +50,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
         }
         $customerData['customer_id'] = $customerId;
         $this->_getSession()->setCustomerData($customerData);
+
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Customer::customer_manage');
         $this->prepareDefaultCustomerTitle($resultPage);
