@@ -48,7 +48,7 @@ class InstallData implements InstallDataInterface
 
         $customerSetup->addAttribute(Customer::ENTITY, 'can_create_sub_login', [
             'type' => 'int',
-            'label' => 'Can Create Sublogin',
+            'label' => 'Can Create Sub Account',
             'input' => 'boolean',
             'backend' => 'Magento\Customer\Model\Attribute\Backend\Data\Boolean',
             'required' => false,
@@ -61,7 +61,7 @@ class InstallData implements InstallDataInterface
 
         $customerSetup->addAttribute(Customer::ENTITY, 'max_sub_logins', [
             'type' => 'varchar',
-            'label' => 'Max Sub Logins',
+            'label' => 'Max Sub Accounts',
             'input' => 'text',
             'sort_order' => 900,
             'required' => false,
@@ -72,19 +72,18 @@ class InstallData implements InstallDataInterface
         ]);
 
         $customerSetup->addAttribute(Customer::ENTITY, 'expire_date', [
-                'type' => 'datetime',
-                'label' => 'Expire Date',
-                'input' => 'date',
-                'frontend' => 'Magento\Eav\Model\Entity\Attribute\Frontend\Datetime',
-                'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
-                'required' => false,
-                'sort_order' => 900,
-                'visible' => true,
-                'system' => false,
-                'user_defined' => true,
-                'position' => 999
-            ]
-        );
+            'type' => 'datetime',
+            'label' => 'Expire Date',
+            'input' => 'date',
+            'frontend' => 'Magento\Eav\Model\Entity\Attribute\Frontend\Datetime',
+            'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
+            'required' => false,
+            'sort_order' => 900,
+            'visible' => true,
+            'system' => false,
+            'user_defined' => true,
+            'position' => 999
+        ]);
 
         $customerSetup->addAttribute(Customer::ENTITY, 'sublogin_parent_id', [
             'type' => 'int',
@@ -100,7 +99,7 @@ class InstallData implements InstallDataInterface
 
         $customerSetup->addAttribute(Customer::ENTITY, 'is_sub_login', [
             'type' => 'int',
-            'label' => 'Is Sub-account',
+            'label' => 'Is Sub Account',
             'required' => false,
             'visible' => false,
             'user_defined' => true,
@@ -115,7 +114,7 @@ class InstallData implements InstallDataInterface
 
         $customerSetup->addAttribute(Customer::ENTITY, 'is_active_sublogin', [
             'type' => 'int',
-            'label' => 'Is Active Sublogin',
+            'label' => 'Is Active Sub Account',
             'required' => false,
             'visible' => false,
             'user_defined' => true,
@@ -157,14 +156,6 @@ class InstallData implements InstallDataInterface
             ]);
         $attribute->save();
 
-        $attribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'is_sub_login')
-            ->addData([
-                'attribute_set_id' => $attributeSetId,
-                'attribute_group_id' => $attributeGroupId,
-                'used_in_forms' => ['adminhtml_customer']
-            ]);
-        $attribute->save();
-
         $attribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'is_active_sublogin')
             ->addData([
                 'attribute_set_id' => $attributeSetId,
@@ -173,6 +164,37 @@ class InstallData implements InstallDataInterface
             ]);
         $attribute->save();
 
+        $isSubLoginAttribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'is_sub_login')
+            ->addData([
+                'attribute_set_id' => $attributeSetId,
+                'attribute_group_id' => $attributeGroupId,
+                'used_in_forms' => ['adminhtml_customer']
+            ]);
+        $isSubLoginAttribute->save();
+
         $setup->endSetup();
+
+        $this->updateCustomerAttributes($setup, $isSubLoginAttribute);
+    }
+
+    public function updateCustomerAttributes(ModuleDataSetupInterface $setup, $isSubLoginAttribute)
+    {
+        $connection = $setup->getConnection();
+
+        $customerEntityTable = $connection->getTableName('customer_entity');
+        $customerEntityIntTable = $connection->getTableName('customer_entity_int');
+        $columns = [
+            'attribute_id' => new \Zend_Db_Expr($isSubLoginAttribute->getId()),
+            'entity_id' => 'entity_id',
+            'value' => new \Zend_Db_Expr(\SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_NOT_SUB_LOGIN)
+        ];
+
+        $select = $connection->select()->from(
+            [$customerEntityTable],
+            $columns
+        );
+        $query = $select->insertFromSelect($customerEntityIntTable, array_keys($columns));
+
+        $connection->query($query);
     }
 }
