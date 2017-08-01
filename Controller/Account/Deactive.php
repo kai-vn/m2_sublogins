@@ -10,6 +10,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -24,6 +25,7 @@ class Deactive extends \Magento\Customer\Controller\AbstractAccount
     protected $session;
     protected $urlModel;
     protected $url;
+    protected $pageFactory;
     protected $registry;
     protected $_customerRepository;
     protected $request;
@@ -36,6 +38,7 @@ class Deactive extends \Magento\Customer\Controller\AbstractAccount
     public function __construct(
         Context $context,
         CustomerUrl $customerUrl,
+        PageFactory $pageFactory,
         UrlFactory $urlFactory,
         \Magento\Framework\UrlInterface $url,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavAttribute,
@@ -53,6 +56,7 @@ class Deactive extends \Magento\Customer\Controller\AbstractAccount
 
     )
     {
+        $this->pageFactory = $pageFactory;
         $this->_eavAttribute = $eavAttribute;
         $this->accountManagement = $accountManagement;
         $this->helper = $helper;

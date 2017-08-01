@@ -8,11 +8,12 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Edit extends \Magento\Customer\Controller\AbstractAccount
+class Edit extends \SITC\Sublogins\Controller\Account\AccountAbstract
 {
     /** @var CustomerRepositoryInterface */
     protected $customerRepository;
-
+    protected $_customerSession;
+    protected $pageFactory;
     /** @var DataObjectHelper */
     protected $dataObjectHelper;
 
@@ -35,13 +36,16 @@ class Edit extends \Magento\Customer\Controller\AbstractAccount
      */
     public function __construct(
         Context $context,
+        PageFactory $pageFactory,
         Session $customerSession,
+        \Magento\Customer\Model\Session $customerSession,
         PageFactory $resultPageFactory,
         CustomerRepositoryInterface $customerRepository,
         DataObjectHelper $dataObjectHelper
     )
     {
         $this->session = $customerSession;
+        $this->_customerSession = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->customerRepository = $customerRepository;
         $this->dataObjectHelper = $dataObjectHelper;

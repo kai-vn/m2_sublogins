@@ -11,6 +11,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Session;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -44,7 +45,7 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
 
     /** @var \Magento\Framework\UrlInterface */
     protected $urlModel;
-
+    protected $pageFactory;
     /**
      * @var Session
      */
@@ -68,9 +69,11 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Address $addressHelper,
+        PageFactory $pageFactory,
         UrlFactory $urlFactory
     )
     {
+        $this->pageFactory = $pageFactory;
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;

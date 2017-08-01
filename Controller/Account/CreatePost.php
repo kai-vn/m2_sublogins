@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Helper\Address;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Metadata\FormFactory;
@@ -89,7 +90,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private $cookieMetadataFactory;
-
+    protected $pageFactory;
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
@@ -129,6 +130,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
         UrlFactory $urlFactory,
+        PageFactory $pageFactory,
         FormFactory $formFactory,
         SubscriberFactory $subscriberFactory,
         RegionInterfaceFactory $regionDataFactory,
@@ -142,7 +144,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         AccountRedirect $accountRedirect
     )
     {
-
+        $this->pageFactory = $pageFactory;
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;

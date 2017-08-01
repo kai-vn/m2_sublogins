@@ -14,6 +14,7 @@ use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -37,7 +38,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @var AccountManagementInterface
      */
     protected $customerAccountManagement;
-
+    protected $pageFactory;
     /**
      * @var CustomerRepositoryInterface
      */
@@ -87,6 +88,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     public function __construct(
         Context $context,
         Session $customerSession,
+        PageFactory $pageFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,

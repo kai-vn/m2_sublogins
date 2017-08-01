@@ -94,6 +94,7 @@ class InstallData implements InstallDataInterface
             'position' => 999,
             'system' => false,
             'sort_order' => 900,
+            'is_used_in_grid' => true,
             'is_filterable_in_grid' => true
         ]);
 

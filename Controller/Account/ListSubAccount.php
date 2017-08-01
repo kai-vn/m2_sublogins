@@ -12,7 +12,9 @@ class ListSubAccount extends Action
 
     public function __construct(
         Context $context,
-        PageFactory $pageFactory)
+        \Magento\Customer\Model\Session $customerSession,
+        PageFactory $pageFactory
+    )
     {
         $this->_resultPageFactory = $pageFactory;
         parent::__construct($context);

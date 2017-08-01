@@ -6,7 +6,6 @@
 
 namespace SITC\Sublogins\Block\Order;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
@@ -18,7 +17,7 @@ class History extends \Magento\Framework\View\Element\Template
      * @var string
      */
     protected $_template = 'history.phtml';
-
+    protected $subOrders;
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
@@ -53,19 +52,15 @@ class History extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
-        \SITC\Sublogins\Model\Parrent $parrent,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
         array $data = []
     )
     {
-        $this->_parrent = $parrent;
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
         parent::__construct($context, $data);
-        $collection = $this->_parrent->getCollection();
-        $this->setCollection($collection);
     }
 
     /**
@@ -79,38 +74,36 @@ class History extends \Magento\Framework\View\Element\Template
     /**
      * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
      */
-    public function getOrders()
+    public function getsubOrders()
     {
-        if (!($customerId = $this->_customerSession->getCustomerId())) {
-            return false;
-        }
-        if (!$this->orders) {
-            $this->orders = $this->getOrderCollectionFactory()->create($customerId)->addFieldToSelect(
-                '*'
-            )->addFieldToFilter(
-                'status',
-                ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
-            )->setOrder(
-                'created_at',
-                'desc'
-            );
-        }
-        return $this->orders;
-    }
+        if (!$this->subOrders) {
+            $customerId = $this->_customerSession->getCustomerId();
+            $this->subOrders = $this->_orderCollectionFactory->create()
+                ->addFieldToSelect('*')
+                ->addFieldToFilter('customer_id', $customerId);
+            die($this->subOrders->getSelect());
 
-    /**
-     * @return CollectionFactoryInterface
-     *
-     * @deprecated
-     */
-    private function getOrderCollectionFactory()
+        }
+        return $this->subOrders;
+    }
+    protected function _prepareLayout()
     {
-        if ($this->orderCollectionFactory === null) {
-            $this->orderCollectionFactory = ObjectManager::getInstance()->get(CollectionFactoryInterface::class);
-        }
-        return $this->orderCollectionFactory;
-    }
+        parent::_prepareLayout();
+        if ($this->getsubOrders()) {
+            $pager = $this->getLayout()->createBlock(
+                'Magento\Theme\Block\Html\Pager',
+                'sitc.sublogins.record.pager'
+            )
+                ->setAvailableLimit([1 => 1, 2 => 2, 3 => 3])
+                ->setShowPerPage(true)
+                ->setCollection($this->getsubOrders());
 
+            $this->setChild('pager', $pager);
+
+            $this->getsubOrders()->load();
+        }
+        return $this;
+    }
     /**
      * @param object $order
      * @return string
@@ -159,20 +152,6 @@ class History extends \Magento\Framework\View\Element\Template
         $this->pageConfig->getTitle()->set(__('My Orders'));
     }
 
-    protected function _prepareLayout()
-    {
 
-        parent::_prepareLayout();
-        if ($this->getCollection()) {
-            // create pager block for collection
-            $pager = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
-                'sitc.sublogins.record.pager'
-            )->setCollection(
-                $this->getCollection() // assign collection to pager
-            );
-            $this->setChild('pager', $pager);// set pager block in layout
-        }
-        return $this;
-    }
+
 }

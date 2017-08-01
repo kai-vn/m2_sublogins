@@ -14,6 +14,7 @@ use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 class Active extends \Magento\Customer\Controller\AbstractAccount
 {
@@ -32,9 +33,12 @@ class Active extends \Magento\Customer\Controller\AbstractAccount
     protected $customerDataFactory;
     protected $accountManagement;
     protected $_eavAttribute;
+    protected $pageFactory;
 
     public function __construct(
         Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        PageFactory $pageFactory,
         CustomerUrl $customerUrl,
         UrlFactory $urlFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavAttribute,
@@ -59,6 +63,7 @@ class Active extends \Magento\Customer\Controller\AbstractAccount
         $this->customerDataFactory = $customerDataFactory;
         $this->_customerRepository = $customerRepository;
         $this->request = $request;
+        $this->pageFactory = $pageFactory;
         $this->url = $url;
         $this->urlModel = $urlFactory->create();
         $this->customerFactory = $customerFactory;

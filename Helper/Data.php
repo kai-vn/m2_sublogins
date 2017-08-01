@@ -164,13 +164,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $customerId = $this->_customerSession->getCustomerId();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $sub_accs = array();
-        $aguments = $objectManager->create('SITC\Sublogins\Model\Parrent')->getCollection()->getData();
+        $aguments = $objectManager->create('Magento\Customer\Model\Customer')->getCollection()->getData();
 
-        foreach ($aguments as $agument) {
-            if ($agument['value'] == $customerId && $agument['attribute_id'] == $attributeId) {
-                $sub_accs[] = $agument['entity_id'];
-            }
-        }
+//        foreach ($aguments as $agument) {
+//            if ($agument['value'] == $customerId && $agument['attribute_id'] == $attributeId) {
+//                $sub_accs[] = $agument['entity_id'];
+//            }
+//        }
 
         return $sub_accs;
     }
@@ -181,12 +181,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $customerId = $this->_customerSession->getCustomerId();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $sub_accs = array();
-        $aguments = $objectManager->create('SITC\Sublogins\Model\Parrent')->getCollection()->getData();
-        foreach ($aguments as $agument) {
-            if ($agument['value'] == 1 && $agument['entity_id'] == $customerId && $agument['attribute_id'] == $attributeId) {
-                $sub_accs[] = $agument['entity_id'];
-            }
-        }
+        $aguments = $objectManager->create('Magento\Customer\Model\Customer')->getCollection()->getData();
+
         return $sub_accs;
     }
 

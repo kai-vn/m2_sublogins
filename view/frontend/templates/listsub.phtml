@@ -3,12 +3,9 @@ $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
 $redirect = $storeManager->getStore()->getBaseUrl();
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$customerSession = $objectManager->create('Magento\Customer\Model\Session');
-$sublog = $this->helper('SITC\Sublogins\Helper\Data')->getIdSub();
-$issublog = $this->helper('SITC\Sublogins\Helper\Data')->isSublogin();
-$cansub = $this->helper('SITC\Sublogins\Helper\Data')->getCreateSublogin();
+$customer = $block->getCustomer();
 ?>
-<?php if(!$issublog || $cansub) : ?>
+<?php if(!$customer->getIsSubLogin() && $customer->getCanCreateSubLogin()) : ?>
     <div class="create-account">
         <a href="<?php echo $redirect . 'sublogins/create/account/' ?>"><?php echo __('Create Sub-Account') ?></a>
     </div>
@@ -23,39 +20,35 @@ $cansub = $this->helper('SITC\Sublogins\Helper\Data')->getCreateSublogin();
             return false;
     }
 </script>
-<div class="table-wrapper orders-history">
-    <table class="data table table-order-items history" id="my-orders-table">
-        <caption class="table-caption"><?php echo __('Grid Record') ?></caption>
-        <thead>
-        <tr>
-            <th scope="col" class="col id"><?php echo __('ID #') ?></th>
-            <th scope="col" class="col prefix"><?php echo __('Prefix') ?></th>
-            <th scope="col" class="col firstname"><?php echo __('FirstName') ?></th>
-            <th scope="col" class="col lastname"><?php echo __('LastName') ?></th>
-            <th scope="col" class="col email"><?php echo __('Email') ?></th>
-            <th scope="col" class="col expire_date"><?php echo __('Date Of Birth ') ?></th>
-            <th scope="col" class="col status"><?php echo __('Active') ?></th>
-            <th scope="col" class="col action"><?php echo __('Action') ?></th>
-            <th scope="col" class="col ">&nbsp;</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        foreach ($sublog as $sublog_id):
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $customerObjs = $objectManager->create('Magento\Customer\Model\Customer')->getCollection()->addFieldToFilter('entity_id',$sublog_id);
-            $active = $this->helper('SITC\Sublogins\Helper\Data')->getStatusSubAc($sublog_id);
-            foreach ($customerObjs as $customerObj):
-                ?>
-                <?php if($customerSession->isLoggedIn() && $sublog || $cansub != $issublog) : ?>
+<?php $subAccounts = $block->getSubAccounts(); ?>
+<?php if ($subAccounts && count($subAccounts)): ?>
+    <div class="table-wrapper orders-history">
+        <table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption"><?php echo __('Grid Record') ?></caption>
+            <thead>
+            <tr>
+                <th scope="col" class="col id"><?php echo __('ID #') ?></th>
+                <th scope="col" class="col prefix"><?php echo __('Prefix') ?></th>
+                <th scope="col" class="col firstname"><?php echo __('FirstName') ?></th>
+                <th scope="col" class="col lastname"><?php echo __('LastName') ?></th>
+                <th scope="col" class="col email"><?php echo __('Email') ?></th>
+                <th scope="col" class="col expire_date"><?php echo __('Date Of Birth ') ?></th>
+                <th scope="col" class="col status"><?php echo __('Active') ?></th>
+                <th scope="col" class="col action"><?php echo __('Action') ?></th>
+                <th scope="col" class="col ">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ($subAccounts as $subAccount): ?>
                 <tr>
-                    <td class="col id"><?php echo $customerObj->getEntityId() ?></td>
-                    <td class="col prefix"><?php echo $customerObj->getPrefix() ?></td>
-                    <td class="col firstname"><?php echo $customerObj->getFirstname() ?></td>
-                    <td class="col lastname"><?php echo $customerObj->getLastname() ?></td>
-                    <td class="col email"><?php echo $customerObj->getEmail() ?></td>
-                    <td class="col date"><?php echo $block->formatDate($customerObj->getDob()) ?></td>
-                    <td class="col status"><?php echo (int) $active ?></td>
+                    <td class="col id"><?php echo $subAccount->getEntityId() ?></td>
+                    <td class="col prefix"><?php echo $subAccount->getPrefix() ?></td>
+                    <td class="col firstname"><?php echo $subAccount->getFirstname() ?></td>
+                    <td class="col lastname"><?php echo $subAccount->getLastname() ?></td>
+                    <td class="col email"><?php echo $subAccount->getEmail() ?></td>
+                    <td class="col date"><?php echo $block->formatDate($subAccount->getDob()) ?></td>
+                    <td class="col status"><?php $status = $subAccount->getIsActiveSublogin() == 1 ? __('Yes') : __('No'); echo $status; ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
                         <ul class="sub-ac">
                             <li>
@@ -64,63 +57,37 @@ $cansub = $this->helper('SITC\Sublogins\Helper\Data')->getCreateSublogin();
                                 </a>
                             </li>
                             <li>
-                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/delete/id/' . $customerObj->getId() ?>" onclick="return ConfirmDelete();" class="action delete">
+                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/delete/id/' . $subAccount->getId() ?>" onclick="return ConfirmDelete();" class="action delete">
                                     <span>Delete Account</span>
                                 </a>
                             </li>
-                            <li>
-                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/active/ac/' . $customerObj->getId() ?>" class="action active">
-                                    <span>Active Account</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/deactive/deac/' . $customerObj->getId() ?>" class="action deactive">
-                                    <span class="warning-subac">Deactive Account</span>
-                                </a>
-                            </li>
+                            <?php if($subAccount->getIsActiveSublogin()) :  ?>
+                                <li>
+                                    <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/deactive/deac/' . $subAccount->getId() ?>" class="action deactive">
+                                        <span class="warning-subac">Deactive Account</span>
+                                    </a>
+                                </li>
+                            <?php else : ?>
+                                <li>
+                                    <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/active/ac/' . $subAccount->getId() ?>" class="action active">
+                                        <span>Active Account</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
 
                         </ul>
                     </td>
                 </tr>
-            <?php endif;?>
             <?php endforeach; ?>
-        <?php endforeach; ?>
-        <?php if(is_null($sublog) || !empty($issublog)) : ?>
-            <?php
-            foreach ($issublog as $is_sublog_id):
-                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                $customerObjs = $objectManager->create('Magento\Customer\Model\Customer')->getCollection()->addFieldToFilter('entity_id', $issublog);
-                $active = $this->helper('SITC\Sublogins\Helper\Data')->getStatusSubAc($is_sublog_id);
-                foreach($customerObjs as $customerObj):
-                    ?>
-                    <?php if($customerSession->isLoggedIn() && $issublog) :  ?>
-                    <tr>
-                        <td class="col id"><?php echo $customerObj->getEntityId() ?></td>
-                        <td class="col prefix"><?php echo $customerObj->getPrefix() ?></td>
-                        <td class="col status"><?php echo $customerObj->getFirstname() ?></td>
-                        <td class="col status"><?php echo $customerObj->getLastname() ?></td>
-                        <td class="col status"><?php echo $customerObj->getEmail() ?></td>
-                        <td class="col date"><?php echo $block->formatDate($customerObj->getDob()) ?></td>
-                        <td class="col status"><?php echo $active ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                            <ul class="sub-ac">
-                                <li>
-                                    <a href="<?php /* @escapeNotVerified */ echo $redirect . 'sublogins/account/edit' ?>" class="action view">
-                                        <span><?php /* @escapeNotVerified */ echo __('Edit Account') ?></span>
-                                    </a>
-                                </li>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); // for display pager block which we create in block file.   ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('There are no sub account.'); ?></span></div>
+<?php endif ?>
 
-                            </ul>
-                        </td>
-                    </tr>
-
-                <?php endif; ?>
-                <?php endforeach;?>
-            <?php endforeach;?>
-        <?php endif; ?>
-
-        </tbody>
-    </table>
-</div>
 
 

@@ -16,12 +16,12 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
-
+    protected $pageFactory;
     /**
      * @var Session
      */
     protected $session;
-
+    protected $_customerSession;
     /**
      * @var PageFactory
      */
@@ -36,12 +36,16 @@ class Confirmation extends \Magento\Customer\Controller\AbstractAccount
      */
     public function __construct(
         Context $context,
+        \Magento\Customer\Model\Session $customerSession,
         Session $customerSession,
         PageFactory $resultPageFactory,
+        PageFactory $pageFactory,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement
     )
     {
+        $this->pageFactory = $pageFactory;
+        $this->_customerSession = $customerSession;
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->storeManager = $storeManager;

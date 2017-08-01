@@ -32,6 +32,13 @@
             </argument>
         </arguments>
     </type>
+    <!--<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">-->
+        <!--<arguments>-->
+            <!--<argument name="collections" xsi:type="array">-->
+                <!--<item name="edit_subaccount_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Grid\Collection</item>-->
+            <!--</argument>-->
+        <!--</arguments>-->
+    <!--</type>-->
     <type name="Magento\Customer\Ui\Component\Listing\Column\Actions">
         <plugin name="add_action_create_sublogins_customer_grid"
                 type="SITC\Sublogins\Plugin\Customer\Ui\Component\Listing\Column\Actions"/>

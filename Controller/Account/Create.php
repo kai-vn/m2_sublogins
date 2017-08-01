@@ -16,7 +16,7 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var Registration */
     protected $registration;
-
+    protected $pageFactory;
     /**
      * @var Session
      */
@@ -36,10 +36,14 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
     public function __construct(
         Context $context,
         Session $customerSession,
+        \Magento\Customer\Model\Session $customerSession,
+        PageFactory $pageFactory,
         PageFactory $resultPageFactory,
         Registration $registration
     )
     {
+        $this->_customerSession = $customerSession;
+        $this->pageFactory = $pageFactory;
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->registration = $registration;

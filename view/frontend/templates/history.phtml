@@ -1,20 +1,11 @@
 <?php
-/**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-// @codingStandardsIgnoreFile
-?>
-<?php
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$customerSession = $objectManager->create('Magento\Customer\Model\Session');
-$order_sublog = $this->helper('SITC\Sublogins\Helper\Data')->getOrdersSubAc();
-$is_order_sublog = $this->helper('SITC\Sublogins\Helper\Data')->getOrdersIsSubAc();
+$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$customer = $block->getCustomer();
 
 ?>
-<?php $_gridrecords = $block->getCollection(); ?>
-
+<?php $subOrders = $block->getsubOrders(); ?>
+<?php if ($subOrders && count($subOrders)): ?>
 <?php echo $block->getChildHtml('info'); ?>
     <div class="table-wrapper orders-history">
         <table class="data table table-order-items history" id="my-orders-table">
@@ -34,35 +25,30 @@ $is_order_sublog = $this->helper('SITC\Sublogins\Helper\Data')->getOrdersIsSubAc
             </thead>
             <tbody>
 
-            <?php if($customerSession->isLoggedIn() && $order_sublog) : ?>
-                <?php
-                foreach ($order_sublog as $sublog_id):
 
-                    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                    $customerObjs = $objectManager->create('Magento\Sales\Model\Order')->getCollection()->addFieldToFilter('customer_id', $sublog_id);
-                    foreach ($customerObjs as $customerObj):
-                        ?>
+                <?php
+                foreach ($subOrders as $subOrder): ?>
                         <tr>
-                            <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $customerObj->getRealOrderId() ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($customerObj->getCreatedAt()) ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Name')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $customerObj->getCustomerFirstName() ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Email')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $customerObj->getCustomerEmail() ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $subOrder->getRealOrderId() ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($subOrder->getCreatedAt()) ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Name')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $subOrder->getCustomerFirstName() ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Email')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $subOrder->getCustomerEmail() ?></td>
                             <?php $extra = $block->getChildBlock('extra.container'); ?>
                             <?php if ($extra): ?>
-                                <?php $extra->setOrder($customerObj); ?>
+                                <?php $extra->setOrder($subOrder); ?>
                                 <?php /* @noEscape */ echo $extra->getChildHtml() ?>
                             <?php endif; ?>
-                            <td data-th="<?php echo $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $customerObj->getShippingAddress() ? $block->escapeHtml($customerObj->getShippingAddress()->getName()) : '&nbsp;' ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Order Total')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $customerObj->formatPrice($customerObj->getGrandTotal()) ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo $customerObj->getStatusLabel() ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $subOrder->getShippingAddress() ? $block->escapeHtml($subOrder->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Order Total')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $subOrder->formatPrice($subOrder->getGrandTotal()) ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo $subOrder->getStatusLabel() ?></td>
                             <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                                <a href="<?php /* @escapeNotVerified */ echo $block->getViewUrl($customerObj) ?>" class="action view">
+                                <a href="<?php /* @escapeNotVerified */ echo $block->getViewUrl($subOrder) ?>" class="action view">
                                     <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
                                 </a>
-                                <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($customerObj->getEntityId())) : ?>
+                                <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($subOrder->getEntityId())) : ?>
                                     <a href="#" data-post='<?php /* @escapeNotVerified */ echo
                                     $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
-                                        ->getPostData($block->getReorderUrl($customerObj))
+                                        ->getPostData($block->getReorderUrl($subOrder))
                                     ?>' class="action order">
                                         <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
                                     </a>
@@ -71,56 +57,16 @@ $is_order_sublog = $this->helper('SITC\Sublogins\Helper\Data')->getOrdersIsSubAc
                         </tr>
 
                     <?php endforeach; ?>
-                <?php endforeach; ?>
-            <?php endif; ?>
-            <?php if(empty($order_sublog)) : ?>
-            <?php if($customerSession->isLoggedIn() && $is_order_sublog) : ?>
-                <?php
-                foreach ($is_order_sublog as $is_sublog_id):
-
-                    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                    $customerObjs = $objectManager->create('Magento\Sales\Model\Order')->getCollection()->addFieldToFilter('customer_id', $is_sublog_id);
-                    foreach ($customerObjs as $customerObj):
-                        ?>
-                        <tr>
-                            <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $customerObj->getRealOrderId() ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($customerObj->getCreatedAt()) ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Name')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $customerObj->getCustomerFirstName() ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Email')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $customerObj->getCustomerEmail() ?></td>
-                            <?php $extra = $block->getChildBlock('extra.container'); ?>
-                            <?php if ($extra): ?>
-                                <?php $extra->setOrder($customerObj); ?>
-                                <?php /* @noEscape */ echo $extra->getChildHtml() ?>
-                            <?php endif; ?>
-                            <td data-th="<?php echo $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $customerObj->getShippingAddress() ? $block->escapeHtml($customerObj->getShippingAddress()->getName()) : '&nbsp;' ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Order Total')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $customerObj->formatPrice($customerObj->getGrandTotal()) ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo $customerObj->getStatusLabel() ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                                <a href="<?php /* @escapeNotVerified */ echo $block->getViewUrl($customerObj) ?>" class="action view">
-                                    <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
-                                </a>
-                                <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($customerObj->getEntityId())) : ?>
-                                    <a href="#" data-post='<?php /* @escapeNotVerified */ echo
-                                    $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
-                                        ->getPostData($block->getReorderUrl($customerObj))
-                                    ?>' class="action order">
-                                        <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
-                                    </a>
-                                <?php endif ?>
-                            </td>
-                        </tr>
-
-                    <?php endforeach; ?>
-                <?php endforeach; ?>
-            <?php endif; ?>
-            <?php endif; ?>
-
 
             </tbody>
-
         </table>
     </div>
-
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); // for display pager block which we create in block file.   ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('There are no sub order.'); ?></span></div>
+<?php endif ?>
 
 
 

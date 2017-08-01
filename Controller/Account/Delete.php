@@ -8,6 +8,7 @@ namespace SITC\Sublogins\Controller\Account;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
@@ -18,6 +19,7 @@ class Delete extends \Magento\Framework\App\Action\Action
     /**
      * @var CustomerRepositoryInterface
      */
+    protected $pageFactory;
     protected $_customerSession;
     protected $customerFactory;
     protected $_customerRepository;
@@ -44,6 +46,7 @@ class Delete extends \Magento\Framework\App\Action\Action
      */
     public function __construct(
         Context $context,
+        PageFactory $pageFactory,
         \Magento\Framework\Controller\ResultFactory $result,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -61,6 +64,7 @@ class Delete extends \Magento\Framework\App\Action\Action
 
     )
     {
+        $this->pageFactory = $pageFactory;
         $this->customerFactory = $customerFactory;
         $this->request = $request;
         $this->url = $url;
