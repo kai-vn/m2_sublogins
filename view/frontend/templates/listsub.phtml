@@ -5,11 +5,6 @@ $redirect = $storeManager->getStore()->getBaseUrl();
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $customer = $block->getCustomer();
 ?>
-<?php if(!$customer->getIsSubLogin() && $customer->getCanCreateSubLogin()) : ?>
-    <div class="create-account">
-        <a href="<?php echo $redirect . 'sublogins/create/account/' ?>"><?php echo __('Create Sub-Account') ?></a>
-    </div>
-<?php endif; ?>
 <script>
     function ConfirmDelete()
     {
