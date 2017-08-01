@@ -53,7 +53,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 '\Magento\Customer\Api\Data\CustomerInterface'
             );
 
-            $customer->setCustomAttribute('is_sub_login', 1);
+            $customer->setCustomAttribute('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
             $customer->setCustomAttribute('sublogin_parent_id', $parentcustomerId);
             $customer->setCustomAttribute('is_active_sublogin', 1);
             $customer->setCustomAttribute('expire_date', $data['expire_date']);

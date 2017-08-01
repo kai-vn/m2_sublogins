@@ -7,7 +7,6 @@ use Magento\Framework\App\ObjectManager;
 
 class DataProvider
 {
-
     protected $_request;
     protected $session;
 

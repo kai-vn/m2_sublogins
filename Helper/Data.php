@@ -58,7 +58,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $customerId = $this->_customerSession->getCustomerId();
             $this->subAccounts = $this->customerCollectionFactory->create()
                 ->addAttributeToSelect('*')
-                ->addAttributeToFilter('is_sub_login', 1)
+                ->addAttributeToFilter('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN)
                 ->addAttributeToFilter('sublogin_parent_id', $customerId);
         }
         return $this->subAccounts;

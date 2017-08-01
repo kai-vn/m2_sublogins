@@ -57,7 +57,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
      */
     public function canShowTab()
     {
-        if ($this->getCustomerId() && $this->isSublogin() == false) {
+        if ($this->getCustomerId() && $this->isSublogin() == \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN) {
             return true;
         }
         return false;
@@ -87,7 +87,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
      */
     public function isHidden()
     {
-        if ($this->getCustomerId() && $this->isSublogin() == true) {
+        if ($this->getCustomerId() && $this->isSublogin() == \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN) {
             return false;
         }
         return true;

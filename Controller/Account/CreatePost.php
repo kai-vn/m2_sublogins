@@ -191,7 +191,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             $currentCustomerId = $this->_customerSession->getCustomer()->getId();
             $customer->setCustomAttribute('sublogin_parent_id', $currentCustomerId);
             $data = (int)$this->getRequest()->getPostValue('active');
-            $customer->setCustomAttribute('is_sub_login', 1);
+            $customer->setCustomAttribute('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
             $customer->setCustomAttribute('is_active_sublogin', $data);
             $password = $this->getRequest()->getParam('password');
             $confirmation = $this->getRequest()->getParam('password_confirmation');

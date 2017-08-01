@@ -23,7 +23,7 @@ class PrepareSave implements ObserverInterface
         $customer = $observer->getCustomer();
         if (!empty($subloginParentId)) {
             $customer->setCustomAttribute('sublogin_parent_id', $subloginParentId);
-            $customer->setCustomAttribute('is_sub_login', 1);
+            $customer->setCustomAttribute('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
         }
         $this->getSession()->unsSubParentId();
         return $customer;

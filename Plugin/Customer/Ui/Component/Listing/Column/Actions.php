@@ -38,9 +38,9 @@ class Actions
             foreach ($result['data']['items'] as &$item) {
                 $customer = $this->_customerRepositoryInterface->getById($item['entity_id']);
                 $customAttribute = $customer->getCustomAttribute('can_create_sub_login');
-                if (empty($customAttribute) && empty($customer)) {
+                if ($customAttribute && !empty($customer)) {
                     $canCreateSublogin = $customAttribute->getValue();
-                    if (!$canCreateSublogin == 1) {
+                    if ($canCreateSublogin == 1) {
                         $item[$subject->getData('name')]['sublogins'] = [
                             'href' => $this->urlBuilder->getUrl(
                                 'customer/index/new',
@@ -53,7 +53,6 @@ class Actions
                 }
             }
         }
-
         return $result;
     }
 

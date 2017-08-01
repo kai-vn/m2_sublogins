@@ -48,7 +48,7 @@ class ListSubAccounts extends \Magento\Backend\Block\Widget\Grid\Extended
         $collection = $this->customerCollectionFactory->create()
             ->addFieldToSelect('*')
             ->addAttributeToSelect('expire_date', true)
-            ->addAttributeToFilter('is_sub_login', 1);
+            ->addAttributeToFilter('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

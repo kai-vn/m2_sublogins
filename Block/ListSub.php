@@ -28,12 +28,6 @@ class ListSub extends Template
         parent::__construct($context, $data);
     }
 
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->pageConfig->getTitle()->set(__('My Sub-Account List'));
-    }
-
     public function getPagerHtml()
     {
         return $this->getChildHtml('pager');
@@ -45,16 +39,10 @@ class ListSub extends Template
         return $this->_customerSession->getCustomer();
     }
 
-    public function getSubAccounts()
+    protected function _construct()
     {
-        if (!$this->subAccounts) {
-            $customerId = $this->_customerSession->getCustomerId();
-            $this->subAccounts = $this->_customerCollectionFactory->create()
-                ->addAttributeToSelect('*')
-                ->addAttributeToFilter('is_sub_login', 1)
-                ->addAttributeToFilter('sublogin_parent_id', $customerId);
-        }
-        return $this->subAccounts;
+        parent::_construct();
+        $this->pageConfig->getTitle()->set(__('My Sub-Account List'));
     }
 
     protected function _prepareLayout()
@@ -64,7 +52,7 @@ class ListSub extends Template
             $pager = $this->getLayout()->createBlock(
                 'Magento\Theme\Block\Html\Pager',
                 'sitc.sublogins.record.pager'
-                )
+            )
                 ->setAvailableLimit([1 => 1, 2 => 2, 3 => 3])
                 ->setShowPerPage(true)
                 ->setCollection($this->getSubAccounts());
@@ -74,6 +62,18 @@ class ListSub extends Template
             $this->getSubAccounts()->load();
         }
         return $this;
+    }
+
+    public function getSubAccounts()
+    {
+        if (!$this->subAccounts) {
+            $customerId = $this->_customerSession->getCustomerId();
+            $this->subAccounts = $this->_customerCollectionFactory->create()
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN)
+                ->addAttributeToFilter('sublogin_parent_id', $customerId);
+        }
+        return $this->subAccounts;
     }
 
 }
