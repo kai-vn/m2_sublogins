@@ -20,7 +20,6 @@ class ListSubAccount extends Action
         parent::__construct($context);
 
     }
-
     public function execute()
     {
         $resultPage = $this->_resultPageFactory->create();

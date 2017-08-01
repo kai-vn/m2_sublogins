@@ -39,8 +39,7 @@ $customer = $block->getCustomer();
             </tr>
             </thead>
             <tbody>
-            <?php
-            foreach ($subAccounts as $subAccount): ?>
+            <?php foreach ($subAccounts as $subAccount): ?>
                 <tr>
                     <td class="col id"><?php echo $subAccount->getEntityId() ?></td>
                     <td class="col prefix"><?php echo $subAccount->getPrefix() ?></td>

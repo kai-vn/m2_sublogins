@@ -5,85 +5,30 @@
  */
 
 namespace SITC\Sublogins\Block;
-
+use Magento\Customer\Model\Session as CustomerSession;
 class SubAc extends \Magento\Framework\View\Element\Template
 {
-
+    protected $_customerSession;
     protected $helper;
-
     public function __construct(
         \SITC\Sublogins\Helper\Data $helper,
         \Magento\Framework\View\Element\Template\Context $context,
+        CustomerSession $customerSession,
         array $data = []
     )
     {
+        $this->_customerSession = $customerSession;
         $this->helper = $helper;
         parent::__construct($context, $data);
     }
 
     protected function _prepareLayout()
     {
-        if ($this->helper->isSublogin()) {
-            $this->addChild(
-                'list-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'List Sub Account',
-                    'path' => 'sublogins/account/listsubaccount'
-                ]
-            );
+        if($this->helper->isSublogin()) {
+            return parent::_prepareLayout();
+        }
 
-        } elseif ($this->helper->getIdSub()) {
-            $this->addChild(
-                'create-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'Create Sub Account',
-                    'path' => 'sublogins/create/account'
-                ]
-            );
-            $this->addChild(
-                'list-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'List Sub Account',
-                    'path' => 'sublogins/account/listsubaccount'
-                ]
-            );
-            $this->addChild(
-                'order-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'My Sub Account Order',
-                    'path' => 'sublogins/order/history'
-                ]
-            );
-        } elseif (!$this->helper->getIdSub()) {
-            $this->addChild(
-                'create-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'Create Sub Account',
-                    'path' => 'sublogins/create/account'
-                ]
-            );
-            $this->addChild(
-                'list-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'List Sub Account',
-                    'path' => 'sublogins/account/listsubaccount'
-                ]
-            );
-            $this->addChild(
-                'order-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'My Sub Account Order',
-                    'path' => 'sublogins/order/history'
-                ]
-            );
-        } elseif ($this->helper->getCreateSublogin()) {
+       if ($this->helper->getCreateSublogin()) {
             $this->addChild(
                 'create-sub-account',
                 'Magento\Framework\View\Element\Html\Link\Current',
@@ -109,6 +54,5 @@ class SubAc extends \Magento\Framework\View\Element\Template
                 ]
             );
         }
-        return parent::_prepareLayout();
     }
 }

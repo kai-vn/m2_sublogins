@@ -21,7 +21,6 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
     public function execute()
     {
         $customerId = $this->initCurrentCustomer();
-
         $customerData = [];
         $customerData['account'] = [];
         $customerData['address'] = [];
@@ -49,8 +48,8 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
             }
         }
         $customerData['customer_id'] = $customerId;
+        var_dump($customerData);
         $this->_getSession()->setCustomerData($customerData);
-
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Customer::customer_manage');
         $this->prepareDefaultCustomerTitle($resultPage);

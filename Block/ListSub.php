@@ -49,13 +49,11 @@ class ListSub extends Template
     {
         if (!$this->subAccounts) {
             $customerId = $this->_customerSession->getCustomerId();
-
             $this->subAccounts = $this->_customerCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addAttributeToFilter('is_sub_login', 1)
                 ->addAttributeToFilter('sublogin_parent_id', $customerId);
         }
-
         return $this->subAccounts;
     }
 

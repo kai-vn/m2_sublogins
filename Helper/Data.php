@@ -8,93 +8,17 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerC
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\UrlInterface;
 
-
-/**
- * Catalog data helper
- * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     protected $customerCollectionFactory;
-    /**
-     * Currently selected store ID if applicable
-     *
-     * @var int
-     */
-    protected $storeManager;
-    protected $_storeId;
-    protected $orders;
+    protected $subAccounts;
     protected $customerFactory;
-    /**
-     *
-     * @var \Magento\Framework\App\ResourceConnection
-     */
-    protected $_resource;
-    protected $_orderCollectionFactory;
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry;
     protected $customerRepository;
-    /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @var \Magento\Backend\Model\UrlInterface
-     */
-    protected $_backendUrl;
-
-    /**
-     * @var \Magento\Framework\DB\Helper
-     */
-    protected $_resourceHelper;
-    protected $eavConfig;
-    /**
-     * @var CustomerSession
-     */
     protected $_customerSession;
     protected $_customerRepositoryInterface;
-    /**
-     * @var \Magento\MediaStorage\Model\File\Uploader
-     */
-    protected $_uploaderFactory;
-    protected $request;
-    /**
-     * @var Filesystem
-     */
-    protected $_fileSystem;
     protected $customerExtractor;
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $_localeDate;
-    protected $urlBuilder;
-    protected $_jsonEncoder;
-    protected $_eavAttribute;
     protected $customerRepositoryInterface;
-    /**
-     * category collection factory.
-     *
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     */
-    protected $_categoryCollectionFactory;
 
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param CustomerSession $customerSession
-     * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\ResourceConnection $resource,
@@ -102,129 +26,68 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UrlInterface $urlBuilder,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
-        \Magento\Framework\Registry $coreRegistry,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         CustomerExtractor $customerExtractor,
-        \Magento\Framework\App\RequestInterface $request,
         CustomerCollectionFactory $customerCollectionFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        CustomerSession $customerSession,
-        \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavAttribute,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\DB\Helper $resourceHelper,
-        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
-        \Magento\Framework\Filesystem $fileSystem,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+        CustomerSession $customerSession
     )
     {
-        $this->_eavAttribute = $eavAttribute;
-        $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->urlBuilder = $urlBuilder;
-        $this->request = $request;
         $this->customerCollectionFactory = $customerCollectionFactory;
         $this->_resource = $resource;
         $this->customerRepositoryInterface = $customerRepositoryInterface;
         $this->customerExtractor = $customerExtractor;
         $this->_storeManager = $storeManager;
         $this->customerRepository = $customerRepository;
-        $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
-        $this->_backendUrl = $backendUrl;
         $this->customerFactory = $customerFactory;
-        $this->storeManager = $storeManager;
-        $this->_categoryCollectionFactory = $categoryCollectionFactory;
-        $this->_resourceHelper = $resourceHelper;
-        $this->_uploaderFactory = $uploaderFactory;
-        $this->_fileSystem = $fileSystem;
-        $this->_localeDate = $localeDate;
-        $this->_jsonEncoder = $jsonEncoder;
-
         parent::__construct($context);
     }
 
-    /**
-     * Set a specified store ID value
-     *
-     * @param int $store
-     * @return $this
-     */
     public function setStoreId($store)
     {
         $this->_storeId = $store;
         return $this;
     }
 
-    public function getIdSub()
+    public function getSubAccounts()
     {
-        $attributeId = $this->_eavAttribute->getIdByCode('customer', 'sublogin_parent_id');
-        $customerId = $this->_customerSession->getCustomerId();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $sub_accs = array();
-        $aguments = $objectManager->create('Magento\Customer\Model\Customer')->getCollection()->getData();
-
-//        foreach ($aguments as $agument) {
-//            if ($agument['value'] == $customerId && $agument['attribute_id'] == $attributeId) {
-//                $sub_accs[] = $agument['entity_id'];
-//            }
-//        }
-
-        return $sub_accs;
-    }
-
-    public function isSublogin()
-    {
-        $attributeId = $this->_eavAttribute->getIdByCode('customer', 'is_sub_login');
-        $customerId = $this->_customerSession->getCustomerId();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $sub_accs = array();
-        $aguments = $objectManager->create('Magento\Customer\Model\Customer')->getCollection()->getData();
-
-        return $sub_accs;
-    }
-
-    public function getCreateSublogin()
-    {
-        $customerId = $this->_customerSession->getCustomerId();
-        $customer = $this->_customerRepositoryInterface->getById($customerId);
-        $customAttribute = $customer->getCustomAttribute('can_create_sub_login');
-        if (!empty($customAttribute)) {
-            $customAttribute = $customAttribute->getValue();
+        if (!$this->subAccounts) {
+            $customerId = $this->_customerSession->getCustomerId();
+            $this->subAccounts = $this->customerCollectionFactory->create()
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('is_sub_login', 1)
+                ->addAttributeToFilter('sublogin_parent_id', $customerId);
         }
-        return $customAttribute;
+        return $this->subAccounts;
     }
 
-    public function getOrdersSubAc()
+    public function isSublogin($customer = null)
     {
-        $attributeId = $this->_eavAttribute->getIdByCode('customer', 'sublogin_parent_id');
-        $customerId = $this->_customerSession->getCustomerId();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $sub_accs = array();
-        $aguments = $objectManager->create('SITC\Sublogins\Model\Parrent')->getCollection()->getData();
-        foreach ($aguments as $agument) {
-            if ($agument['value'] == $customerId && $agument['attribute_id'] == $attributeId) {
-                $sub_accs[] = $agument['entity_id'];
-            }
+        if (!$customer) {
+            $customer = $this->_customerSession->getCustomer();
         }
-        return $sub_accs;
+
+        if ($customer->getIsSubLogin() == \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN) {
+            return true;
+        }
+
+        return false;
     }
 
-    public function getOrdersIsSubAc()
+    public function getCreateSublogin($customer = null)
     {
-        $attributeId = $this->_eavAttribute->getIdByCode('customer', 'is_sub_login');
-        $customerId = $this->_customerSession->getCustomerId();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $sub_accs = array();
-        $aguments = $objectManager->create('SITC\Sublogins\Model\Parrent')->getCollection()->getData();
-        foreach ($aguments as $agument) {
-            if ($agument['value'] == 1 && $agument['entity_id'] == $customerId && $agument['attribute_id'] == $attributeId) {
-                $sub_accs[] = $agument['entity_id'];
-            }
+        if (!$customer) {
+            $customer = $this->_customerSession->getCustomer();
         }
-        return $sub_accs;
+
+        if ($customer->getCanCreateSubLogin()) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getStatusSubAc($sublog_id)
@@ -239,8 +102,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getSubRegisterPostUrl()
     {
-        return $this->urlBuilder->getUrl('sublogins/account/createpost');
+        return $this->_urlBuilder->getUrl('sublogins/account/createpost');
     }
-
-
 }
