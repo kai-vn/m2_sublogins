@@ -24,7 +24,6 @@ class Delete extends \Magento\Framework\App\Action\Action
     protected $customerFactory;
     protected $_customerRepository;
     protected $registry;
-    protected $currentCustomer;
     protected $_customer;
     protected $request;
     protected $_messageManager;
@@ -47,7 +46,6 @@ class Delete extends \Magento\Framework\App\Action\Action
     public function __construct(
         Context $context,
         PageFactory $pageFactory,
-        \Magento\Framework\Controller\ResultFactory $result,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Registry $coreRegistry,
@@ -58,9 +56,7 @@ class Delete extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\Customer $customer,
         CustomerRepositoryInterface $customerRepository,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
-        CustomerRepositoryInterface $customerRepository
+        \Magento\Customer\Model\CustomerFactory $customerFactory
 
     )
     {
@@ -73,7 +69,6 @@ class Delete extends \Magento\Framework\App\Action\Action
         $this->_coreRegistry = $coreRegistry;
         $this->_messageManager = $messageManager;
         $this->_customer = $customer;
-        $this->currentCustomer = $currentCustomer;
         $this->registry = $registry;
         parent::__construct($context, $registry);
         $this->_cacheTypeList = $cacheTypeList;

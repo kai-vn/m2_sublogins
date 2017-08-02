@@ -6,72 +6,35 @@
 
 namespace SITC\Sublogins\Controller\Account;
 
-use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Model\CustomerExtractor;
-use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlFactory;
 
 class Deactive extends \Magento\Customer\Controller\AbstractAccount
 {
     protected $customerFactory;
-    protected $customerExtractor;
-    protected $registration;
-    protected $_customerSession;
-    protected $session;
-    protected $urlModel;
     protected $url;
     protected $pageFactory;
-    protected $registry;
     protected $_customerRepository;
     protected $request;
-    protected $customerUrl;
-    protected $helper;
-    protected $customerDataFactory;
-    protected $accountManagement;
-    protected $_eavAttribute;
 
     public function __construct(
         Context $context,
-        CustomerUrl $customerUrl,
         PageFactory $pageFactory,
         UrlFactory $urlFactory,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute $eavAttribute,
-        Session $customerSession,
         CustomerInterfaceFactory $customerDataFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Customer\Model\Session $customerSession,
-        \SITC\Sublogins\Helper\Data $helper,
-        AccountManagementInterface $accountManagement,
-        ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Registry $registry,
-        CustomerExtractor $customerExtractor,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Framework\App\RequestInterface $request
-
     )
     {
         $this->pageFactory = $pageFactory;
-        $this->_eavAttribute = $eavAttribute;
-        $this->accountManagement = $accountManagement;
-        $this->helper = $helper;
-        $this->customerDataFactory = $customerDataFactory;
-        $this->_customerRepository = $customerRepository;
         $this->request = $request;
         $this->urlModel = $urlFactory->create();
         $this->customerFactory = $customerFactory;
-        $this->registry = $registry;
-        $this->customerUrl = $customerUrl;
-        $this->session = $customerSession;
         $this->url = $url;
-        $this->_customerSession = $customerSession;
-        $this->customerExtractor = $customerExtractor;
-        parent::__construct($context, $registry);
+        parent::__construct($context);
     }
 
     public function execute()
