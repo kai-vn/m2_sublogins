@@ -6,17 +6,24 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 
 class BeforeSave implements ObserverInterface
 {
+    protected $_responseFactory;
+    protected $_url;
     /**
      * Encryption model
      *
      * @var EncryptorInterface
      */
+    protected $_objectManager;
+    protected $_urlInterface;
+    protected $redirect;
     protected $encryptor;
     protected $request;
     protected $helper;
+    protected $_customerRepositoryInterface;
     /**
      * @var CustomerRegistry
      */
@@ -27,6 +34,7 @@ class BeforeSave implements ObserverInterface
      */
     private $customerRepository;
     protected $_customerSession;
+    protected $customerDataFactory;
     /**
      * @param EncryptorInterface $encryptor
      * @param CustomerRegistry $customerRegistry
@@ -35,30 +43,40 @@ class BeforeSave implements ObserverInterface
 
     public function __construct(
         EncryptorInterface $encryptor,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \SITC\Sublogins\Helper\Data $helper,
+        CustomerInterfaceFactory $customerDataFactory,
         CustomerRegistry $customerRegistry,
+        \Magento\Framework\App\Response\RedirectInterface $redirect,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
+        CustomerRepositoryInterface $customerRepository,
+        \Magento\Framework\App\ResponseFactory $responseFactory,
+        \Magento\Framework\UrlInterface $urlInterface,
         \Magento\Framework\App\RequestInterface $request,
-        CustomerSession $customerSession,
-        CustomerRepositoryInterface $customerRepository
+        CustomerSession $customerSession
+
     )
     {
+        $this->_objectManager = $objectManager;
+        $this->_responseFactory = $responseFactory;
+        $this->_urlInterface = $urlInterface;
         $this->customerFactory = $customerFactory;
+        $this->customerRepository = $customerRepository;
         $this->helper = $helper;
         $this->_customerSession = $customerSession;
         $this->request = $request;
+        $this->customerDataFactory = $customerDataFactory;
         $this->encryptor = $encryptor;
         $this->customerRegistry = $customerRegistry;
-        $this->customerRepository = $customerRepository;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $password = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_hash'];
-        /** @var \Magento\Customer\Model\Customer $model */
         $model = $observer->getEvent()->getData('customer');
-        $customer = $this->customerFactory->create()->getId();
-        if($this->helper->isSublogin($customer)) {
+        $customer = $this->customerRepository->getById($model->getId());
+        $customerSublogin = $this->customerFactory->create()->load($model->getId());
+        if($this->helper->isSublogin($customerSublogin)) {
             $customerSecure = $this->customerRegistry->retrieveSecureData($model->getId());
             if ($this->encryptor->validateHashVersion($customerSecure->getPasswordHash(), true)) {
                 $customerSecure->setPasswordHash($this->encryptor->getHash($password, true));

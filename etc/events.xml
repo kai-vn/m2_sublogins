@@ -6,5 +6,4 @@
     <event name="customer_customer_authenticated">
         <observer name="check_sub_account_expired" instance="SITC\Sublogins\Observer\Customer\BeforeLogin" />
     </event>
-
 </config>
