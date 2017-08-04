@@ -7,11 +7,13 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 class BeforeSave implements ObserverInterface
 {
     protected $_responseFactory;
     protected $_url;
+    private $logger;
     /**
      * Encryption model
      *
@@ -42,6 +44,7 @@ class BeforeSave implements ObserverInterface
      */
 
     public function __construct(
+        \Psr\Log\LoggerInterface $logger,
         EncryptorInterface $encryptor,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \SITC\Sublogins\Helper\Data $helper,
@@ -57,6 +60,7 @@ class BeforeSave implements ObserverInterface
 
     )
     {
+        $this->logger = $logger;
         $this->_objectManager = $objectManager;
         $this->_responseFactory = $responseFactory;
         $this->_urlInterface = $urlInterface;
@@ -73,6 +77,10 @@ class BeforeSave implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $password = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_hash'];
+        $confirmPassword = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_confirmation'];
+        if($confirmPassword != $password) {
+            throw new LocalizedException(__('Password do not match.'));
+        }
         $model = $observer->getEvent()->getData('customer');
         $customer = $this->customerRepository->getById($model->getId());
         $customerSublogin = $this->customerFactory->create()->load($model->getId());
@@ -83,5 +91,5 @@ class BeforeSave implements ObserverInterface
                 $this->customerRepository->save($customer);
             }
         }
-    }
+        }
 }

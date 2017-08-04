@@ -149,9 +149,10 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="visible" xsi:type="boolean">true</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="elementTmpl" xsi:type="string">SITC_Sublogins/form/element/input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">New password</item>
                     <item name="validation" xsi:type="array">
@@ -159,25 +160,24 @@
                         <item name="no-whitespace" xsi:type="boolean">true</item>
                         <item name="validate-admin-password" xsi:type="boolean">true</item>
                     </item>
-                    <item name="dataScope" xsi:type="string">password_hash</item>
                 </item>
             </argument>
         </field>
-        <field name="confirmation">
+        <field name="password_confirmation">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="visible" xsi:type="boolean">true</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="elementTmpl" xsi:type="string">SITC_Sublogins/form/element/input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">Confirm password</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                         <item name="no-whitespace" xsi:type="boolean">true</item>
-                        <item name="validate-cpassword" xsi:type="boolean">true</item>
+                        <item name="validate-admin-password" xsi:type="boolean">true</item>
                     </item>
-                    <item name="dataScope" xsi:type="string">password_confirmation</item>
                 </item>
             </argument>
         </field>
