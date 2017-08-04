@@ -76,20 +76,20 @@ class BeforeSave implements ObserverInterface
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $password = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_hash'];
-        $confirmPassword = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_confirmation'];
-        if($confirmPassword != $password) {
-            throw new LocalizedException(__('Password do not match.'));
-        }
         $model = $observer->getEvent()->getData('customer');
-        $customer = $this->customerRepository->getById($model->getId());
         $customerSublogin = $this->customerFactory->create()->load($model->getId());
         if($this->helper->isSublogin($customerSublogin)) {
+            $password = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_hash'];
+            $confirmPassword = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_confirmation'];
+            if($confirmPassword != $password) {
+                throw new LocalizedException(__('Password do not match.'));
+            }
+            $customer = $this->customerRepository->getById($model->getId());
             $customerSecure = $this->customerRegistry->retrieveSecureData($model->getId());
             if ($this->encryptor->validateHashVersion($customerSecure->getPasswordHash(), true)) {
                 $customerSecure->setPasswordHash($this->encryptor->getHash($password, true));
                 $this->customerRepository->save($customer);
             }
         }
-        }
+    }
 }

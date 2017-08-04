@@ -13,7 +13,10 @@
         <?php echo $block->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Account Information') ?></span></legend><br>
         <?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')->setObject($block->getCustomer())->toHtml() ?>
-
+        <div class="field active required">
+            <label for="password-confirmation" class="label"><span><?php /* @escapeNotVerified */ echo __('Expire Date') ?></span></label>
+            <input name="expire_date" id="datepicker" title="SubAccount" value="<?php echo $block->formatDate() ?>" type="text">
+        </div>
         <?php $_dob = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob') ?>
         <?php $_taxvat = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Taxvat') ?>
         <?php $_gender = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Gender') ?>
@@ -88,6 +91,29 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "mage/calendar"
+    ], function($){
+        $('#datepicker').datepicker({
+                prevText: '&#x3c;zurück', prevStatus: '',
+                prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                nextText: 'Vor&#x3e;', nextStatus: '',
+                nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                monthNames: ['Januar','Februar','März','April','Mai','Juni',
+                    'Juli','August','September','Oktober','November','Dezember'],
+                monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+                    'Jul','Aug','Sep','Okt','Nov','Dez'],
+                dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+                dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                showMonthAfterYear: false,
+                dateFormat:'d/m/yy'
+            }
+        );
+    });
+</script>
 <script>
     require([
         "jquery",

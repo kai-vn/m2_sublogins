@@ -99,7 +99,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         return $status;
     }
-
     public function getSubRegisterPostUrl()
     {
         return $this->_urlBuilder->getUrl('sublogins/account/createpost');

@@ -33,7 +33,6 @@ class Active extends \Magento\Customer\Controller\AbstractAccount
 
     public function execute()
     {
-
         $resultRedirect = $this->resultRedirectFactory->create();
         $customerId = $this->request->getParam('ac');
         $customer = $this->customerFactory->create()->load($customerId);

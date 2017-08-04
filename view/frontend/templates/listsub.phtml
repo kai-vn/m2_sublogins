@@ -27,7 +27,7 @@ $customer = $block->getCustomer();
                 <th scope="col" class="col firstname"><?php echo __('FirstName') ?></th>
                 <th scope="col" class="col lastname"><?php echo __('LastName') ?></th>
                 <th scope="col" class="col email"><?php echo __('Email') ?></th>
-                <th scope="col" class="col expire_date"><?php echo __('Date Of Birth ') ?></th>
+                <th scope="col" class="col expire_date"><?php echo __('Expired Date ') ?></th>
                 <th scope="col" class="col status"><?php echo __('Active') ?></th>
                 <th scope="col" class="col action"><?php echo __('Action') ?></th>
                 <th scope="col" class="col ">&nbsp;</th>
@@ -41,7 +41,7 @@ $customer = $block->getCustomer();
                     <td class="col firstname"><?php echo $subAccount->getFirstname() ?></td>
                     <td class="col lastname"><?php echo $subAccount->getLastname() ?></td>
                     <td class="col email"><?php echo $subAccount->getEmail() ?></td>
-                    <td class="col date"><?php echo $block->formatDate($subAccount->getDob()) ?></td>
+                    <td class="col date"><?php echo $block->formatDate($subAccount->getExpireDate()) ?></td>
                     <td class="col status"><?php $status = $subAccount->getIsActiveSublogin() == 1 ? __('Yes') : __('No'); echo $status; ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
                         <ul class="sub-ac">

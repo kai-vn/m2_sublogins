@@ -60,7 +60,7 @@ class InstallData implements InstallDataInterface
         ]);
 
         $customerSetup->addAttribute(Customer::ENTITY, 'max_sub_logins', [
-            'type' => 'varchar',
+            'type' => 'int',
             'label' => 'Max Sub Accounts',
             'input' => 'text',
             'sort_order' => 900,
@@ -79,7 +79,7 @@ class InstallData implements InstallDataInterface
             'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
             'required' => false,
             'sort_order' => 900,
-            'visible' => true,
+            'visible' => false,
             'system' => false,
             'user_defined' => true,
             'position' => 999

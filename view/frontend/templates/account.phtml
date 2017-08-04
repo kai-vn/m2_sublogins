@@ -121,6 +121,10 @@
             </div>
         </div>
         <div class="field active required">
+            <label for="password-confirmation" class="label"><span><?php /* @escapeNotVerified */ echo __('Expire Date') ?></span></label>
+            <input name="expire_date" id="datepicker" title="SubAccount" value="" type="text">
+        </div>
+        <div class="field active required">
             <label for="password-confirmation" class="label"><span><?php /* @escapeNotVerified */ echo __('Active Account') ?></span></label>
             <div class="control">
                 <select name="active" id="active">
@@ -130,11 +134,8 @@
                 </select>
             </div>
         </div>
-
-
         <?php echo $block->getChildHtml('form_additional_info'); ?>
     </fieldset>
-
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action submit primary" title="<?php /* @escapeNotVerified */ echo __('Create an Account') ?>"><span><?php /* @escapeNotVerified */ echo __('Create an Account') ?></span></button>
@@ -144,7 +145,29 @@
         </div>
     </div>
 </form>
-
+ <script type="text/javascript">
+     require([
+         "jquery",
+         "mage/calendar"
+     ], function($){
+         $('#datepicker').datepicker({
+                 prevText: '&#x3c;zurück', prevStatus: '',
+                 prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                 nextText: 'Vor&#x3e;', nextStatus: '',
+                 nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                 monthNames: ['Januar','Februar','März','April','Mai','Juni',
+                     'Juli','August','September','Oktober','November','Dezember'],
+                 monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+                     'Jul','Aug','Sep','Okt','Nov','Dez'],
+                 dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+                 dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                 dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                 showMonthAfterYear: false,
+                 dateFormat:'d/m/yy'
+             }
+         );
+     });
+ </script>
 <script>
     require([
         'jquery',

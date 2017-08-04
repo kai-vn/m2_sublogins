@@ -85,4 +85,5 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     {
         return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
+
 }

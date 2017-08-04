@@ -49,7 +49,7 @@ class Edit extends \SITC\Sublogins\Controller\Account\AccountAbstract
         $this->resultPageFactory = $resultPageFactory;
         $this->customerRepository = $customerRepository;
         $this->dataObjectHelper = $dataObjectHelper;
-        parent::__construct($context);
+        parent::__construct($context, $customerSession, $pageFactory);
     }
 
     /**
@@ -79,7 +79,6 @@ class Edit extends \SITC\Sublogins\Controller\Account\AccountAbstract
         }
         $this->session->setCustomerData($customerDataObject);
         $this->session->setChangePassword($this->getRequest()->getParam('changepass') == 1);
-
         $resultPage->getConfig()->getTitle()->set(__('Account Information'));
         $resultPage->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
         return $resultPage;
