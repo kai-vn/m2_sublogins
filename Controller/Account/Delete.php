@@ -85,7 +85,6 @@ class Delete extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sublogins/create');
         $customerId = $this->request->getParam('id');
         $this->registry->register('isSecureArea', true);
         $customer = $this->customerFactory->create()->load($customerId);
@@ -97,7 +96,7 @@ class Delete extends \Magento\Framework\App\Action\Action
         foreach ($this->_cacheFrontendPool as $cacheFrontend) {
             $cacheFrontend->getBackend()->clean();
         }
-        return $resultRedirect->setUrl($this->url->getUrl('sublogins/create'));
+        return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount'));
     }
 
 

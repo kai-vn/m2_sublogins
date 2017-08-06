@@ -18,6 +18,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_customerRepositoryInterface;
     protected $customerExtractor;
     protected $customerRepositoryInterface;
+    protected $request;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -28,11 +29,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         CustomerExtractor $customerExtractor,
+        \Magento\Framework\App\RequestInterface $request,
         CustomerCollectionFactory $customerCollectionFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         CustomerSession $customerSession
     )
     {
+        $this->request = $request;
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->urlBuilder = $urlBuilder;
         $this->customerCollectionFactory = $customerCollectionFactory;
@@ -76,7 +79,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         return false;
     }
+    public function getExpireDate($customer = null)
+    {
+        if (!$customer) {
+            $customer = $this->_customerSession->getCustomer();
+        }
 
+        if ($customer->getExpireDate()) {
+            return true;
+        }
+
+        return false;
+    }
+    public function getIddata()
+    {
+        $customerId = $this->request->getParam('subid');
+        $customer = $this->customerFactory->create()->load($customerId);
+        $emailSublogins = $customer->getEntityId();
+        return $emailSublogins;
+
+    }
     public function getCreateSublogin($customer = null)
     {
         if (!$customer) {

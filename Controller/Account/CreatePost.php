@@ -74,6 +74,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /** @var DataObjectHelper */
     protected $dataObjectHelper;
     protected $_customerSession;
+    protected $date;
     protected $_cacheTypeList;
     protected $_cacheFrontendPool;
     /**
@@ -121,6 +122,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     public function __construct(
         Context $context,
         Session $customerSession,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Customer\Model\Session $customerSession,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
@@ -144,6 +146,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         AccountRedirect $accountRedirect
     )
     {
+        $this->date = $date;
         $this->pageFactory = $pageFactory;
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -193,6 +196,9 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             $data = (int)$this->getRequest()->getPostValue('active');
             $customer->setCustomAttribute('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
             $customer->setCustomAttribute('is_active_sublogin', $data);
+            $dataDate = $this->getRequest()->getPostValue('expire_date');
+            $dateFormat = $this->date->date('d-m-Y', $dataDate);
+            $customer->setCustomAttribute('expire_date', $dateFormat);
             $password = $this->getRequest()->getParam('password');
             $confirmation = $this->getRequest()->getParam('password_confirmation');
             $redirectUrl = $this->session->getBeforeAuthUrl();
@@ -242,7 +248,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t save the customer.'));
         }
-
         $this->session->setCustomerFormData($this->getRequest()->getPostValue());
         $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
         $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
@@ -257,7 +262,14 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount'));
 
     }
-
+    protected function converToTz($dateTime="", $toTz='', $fromTz='')
+    {
+        // timezone by php friendly values
+        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
+        $date->setTimezone(new \DateTimeZone($toTz));
+        $dateTime = $date->format('m/d/Y H:i:s');
+        return $dateTime;
+    }
     /**
      * Add address to customer during create account
      *

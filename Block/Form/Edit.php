@@ -6,6 +6,8 @@
 
 namespace SITC\Sublogins\Block\Form;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
 
 /**
@@ -15,6 +17,11 @@ use Magento\Customer\Model\AccountManagement;
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
+    protected $subAccounts;
+    protected $_customerSession;
+    protected $_customerCollectionFactory;
+    protected $request;
+    protected $customerFactory;
     /**
      * Restore entity data from session. Entity and form code must be defined for the form.
      *
@@ -22,6 +29,24 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * @param null $scope
      * @return \Magento\Customer\Block\Form\Register
      */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $customerAccountManagement,
+        array $data = [])
+    {
+        $this->request = $request;
+        $this->customerFactory = $customerFactory;
+        $this->_customerCollectionFactory = $customerCollectionFactory;
+        $this->_customerSession = $customerSession;
+        parent::__construct($context, $customerSession, $subscriberFactory, $customerRepository, $customerAccountManagement, $data);
+    }
+
     public function restoreSessionData(\Magento\Customer\Model\Metadata\Form $form, $scope = null)
     {
         $formData = $this->getFormData();
@@ -33,7 +58,25 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
 
         return $this;
     }
+    public function getExpireDate()
+    {
+        $customerId = $this->request->getParam('editsubac');
+        $customer = $this->customerFactory->create()->load($customerId);
+        $expireDate = $customer->getExpireDate();
+        return $expireDate;
+    }
+    public function getEmailSublogins() {
+        $customerId = $this->request->getParam('editsubac');
+        $customer = $this->customerFactory->create()->load($customerId);
+        $emailSublogins = $customer->getEmail();
+        return $emailSublogins;
 
+    }
+    public function getIddata()
+    {
+        $this->request->getParams();
+        return $this->request->getParam('editsubac');
+    }
     /**
      * Retrieve form data
      *

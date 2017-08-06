@@ -46,7 +46,7 @@ $customer = $block->getCustomer();
                     <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
                         <ul class="sub-ac">
                             <li>
-                                <a href="<?php /* @escapeNotVerified */ echo $redirect . 'sublogins/account/edit' ?>" class="action view">
+                                <a href="<?php /* @escapeNotVerified */ echo $redirect . 'sublogins/account/edit/editsubac/' . $subAccount->getId()?>" class="action view">
                                     <span><?php /* @escapeNotVerified */ echo __('Edit Account') ?></span>
                                 </a>
                             </li>

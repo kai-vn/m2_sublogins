@@ -53,7 +53,7 @@ class ListSub extends Template
                 'Magento\Theme\Block\Html\Pager',
                 'sitc.sublogins.record.pager'
             )
-                ->setAvailableLimit([1 => 1, 2 => 2, 3 => 3])
+                ->setAvailableLimit([10 => 10])
                 ->setShowPerPage(true)
                 ->setCollection($this->getSubAccounts());
 

@@ -33,7 +33,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * Form code for data extractor
      */
     const FORM_DATA_EXTRACTOR_CODE = 'customer_account_edit';
-
+    protected $date;
     /**
      * @var AccountManagementInterface
      */
@@ -53,7 +53,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @var CustomerExtractor
      */
     protected $customerExtractor;
-
+    protected $customerFactory;
+    protected $helper;
     /**
      * @var Session
      */
@@ -71,12 +72,13 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @var AuthenticationInterface
      */
     private $authentication;
-
+    protected $customerCollectionFactory;
     /**
      * @var Mapper
      */
+    protected $request;
     private $customerMapper;
-
+    protected $_customerSession;
     /**
      * @param Context $context
      * @param Session $customerSession
@@ -87,14 +89,26 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function __construct(
         Context $context,
+        \Magento\Customer\Model\Session $customerSession,
         Session $customerSession,
+        \SITC\Sublogins\Helper\Data $helper,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory,
         PageFactory $pageFactory,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor
     )
     {
+        $this->helper = $helper;
+        $this->request = $request;
+        $this->customerFactory = $customerFactory;
+        $this->customerCollectionFactory  = $customerCollectionFactory;
+        $this->_customerSession = $customerSession;
+        $this->date = $date;
         parent::__construct($context);
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
@@ -115,19 +129,16 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
         if ($validFormKey && $this->getRequest()->isPost()) {
-            $currentCustomerDataObject = $this->getCustomerDataObject($this->session->getCustomerId());
+            $currentCustomerDataObject = $this->getCustomerDataObject($this->helper->getIddata());
             $customerCandidateDataObject = $this->populateNewCustomerDataObject(
                 $this->_request,
                 $currentCustomerDataObject
             );
-
             try {
                 // whether a customer enabled change email option
                 $this->processChangeEmailRequest($currentCustomerDataObject);
-
                 // whether a customer enabled change password option
                 $isPasswordChanged = $this->changeCustomerPassword($currentCustomerDataObject->getEmail());
-
                 $this->customerRepository->save($customerCandidateDataObject);
                 $this->getEmailNotification()->credentialsChanged(
                     $customerCandidateDataObject,
@@ -135,8 +146,14 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                     $isPasswordChanged
                 );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
+                $customerId = (int) $this->request->getParams()['subid'];
+                $customer = $this->customerRepository->getById($customerId);
+                $data = $this->getRequest()->getPostValue('expire_date');
+                $dateFormat = $this->date->date('Y-m-d', $data);
+                $customer->setCustomAttribute('expire_date', $dateFormat);
+                $this->customerRepository->save($customer);
                 $this->messageManager->addSuccess(__('You saved the account information.'));
-                return $resultRedirect->setPath('customer/account');
+                return $resultRedirect->setPath('sublogins/account/listsubaccount/');
             } catch (InvalidEmailOrPasswordException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
@@ -158,7 +175,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
-
             $this->session->setCustomerFormData($this->getRequest()->getPostValue());
         }
 
