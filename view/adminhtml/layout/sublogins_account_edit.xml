@@ -7,7 +7,6 @@
         </referenceContainer>
         <referenceContainer name="left">
             <block class="SITC\Sublogins\Block\Adminhtml\Account\Edit\Tabs" name="account_edit_tabs">
-                <block class="SITC\Sublogins\Block\Adminhtml\Account\Edit\Tab\Form" name="account_edit_tab_form"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">main_section</argument>
                     <argument name="block" xsi:type="string">account_edit_tab_form</argument>
