@@ -162,4 +162,9 @@ class ListSubAccounts extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    public function getRowUrl($row)
+    {
+        return $this->getUrl('sublogins/editsubac/edit', ['id' => $row->getEntityId()]);
+    }
+
 }

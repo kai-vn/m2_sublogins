@@ -1,8 +1,11 @@
 <?php
+
 namespace SITC\Sublogins\Plugin\Customer\Redirect;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Action\Context;
+
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
+
 class RedirectSublogin
 {
     /**
@@ -33,8 +36,8 @@ class RedirectSublogin
      * AccountManagementPlugin constructor.
      *
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Framework\Encryption\Encryptor           $encryptor
-     * @param \Magento\Customer\Model\CustomerRegistry          $customerRegistry
+     * @param \Magento\Framework\Encryption\Encryptor $encryptor
+     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
      */
     public function __construct(
         Context $context,
@@ -46,7 +49,8 @@ class RedirectSublogin
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\CustomerRegistry $customerRegistry
-    ) {
+    )
+    {
         $this->_url = $url;
         $this->customerDataFactory = $customerDataFactory;
         $this->_response = $response;
@@ -57,13 +61,14 @@ class RedirectSublogin
         $this->customerRepository = $customerRepository;
     }
 
-    public function aroundExecute(\Magento\Customer\Controller\Adminhtml\Index\Save $subject , \Closure $proceed)
+    public function aroundExecute(\Magento\Customer\Controller\Adminhtml\Index\Save $subject, \Closure $proceed)
     {
         $resultRedirect = $proceed();
         $customerId = $this->getCurrentCustomerId($subject);
+        $parentId = $subject->getRequest()->getParam('sub_parent_id');
         $customerSublogin = $this->customerFactory->create()->load($customerId);
-        if ($this->helper->isSublogin($customerSublogin)) {
-            $url = $this->_url->getUrl('sublogins/account/index');
+        if ($this->helper->isSublogin($customerSublogin) || $parentId) {
+            $url = $subject->getUrl('sublogins/account/index');
             $resultRedirect->setPath($url);
         }
         return $resultRedirect;

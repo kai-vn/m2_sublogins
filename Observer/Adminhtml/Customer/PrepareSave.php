@@ -49,7 +49,7 @@ class PrepareSave implements ObserverInterface
             $maxSubAccounts = $parent->getMaxSubLogins();
             if($maxSubAccounts && $countSubAccounts + 1 > $maxSubAccounts) {
                 $this->getSession()->unsSubParentId();
-                throw new LocalizedException(__('You cannot create more than %s sub accounts for this customer.', $maxSubAccounts));
+                throw new LocalizedException(__('You cannot create more than %1 sub accounts for this customer.', $maxSubAccounts));
             }
             $customer->setCustomAttribute('sublogin_parent_id', $parentId);
             $customer->setCustomAttribute('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
