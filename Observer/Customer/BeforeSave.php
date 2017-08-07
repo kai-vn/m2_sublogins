@@ -84,6 +84,9 @@ class BeforeSave implements ObserverInterface
             if($confirmPassword != $password) {
                 throw new LocalizedException(__('Password do not match.'));
             }
+            if(empty($password) && empty($confirmPassword)) {
+                return true;
+            }
             $customer = $this->customerRepository->getById($model->getId());
             $customerSecure = $this->customerRegistry->retrieveSecureData($model->getId());
             if ($this->encryptor->validateHashVersion($customerSecure->getPasswordHash(), true)) {

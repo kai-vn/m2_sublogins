@@ -150,15 +150,10 @@
                 <item name="config" xsi:type="array">
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
                     <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">SITC_Sublogins/form/element/input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">New password</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="no-whitespace" xsi:type="boolean">true</item>
-                        <item name="validate-admin-password" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
         </field>
@@ -167,14 +162,10 @@
                 <item name="config" xsi:type="array">
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
                     <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">SITC_Sublogins/form/element/input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">Confirm password</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="no-whitespace" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
         </field>
@@ -186,9 +177,6 @@
                     <item name="formElement" xsi:type="string">date</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">Expire Date</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="validate-date" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
         </field>
