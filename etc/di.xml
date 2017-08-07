@@ -35,10 +35,9 @@
                 type="SITC\Sublogins\Plugin\Customer\Ui\Component\Listing\Column\Actions"/>
     </type>
     <type name="Magento\Customer\Model\Customer\DataProvider">
-        <plugin name="parent_id_sublogins" type="SITC\Sublogins\Plugin\Customer\Model\Customer\DataProvider"/>
+        <plugin name="prepare_parent_id_before_save_customer" type="SITC\Sublogins\Plugin\Customer\Model\Customer\DataProvider"/>
     </type>
     <type name="\Magento\Customer\Controller\Adminhtml\Index\Save">
-        <plugin name="is_sub_login"
-                type="SITC\Sublogins\Plugin\Customer\Redirect\RedirectSublogin"/>
+        <plugin name="set_redirect_url_after_save_sub_account" type="SITC\Sublogins\Plugin\Customer\Redirect\RedirectSublogin"/>
     </type>
 </config>

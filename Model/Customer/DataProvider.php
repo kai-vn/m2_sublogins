@@ -47,6 +47,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var Config
      */
     protected $eavConfig;
+    protected $_request;
+    protected $session;
 
     /**
      * @var FilterPool
@@ -102,7 +104,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @var SessionManagerInterface
      */
-    protected $session;
 
     /**
      * @var FileProcessorFactory
@@ -144,6 +145,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function __construct(
         $name,
         $primaryFieldName,
+        \Magento\Framework\App\RequestInterface $request,
         $requestFieldName,
         EavValidationRules $eavValidationRules,
         CustomerCollectionFactory $customerCollectionFactory,
@@ -151,14 +153,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         FilterPool $filterPool,
         array $meta = [],
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
+        $this->_request = $request;
         $this->collection = $customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
-
     }
 
     /**
@@ -187,6 +190,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         if (isset($this->loadedData)) {
             return $this->loadedData;
+        }
+        $subLoginParentId = $this->_request->getParam('sub_parent_id');
+        if (!empty($subLoginParentId)) {
+            $this->getSession()->setSubParentId($subLoginParentId);
+        }
+        if ($this->session === null) {
+            $this->session = ObjectManager::getInstance()->get(
+                \Magento\Framework\Session\SessionManagerInterface::class
+            );
         }
         $items = $this->collection->getItems();
         /** @var Customer $customer */

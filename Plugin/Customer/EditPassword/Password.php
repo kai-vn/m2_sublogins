@@ -41,8 +41,6 @@ class Password
         $this->_encryptor          = $encryptor;
         $this->_customerRegistry   = $customerRegistry;
     }
-
-
     /**
      * Authenticate Customer by Hash from Old site and update info in DB.
      *
