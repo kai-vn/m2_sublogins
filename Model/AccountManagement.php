@@ -181,7 +181,7 @@ class AccountManagement implements AccountManagementInterface
             $hash = null;
         }
 
-        $customer->setCustomAttribute('is_sub_login', 1);
+        $customer->setCustomAttribute('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
         $customer->setCustomAttribute('expire_date', $customer->getExpireDate());
 
         if ($customer->getParent()) {

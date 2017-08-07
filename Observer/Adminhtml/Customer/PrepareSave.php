@@ -41,27 +41,26 @@ class PrepareSave implements ObserverInterface
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $subloginParentId = $this->getSession()->getSubParentId();
+        $parentId = $this->getSession()->getSubParentId();
         $customer = $observer->getCustomer();
-        $request = $observer->getRequest()->getPostValue('customer');
-        if (!empty($subloginParentId)) {
-            if($request['max_sub_logins']) {
-                $customer->setCustomAttribute('max_sub_logins', $request['max_sub_logins']);
-            }
-            $collectionSize = $this->collectionFactory->create()
-                ->addAttributeToSelect(['sublogin_parent_id', 'is_sub_login'])
-                ->addAttributeToFilter('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN)
-                ->addAttributeToFilter('sublogin_parent_id', $subloginParentId)->getSize();
-            $countSublogins = (int)$collectionSize + 1;
-            $maxSublogins = $this->_customerRepositoryInterface->getById($subloginParentId)->getCustomAttribute('max_sub_logins')->getValue();
-            if($countSublogins > $maxSublogins) {
+
+        if (!empty($parentId)) {
+            $parent = $this->customerFactory->create()->load($parentId);
+
+            $countSubAccounts = $this->helper->getCountSubAccounts($parentId);
+            $maxSubAccounts = $parent->getMaxSubLogins();
+
+            if($maxSubAccounts && $countSubAccounts + 1 > $maxSubAccounts) {
                 $this->getSession()->unsSubParentId();
-                throw new LocalizedException(__('You just can create ' . $maxSublogins . '.'));
+                throw new LocalizedException(__('You cannot create more than %s sub accounts for this customer.', $maxSubAccounts));
             }
-            $customer->setCustomAttribute('sublogin_parent_id', $subloginParentId);
+
+            $customer->setCustomAttribute('sublogin_parent_id', $parentId);
             $customer->setCustomAttribute('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
         }
+
         $this->getSession()->unsSubParentId();
+
         return $customer;
     }
 

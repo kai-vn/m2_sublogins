@@ -58,6 +58,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
 
         return $this;
     }
+
     public function getExpireDate()
     {
         $customerId = $this->request->getParam('editsubac');
@@ -65,6 +66,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         $expireDate = $customer->getExpireDate();
         return $expireDate;
     }
+
     public function getEmailSublogins() {
         $customerId = $this->request->getParam('editsubac');
         $customer = $this->customerFactory->create()->load($customerId);
@@ -72,11 +74,13 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         return $emailSublogins;
 
     }
+
     public function getIddata()
     {
         $this->request->getParams();
         return $this->request->getParam('editsubac');
     }
+
     /**
      * Retrieve form data
      *
@@ -128,5 +132,4 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     {
         return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
-
 }

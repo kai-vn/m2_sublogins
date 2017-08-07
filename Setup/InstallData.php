@@ -66,6 +66,7 @@ class InstallData implements InstallDataInterface
             'sort_order' => 900,
             'required' => false,
             'visible' => true,
+            'is_used_in_grid' => true,
             'user_defined' => true,
             'position' => 999,
             'system' => false,

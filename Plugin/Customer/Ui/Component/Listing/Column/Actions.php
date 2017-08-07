@@ -46,7 +46,7 @@ class Actions
                                 'customer/index/new',
                                 ['sub_parent_id' => $item['entity_id'], 'store' => $storeId]
                             ),
-                            'label' => __('Create Sublogins'),
+                            'label' => __('Create New Sub Account'),
                             'hidden' => false,
                         ];
                     }

@@ -128,8 +128,10 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
-        if ($validFormKey && $this->getRequest()->isPost()) {
-            $currentCustomerDataObject = $this->getCustomerDataObject($this->helper->getIddata());
+        $customerId = (int) $this->request->getParam('subid');
+
+        if ($validFormKey && $this->getRequest()->isPost() && $customerId) {
+            $currentCustomerDataObject = $this->getCustomerDataObject($customerId);
             $customerCandidateDataObject = $this->populateNewCustomerDataObject(
                 $this->_request,
                 $currentCustomerDataObject
@@ -146,7 +148,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                     $isPasswordChanged
                 );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
-                $customerId = (int) $this->request->getParams()['subid'];
                 $customer = $this->customerRepository->getById($customerId);
                 $data = $this->getRequest()->getPostValue('expire_date');
                 $dateFormat = $this->date->date('Y-m-d', $data);

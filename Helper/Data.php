@@ -1,51 +1,40 @@
 <?php
 
-
 namespace SITC\Sublogins\Helper;
 
-use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Framework\UrlInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    protected $customerCollectionFactory;
-    protected $subAccounts;
-    protected $customerFactory;
-    protected $customerRepository;
     protected $_customerSession;
-    protected $_customerRepositoryInterface;
-    protected $customerExtractor;
-    protected $customerRepositoryInterface;
-    protected $request;
+
+    protected $_customerFactory;
+
+    protected $_customerCollectionFactory;
+
+    protected $_subAccounts;
+
+    /**
+     *
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    protected $_resource;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        UrlInterface $urlBuilder,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        CustomerExtractor $customerExtractor,
-        \Magento\Framework\App\RequestInterface $request,
         CustomerCollectionFactory $customerCollectionFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         CustomerSession $customerSession
     )
     {
-        $this->request = $request;
-        $this->_orderCollectionFactory = $orderCollectionFactory;
-        $this->urlBuilder = $urlBuilder;
-        $this->customerCollectionFactory = $customerCollectionFactory;
-        $this->_resource = $resource;
-        $this->customerRepositoryInterface = $customerRepositoryInterface;
-        $this->customerExtractor = $customerExtractor;
-        $this->_storeManager = $storeManager;
-        $this->customerRepository = $customerRepository;
+        $this->_customerCollectionFactory = $customerCollectionFactory;
         $this->_customerSession = $customerSession;
-        $this->customerFactory = $customerFactory;
+        $this->_customerFactory = $customerFactory;
+
+        $this->_resource = $resource;
+
         parent::__construct($context);
     }
 
@@ -57,14 +46,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getSubAccounts()
     {
-        if (!$this->subAccounts) {
+        if (!$this->_subAccounts) {
             $customerId = $this->_customerSession->getCustomerId();
-            $this->subAccounts = $this->customerCollectionFactory->create()
+            $this->subAccounts = $this->_customerCollectionFactory->create()
                 ->addAttributeToSelect('*')
-                ->addAttributeToFilter('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN)
+                ->addAttributeToFilter('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN)
                 ->addAttributeToFilter('sublogin_parent_id', $customerId);
         }
-        return $this->subAccounts;
+        return $this->_subAccounts;
+    }
+
+    public function getCountSubAccounts($customerId = null)
+    {
+        if (!$customerId) {
+            $customerId = $this->_customerSession->getCustomerId();
+            if (!$customerId) {
+                return false;
+            }
+        }
+
+        $connection = $this->_resource->getConnection();
+
+        $select = $connection->select()
+            ->from(
+                ['main_table' => $connection->getTableName('customer_grid_flat')],
+                [new \Zend_Db_Expr('COUNT(main_table.entity_id)')]
+            )
+            ->where('main_table.sublogin_parent_id = :customer_id');
+
+        $bind = ['customer_id' => $customerId];
+
+        return $connection->fetchOne($select, $bind);
     }
 
     public function isSublogin($customer = null)
@@ -79,6 +91,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         return false;
     }
+
     public function getExpireDate($customer = null)
     {
         if (!$customer) {
@@ -91,14 +104,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         return false;
     }
-    public function getIddata()
-    {
-        $customerId = $this->request->getParam('subid');
-        $customer = $this->customerFactory->create()->load($customerId);
-        $emailSublogins = $customer->getEntityId();
-        return $emailSublogins;
 
-    }
     public function getCreateSublogin($customer = null)
     {
         if (!$customer) {
@@ -112,17 +118,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return false;
     }
 
-    public function getStatusSubAc($sublog_id)
-    {
-        $customer = $this->customerRepositoryInterface->getById($sublog_id);
-        $status = $customer->getCustomAttribute('is_active_sublogin');
-        if (!empty($status)) {
-            $status = $status->getValue();
-        }
-        return $status;
-    }
     public function getSubRegisterPostUrl()
     {
-        return $this->_urlBuilder->getUrl('sublogins/account/createpost');
+        return $this->_getUrl('sublogins/account/createpost');
     }
 }
