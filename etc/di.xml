@@ -9,9 +9,7 @@
             </argument>
         </arguments>
     </virtualType>
-
     <preference for="SITC\Sublogins\Api\Data\SubAccountInterface" type="SITC\Sublogins\Model\SubAccount" />
-
     <virtualType name="SubAccountGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">SITC\Sublogins\Model\ResourceModel\SubAccount\Collection</argument>
@@ -37,15 +35,10 @@
                 type="SITC\Sublogins\Plugin\Customer\Ui\Component\Listing\Column\Actions"/>
     </type>
     <type name="Magento\Customer\Model\Customer\DataProvider">
-        <plugin name="parent_id_sublogins"
-                type="SITC\Sublogins\Plugin\Customer\Model\Customer\DataProvider"/>
+        <plugin name="parent_id_sublogins" type="SITC\Sublogins\Plugin\Customer\Model\Customer\DataProvider"/>
     </type>
     <type name="\Magento\Customer\Controller\Adminhtml\Index\Save">
         <plugin name="is_sub_login"
                 type="SITC\Sublogins\Plugin\Customer\Redirect\RedirectSublogin"/>
-    </type>
-    <type name="Magento\Customer\Model\Customer\DataProvider">
-        <plugin name="update_password_subaccount"
-                type="SITC\Sublogins\Plugin\Customer\EditPassword\Password"/>
     </type>
 </config>

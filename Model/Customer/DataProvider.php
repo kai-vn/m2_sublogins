@@ -210,6 +210,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
                 $this->overrideFileUploaderData($address, $result['address'][$addressId]);
             }
+
             $this->loadedData[$customer->getId()] = $result;
         }
 
