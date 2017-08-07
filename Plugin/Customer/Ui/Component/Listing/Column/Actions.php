@@ -43,7 +43,7 @@ class Actions
                     if ($canCreateSublogin == 1) {
                         $item[$subject->getData('name')]['sublogins'] = [
                             'href' => $this->urlBuilder->getUrl(
-                                'sublogins/account/edit',
+                                'customer/index/new',
                                 ['sub_parent_id' => $item['entity_id'], 'store' => $storeId]
                             ),
                             'label' => __('Create Sublogins'),
