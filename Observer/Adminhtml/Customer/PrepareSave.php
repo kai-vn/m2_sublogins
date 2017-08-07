@@ -50,7 +50,7 @@ class PrepareSave implements ObserverInterface
             }
             $collectionSize = $this->collectionFactory->create()
                 ->addAttributeToSelect(['sublogin_parent_id', 'is_sub_login'])
-                ->addAttributeToFilter('is_sub_login', 1)
+                ->addAttributeToFilter('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN)
                 ->addAttributeToFilter('sublogin_parent_id', $subloginParentId)->getSize();
             $countSublogins = (int)$collectionSize + 1;
             $maxSublogins = $this->_customerRepositoryInterface->getById($subloginParentId)->getCustomAttribute('max_sub_logins')->getValue();
