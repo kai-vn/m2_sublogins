@@ -1,111 +1,63 @@
 <?php
-
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
-use Magento\Backend\App\Action;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
-class Edit extends Action
+class Edit extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry = null;
-
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $_resultPageFactory;
-
-    /**
-     * @var \SITC\Sublogins\Model\Account
-     */
-    protected $_model;
-
-    /**
-     * @param Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \SITC\Sublogins\Model\Account $model
-     */
-    public function __construct(
-        Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $registry,
-        \SITC\Sublogins\Model\Account $model
-    )
-    {
-        $this->_resultPageFactory = $resultPageFactory;
-        $this->_coreRegistry = $registry;
-        $this->_model = $model;
-        parent::__construct($context);
-    }
-
-    /**
-     * Edit Account
+     * Customer edit action
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
-        $model = $this->_model;
-
-        // If you have got an id, it's edition
-        if ($id) {
-            $model->load($id);
-            if (!$model->getId()) {
-                $this->messageManager->addError(__('This account not exists.'));
-                /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $customerId = $this->initCurrentCustomer();
+        $customerData = [];
+        $customerData['account'] = [];
+        $customerData['address'] = [];
+        $customer = null;
+        $isExistingCustomer = (bool)$customerId;
+        if ($isExistingCustomer) {
+            try {
+                $customer = $this->_customerRepository->getById($customerId);
+                $customerData['account'] = $this->customerMapper->toFlatArray($customer);
+                $customerData['account'][CustomerInterface::ID] = $customerId;
+                try {
+                    $addresses = $customer->getAddresses();
+                    foreach ($addresses as $address) {
+                        $customerData['address'][$address->getId()] = $this->addressMapper->toFlatArray($address);
+                        $customerData['address'][$address->getId()]['id'] = $address->getId();
+                    }
+                } catch (NoSuchEntityException $e) {
+                    //do nothing
+                }
+            } catch (NoSuchEntityException $e) {
+                $this->messageManager->addException($e, __('Something went wrong while editing the customer.'));
                 $resultRedirect = $this->resultRedirectFactory->create();
-
-                return $resultRedirect->setPath('*/*/');
+                $resultRedirect->setPath('sublogins/*/index');
+                return $resultRedirect;
             }
         }
-
-        $data = $this->_getSession()->getFormData(true);
-        if (!empty($data)) {
-            $model->setData($data);
+        $customerData['customer_id'] = $customerId;
+        $this->_getSession()->setCustomerData($customerData);
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Customer::customer_manage');
+        $this->prepareDefaultCustomerTitle($resultPage);
+        $resultPage->setActiveMenu('Magento_Customer::customer');
+        if ($isExistingCustomer) {
+            $resultPage->getConfig()->getTitle()->prepend($this->_viewHelper->getCustomerName($customer));
+        } else {
+            $resultPage->getConfig()->getTitle()->prepend(__('New Customer'));
         }
-
-        $this->_coreRegistry->register('sublogins_account', $model);
-
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $this->_initAction();
-        $resultPage->addBreadcrumb(
-            $id ? __('Edit Account') : __('New Account'),
-            $id ? __('Edit Account') : __('New Account')
-        );
-        $resultPage->getConfig()->getTitle()->prepend(__('Accounts'));
-        $resultPage->getConfig()->getTitle()
-            ->prepend($model->getId() ? $model->getName() : __('New Account'));
-
         return $resultPage;
-    }
-
-    /**
-     * Init actions
-     *
-     * @return \Magento\Backend\Model\View\Result\Page
-     */
-    protected function _initAction()
-    {
-        // load layout, set active menu and breadcrumbs
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $this->_resultPageFactory->create();
-        $resultPage->setActiveMenu('SITC_Sublogins::account')
-            ->addBreadcrumb(__('Account'), __('Account'))
-            ->addBreadcrumb(__('Manage Accounts'), __('Manage Accounts'));
-        return $resultPage;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('SITC_Sublogins::account_save');
     }
 }

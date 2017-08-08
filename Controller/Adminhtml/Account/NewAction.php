@@ -36,11 +36,4 @@ class NewAction extends Action
         return $resultForward->forward('edit');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('SITC_Sublogins::account_save');
-    }
 }

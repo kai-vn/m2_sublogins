@@ -2,6 +2,7 @@
 namespace SITC\Sublogins\Observer\Customer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -14,6 +15,8 @@ class BeforeSave implements ObserverInterface
     protected $_responseFactory;
     protected $_url;
     private $logger;
+    protected $session;
+    protected $_coreRegistry;
     /**
      * Encryption model
      *
@@ -56,7 +59,8 @@ class BeforeSave implements ObserverInterface
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\UrlInterface $urlInterface,
         \Magento\Framework\App\RequestInterface $request,
-        CustomerSession $customerSession
+        CustomerSession $customerSession,
+        \Magento\Framework\Registry $coreRegistry
 
     )
     {
@@ -72,12 +76,14 @@ class BeforeSave implements ObserverInterface
         $this->customerDataFactory = $customerDataFactory;
         $this->encryptor = $encryptor;
         $this->customerRegistry = $customerRegistry;
+        $this->_coreRegistry = $coreRegistry;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $model = $observer->getEvent()->getData('customer');
-        $customerSublogin = $this->customerFactory->create()->load($model->getId());
+        $parentId = $this->request->getParam('sub_parent_id');
+        $customerSublogin = $this->customerFactory->create()->load($parentId);
         if($this->helper->isSublogin($customerSublogin)) {
             $password = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_hash'];
             $confirmPassword = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_confirmation'];

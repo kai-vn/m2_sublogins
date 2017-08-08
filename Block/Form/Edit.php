@@ -9,6 +9,8 @@ namespace SITC\Sublogins\Block\Form;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Controller\RegistryConstants;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Customer edit form block
@@ -17,6 +19,7 @@ use Magento\Customer\Model\AccountManagement;
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
+    protected $_coreRegistry;
     protected $subAccounts;
     protected $_customerSession;
     protected $_customerCollectionFactory;
@@ -34,12 +37,14 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         array $data = [])
     {
+        $this->_coreRegistry = $registry;
         $this->request = $request;
         $this->customerFactory = $customerFactory;
         $this->_customerCollectionFactory = $customerCollectionFactory;

@@ -44,7 +44,6 @@ class DataProvider
 
     public function afterGetData(CustomerDataProvider $subject, $result)
     {
-
         $subLoginParentId = $this->_request->getParam('sub_parent_id');
         if (!empty($subLoginParentId)) {
             $this->getSession()->setSubParentId($subLoginParentId);

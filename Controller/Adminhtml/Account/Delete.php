@@ -6,19 +6,15 @@ use Magento\Backend\App\Action;
 
 class Delete extends Action
 {
-    protected $_model;
 
     /**
      * @param Action\Context $context
-     * @param \SITC\Sublogins\Model\Account $model
      */
     public function __construct(
-        Action\Context $context,
-        \SITC\Sublogins\Model\Account $model
+        Action\Context $context
     )
     {
         parent::__construct($context);
-        $this->_model = $model;
     }
 
     /**

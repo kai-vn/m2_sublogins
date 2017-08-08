@@ -115,8 +115,18 @@
                     <item name="label" xsi:type="string" translate="true">FirstName</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
-
                     </item>
+                </item>
+            </argument>
+        </field>
+        <field name="middlename">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Middlename</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">customer</item>
                 </item>
             </argument>
         </field>
@@ -143,6 +153,20 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                         <item name="validate-email" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="dob">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="label" xsi:type="string" translate="true">Date Of Birth</item>
+                    <item name="source" xsi:type="string">customer</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-date" xsi:type="boolean">true</item>
                     </item>
                 </item>
             </argument>
@@ -212,6 +236,16 @@
                 </item>
             </argument>
         </field>
+        <container name="change_password" >
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">SITC\Sublogins\Block\Adminhtml\Account\Edit\Tab\Form</argument>
+            </htmlContent>
+        </container>
     </fieldset>
     <fieldset name="address">
         <argument name="data" xsi:type="array">
