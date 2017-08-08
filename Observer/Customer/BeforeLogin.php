@@ -7,13 +7,11 @@ use Magento\Framework\Exception\LocalizedException;
 
 class BeforeLogin implements ObserverInterface
 {
-
     protected $customerRepository;
     protected $messageManager;
     protected $accountRedirect;
     protected $storeManager;
     protected $request;
-
 
     public function __construct(
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
@@ -32,28 +30,32 @@ class BeforeLogin implements ObserverInterface
     {
         $login = $this->request->getPost('login');
         $customer = $this->customerRepository->get($login['username'], $this->storeManager->getStore()->getWebsiteId());
+
         $expireDate = $customer->getCustomAttribute('expire_date');
         if (!empty($expireDate)) {
             $expireDate = $expireDate->getValue();
         }
+
         $isSubAccount = $customer->getCustomAttribute('is_sub_login');
         if (!empty($isSubAccount)) {
             $isSubAccount = $isSubAccount->getValue();
         }
+
         $statusAccount = $customer->getCustomAttribute('is_active_sublogin');
         if (!empty($statusAccount)) {
             $statusAccount = $statusAccount->getValue();
         }
-        if ($customer && !empty($expireDate) && $isSubAccount == 1) {
+
+        if ($customer && !empty($expireDate) && $isSubAccount == \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN) {
             $expireDate = new \DateTime($expireDate);
             $today = new \DateTime('today');
             if ($expireDate < $today) {
-                throw new LocalizedException(__('Your account had been expired date. You can not login to our site.'));
+                throw new LocalizedException(__('Your account has been expired. Please contact to us for further information.'));
             }
-        } elseif ($statusAccount == 0 && $isSubAccount == 1) {
-            throw new LocalizedException(__('Your account is Deactive.'));
+        }
+
+        if($statusAccount == 0 && $isSubAccount == \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN) {
+            throw new LocalizedException(__('Your account is currently not available. Please contact to us for further information.'));
         }
     }
-
-
 }

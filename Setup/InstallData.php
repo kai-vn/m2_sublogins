@@ -123,7 +123,9 @@ class InstallData implements InstallDataInterface
             'position' => 999,
             'system' => false,
             'sort_order' => 900,
-            'is_filterable_in_grid' => true
+            'is_filterable_in_grid' => true,
+            'default' => 1,
+            'default_value' => 1
         ]);
 
         $attribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'can_create_sub_login')
