@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <preference for="SITC\Sublogins\Api\Data\CustomerInterface" type="SITC\Sublogins\Model\Data\Customer" />
+    <preference for="SITC\Sublogins\Api\AccountManagementInterface" type="SITC\Sublogins\Model\AccountManagement" />
+
     <virtualType name="SubAccountGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">
