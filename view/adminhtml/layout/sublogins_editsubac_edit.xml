@@ -3,7 +3,6 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="SITC\Sublogins\Block\Adminhtml\Account\Edit\Tab\Form" name="sublogins_account_form"/>
             <uiComponent name="edit_subaccount"/>
         </referenceContainer>
     </body>
