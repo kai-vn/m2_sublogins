@@ -65,6 +65,6 @@ class SubloginButton extends \Magento\Customer\Block\Adminhtml\Edit\GenericButto
      */
     public function getCreateSubUrl()
     {
-        return $this->getUrl('customer/index/new', ['sub_parent_id' => $this->getCustomerId()]);
+        return $this->getUrl('sublogins/account/new', ['sub_parent_id' => $this->getCustomerId()]);
     }
 }
