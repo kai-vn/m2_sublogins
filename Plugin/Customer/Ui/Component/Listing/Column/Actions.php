@@ -37,9 +37,10 @@ class Actions
             $storeId = $this->context->getFilterParam('store_id');
             foreach ($result['data']['items'] as &$item) {
                 $customer = $this->_customerRepositoryInterface->getById($item['entity_id']);
-                $customAttribute = $customer->getCustomAttribute('can_create_sub_login');
-                if ($customAttribute && !empty($customer)) {
-                    $canCreateSublogin = $customAttribute->getValue();
+                $canCreateSubloginAttribute = $customer->getCustomAttribute('can_create_sub_login');
+                $isSubloginAttribute = $customer->getCustomAttribute('is_sub_login');
+                if ($canCreateSubloginAttribute && !empty($customer)) {
+                    $canCreateSublogin = $canCreateSubloginAttribute->getValue();
                     if ($canCreateSublogin == 1) {
                         $item[$subject->getData('name')]['sublogins'] = [
                             'href' => $this->urlBuilder->getUrl(
@@ -51,6 +52,22 @@ class Actions
                         ];
                     }
                 }
+
+                if ($isSubloginAttribute && !empty($customer)) {
+                    $isSublogin = $isSubloginAttribute->getValue();
+                    if ($isSublogin == 1) {
+                        $item[$subject->getData('name')]['edit'] = [
+                            'href' => $this->urlBuilder->getUrl(
+                                'sublogins/editsubac/edit',
+                                ['id' => $item['entity_id'], 'store' => $storeId]
+                            ),
+                            'label' => __('Edit'),
+                            'hidden' => false,
+                        ];
+                    }
+                }
+
+
             }
         }
         return $result;
