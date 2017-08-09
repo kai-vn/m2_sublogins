@@ -15,15 +15,11 @@ define([
          */
         selectOption: function(id){
             if(($("#"+id).val() == 0)||($("#"+id).val() == undefined)) {
-                $('div[data-index="monday_open_time"]').hide();
-                $('div[data-index="monday_close_time"]').hide();
-                $('div[data-index="monday_break_time"]').hide();
-                $('div[data-index="monday_offbreak_time"]').hide();
+                $('div[data-index="password_hash"]').hide();
+                $('div[data-index="password_confirmation"]').hide();
             } else if($("#"+id).val() == 1) {
-                $('div[data-index="monday_open_time"]').show();
-                $('div[data-index="monday_close_time"]').show();
-                $('div[data-index="monday_break_time"]').show();
-                $('div[data-index="monday_offbreak_time"]').show();
+                $('div[data-index="password_hash"]').show();
+                $('div[data-index="password_confirmation"]').show();
             }
         },
     });
