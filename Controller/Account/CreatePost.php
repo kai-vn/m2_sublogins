@@ -35,6 +35,7 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
+    protected $helper;
     /** @var AccountManagementInterface */
     protected $accountManagement;
 
@@ -70,7 +71,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 
     /** @var \Magento\Framework\UrlInterface */
     protected $urlModel;
-
+    protected $customerFactory;
     /** @var DataObjectHelper */
     protected $dataObjectHelper;
     protected $_customerSession;
@@ -120,6 +121,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     public function __construct(
         Context $context,
         Session $customerSession,
+        \SITC\Sublogins\Helper\Data $helper,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Customer\Model\Session $customerSession,
         ScopeConfigInterface $scopeConfig,
@@ -130,6 +132,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
         UrlFactory $urlFactory,
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
         PageFactory $pageFactory,
         FormFactory $formFactory,
         SubscriberFactory $subscriberFactory,
@@ -144,6 +147,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         AccountRedirect $accountRedirect
     )
     {
+        $this->helper = $helper;
         $this->date = $date;
         $this->pageFactory = $pageFactory;
         $this->session = $customerSession;
@@ -160,6 +164,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->customerUrl = $customerUrl;
         $this->registration = $registration;
         $this->escaper = $escaper;
+        $this->customerFactory = $customerFactory;
         $this->_customerSession = $customerSession;
         $this->customerExtractor = $customerExtractor;
         $this->urlModel = $urlFactory->create();
@@ -181,10 +186,22 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 
     public function execute()
     {
-
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         try {
+            $canCreateSubLogin = $this->_customerSession->getCustomer()->getCanCreateSubLogin();
+            if (!$canCreateSubLogin) {
+                $this->messageManager->addError(__('Your account is currently not available. Please contact to us for further information.'));
+                return $resultRedirect->setUrl($this->url->getUrl('customer/account'));
+            }
+
+            $parentId = $this->_customerSession->getCustomer()->getId();
+            $countSubAccounts = $this->helper->getCountSubAccounts($parentId);
+            $maxSublogins = $this->_customerSession->getCustomer()->getMaxSubLogins();
+            if ($maxSublogins && $countSubAccounts + 1 > $maxSublogins) {
+                $this->messageManager->addError(__('You cannot create more than %1 sub accounts for this customer.', $maxSublogins));
+                return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount'));
+            }
             $address = $this->extractAddress();
             $addresses = $address === null ? [] : [$address];
             $customer = $this->customerExtractor->extract('customer_account_create', $this->_request);

@@ -34,7 +34,6 @@ class PrepareSave implements ObserverInterface
 
         if (!empty($parentId)) {
             $parent = $this->customerFactory->create()->load($parentId);
-
             if (!$customer->getId()) {
                 $countSubAccounts = $this->helper->getCountSubAccounts($parentId);
                 $maxSubAccounts = $parent->getMaxSubLogins();
@@ -45,7 +44,6 @@ class PrepareSave implements ObserverInterface
             }
 
             $requestParams = $observer->getEvent()->getRequest()->getParams('customer');
-
             if (!$customer->getId() && (empty($requestParams['customer']['password_hash']) || empty($requestParams['customer']['password_confirmation']))) {
                 $this->getSession()->unsSubParentId();
                 throw new LocalizedException(__('Please enter the customer password.'));
