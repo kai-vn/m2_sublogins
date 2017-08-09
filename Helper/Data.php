@@ -20,13 +20,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
+    protected $_storeManager;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         CustomerCollectionFactory $customerCollectionFactory,
-        CustomerSession $customerSession
+        CustomerSession $customerSession,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     )
     {
         $this->_customerCollectionFactory = $customerCollectionFactory;
@@ -34,6 +36,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_customerFactory = $customerFactory;
 
         $this->_resource = $resource;
+        $this->_storeManager = $storeManager;
 
         parent::__construct($context);
     }
@@ -42,6 +45,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $this->_storeId = $store;
         return $this;
+    }
+
+    public function getStore()
+    {
+        return $this->_storeManager->getStore();
+    }
+
+    public function getCanViewOrder()
+    {
+        return $this->scopeConfig->getValue(
+            'sublogins/general/can_view_order',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getStore()->getId()
+        );
     }
 
     public function getSubAccounts()
@@ -75,7 +92,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ->where('main_table.sublogin_parent_id = :customer_id');
 
         $bind = ['customer_id' => $customerId];
-
         return $connection->fetchOne($select, $bind);
     }
 

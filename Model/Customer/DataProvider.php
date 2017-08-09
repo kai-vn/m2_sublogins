@@ -169,15 +169,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
+
         $subLoginParentId = $this->_request->getParam('sub_parent_id');
         if (!empty($subLoginParentId)) {
             $this->getSession()->setSubParentId($subLoginParentId);
         }
-        if ($this->session === null) {
-            $this->session = ObjectManager::getInstance()->get(
-                \Magento\Framework\Session\SessionManagerInterface::class
-            );
-        }
+
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {

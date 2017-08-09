@@ -9,12 +9,6 @@ class DataProvider
 {
     protected $_request;
     protected $session;
-    /**
-     * Customer Repository.
-     *
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     */
-    protected $_customerRepository;
 
     /**
      * Encryptor.
@@ -23,23 +17,12 @@ class DataProvider
      */
     protected $_encryptor;
 
-    /**
-     * Customer registry.
-     *
-     * @var \Magento\Customer\Model\CustomerRegistry
-     */
-    protected $_customerRegistry;
-
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Framework\Encryption\Encryptor $encryptor,
-        \Magento\Customer\Model\CustomerRegistry $customerRegistry
+        \Magento\Framework\Encryption\Encryptor $encryptor
     )
     {
-        $this->_customerRepository = $customerRepository;
         $this->_encryptor = $encryptor;
-        $this->_customerRegistry = $customerRegistry;
         $this->_request = $request;
     }
 
@@ -61,28 +44,4 @@ class DataProvider
         }
         return $this->session;
     }
-
-    public function beforeAuthenticate(\Magento\Customer\Model\AccountManagement $subject, ...$args)
-    {
-        if (!empty($args[0]) && !empty($args[1])) {
-            try {
-                $customer = $this->_customerRepository->get($args[0]);
-
-                /* Logic for validation hash from old website here */
-
-                $passwordHash = $this->_encryptor->getHash($args[1], true);
-                $customerSecure = $this->_customerRegistry->retrieveSecureData($customer->getId());
-                $customerSecure->setRpToken(null);
-                $customerSecure->setRpTokenCreatedAt(null);
-                $customerSecure->setPasswordHash($passwordHash);
-                $this->_customerRepository->save($customer, $passwordHash);
-                $this->_customerRegistry->remove($customer->getId());
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                return $args;
-            }
-        }
-
-        return $args;
-    }
-
 }
