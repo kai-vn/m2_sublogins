@@ -4,35 +4,14 @@
     <preference for="SITC\Sublogins\Api\Data\CustomerInterface" type="SITC\Sublogins\Model\Data\Customer" />
     <preference for="SITC\Sublogins\Api\AccountManagementInterface" type="SITC\Sublogins\Model\AccountManagement" />
 
-    <virtualType name="SubAccountGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-        <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <preference for="SITC\Sublogins\Api\Data\SubAccountInterface" type="SITC\Sublogins\Model\SubAccount" />
-    <virtualType name="SubAccountGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
-        <arguments>
-            <argument name="collection" xsi:type="object" shared="false">SITC\Sublogins\Model\ResourceModel\SubAccount\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">SubAccountGirdFilterPool</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="SITC\Sublogins\Model\ResourceModel\SubAccount\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">customer_entity</argument>
-            <argument name="resourceModel" xsi:type="string">SITC\Sublogins\Model\ResourceModel\SubAccount</argument>
-        </arguments>
-    </virtualType>
-
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="sub_account_listing_data_source" xsi:type="string">SITC\Sublogins\Model\ResourceModel\SubAccount\Grid\Collection</item>
+                <item name="sub_account_listing_data_source" xsi:type="string">Magento\Customer\Model\ResourceModel\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
+
     <type name="Magento\Customer\Ui\Component\Listing\Column\Actions">
         <plugin name="add_action_create_sublogins_customer_grid"
                 type="SITC\Sublogins\Plugin\Customer\Ui\Component\Listing\Column\Actions"/>
