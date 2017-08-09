@@ -82,7 +82,8 @@ class BeforeSave implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $model = $observer->getEvent()->getData('customer');
-        $customerSublogin = $this->customerFactory->create()->load($model->getId());
+        $parentId = $this->request->getParam('sub_parent_id');
+        $customerSublogin = $this->customerFactory->create()->load($parentId);
         if($this->helper->isSublogin($customerSublogin)) {
             $password = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_hash'];
             $confirmPassword = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_confirmation'];
