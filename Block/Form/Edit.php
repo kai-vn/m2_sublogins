@@ -64,6 +64,20 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     }
 
     /**
+     * Return the Customer given the customer Id stored in the session.
+     *
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     */
+    public function getCustomer()
+    {
+        $idSublogins = $this->request->getParam('editsubac');
+        return $this->customerRepository->getById($idSublogins);
+    }
+    public function showPrefix()
+    {
+        return $this->_isAttributeVisible('prefix');
+    }
+    /**
      * Retrieve form data
      *
      * @return array

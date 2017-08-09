@@ -10,18 +10,6 @@
             <label for="password-confirmation" class="label"><span><?php /* @escapeNotVerified */ echo __('Expire Date') ?></span></label>
             <input name="expire_date" id="datepicker" title="SubAccount" value="<?php echo $expireDate; ?>" type="text">
         </div>
-        <?php $_dob = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob') ?>
-        <?php $_taxvat = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Taxvat') ?>
-        <?php $_gender = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Gender') ?>
-        <?php if ($_dob->isEnabled()): ?>
-            <?php echo $_dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
-        <?php endif ?>
-        <?php if ($_taxvat->isEnabled()): ?>
-            <?php echo $_taxvat->setTaxvat($block->getCustomer()->getTaxvat())->toHtml() ?>
-        <?php endif ?>
-        <?php if ($_gender->isEnabled()): ?>
-            <?php echo $_gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
-        <?php endif ?>
         <div class="field choice">
             <input type="checkbox" name="change_email" id="change-email" data-role="change-email" value="1" title="<?php /* @escapeNotVerified */ echo __('Change Email') ?>" class="checkbox" />
             <label class="label" for="change-email"><span><?php /* @escapeNotVerified */ echo __('Change Email') ?></span></label>
@@ -31,7 +19,6 @@
             <label class="label" for="change-password"><span><?php /* @escapeNotVerified */ echo __('Change Password') ?></span></label>
         </div>
     </fieldset>
-
     <fieldset class="fieldset password" data-container="change-email-password">
         <legend class="legend"><span data-title="change-email-password"><?php /* @escapeNotVerified */ echo __('Change Email and Password') ?></span></legend><br>
         <div class="field email required" data-container="change-email">
@@ -108,36 +95,6 @@
                 dateFormat:'yy-mm-dd'
             }
         );
-    });
-</script>
-<script>
-    require([
-        "jquery",
-        "mage/mage"
-    ], function($){
-        var dataForm = $('#form-validate');
-        var ignore = <?php /* @escapeNotVerified */ echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
-
-        dataForm.mage('validation', {
-            <?php if ($_dob->isEnabled()): ?>
-            errorPlacement: function(error, element) {
-                if (element.prop('id').search('full') !== -1) {
-                    var dobElement = $(element).parents('.customer-dob'),
-                        errorClass = error.prop('class');
-                    error.insertAfter(element.parent());
-                    dobElement.find('.validate-custom').addClass(errorClass)
-                        .after('<div class="' + errorClass + '"></div>');
-                }
-                else {
-                    error.insertAfter(element);
-                }
-            },
-            ignore: ':hidden:not(' + ignore + ')'
-            <?php else: ?>
-            ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
-            <?php endif ?>
-        });
-
     });
 </script>
 <script type="text/x-magento-init">
