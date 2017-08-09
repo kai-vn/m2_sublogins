@@ -41,15 +41,9 @@ $customer = $block->getCustomer();
                             <td data-th="<?php echo $block->escapeHtml(__('Order Total')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $subOrder->formatPrice($subOrder->getGrandTotal()) ?></td>
                             <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo $subOrder->getStatusLabel() ?></td>
                             <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                                <a href="<?php /* @escapeNotVerified */ echo $block->getViewUrl($subOrder) ?>" class="action view">
-                                    <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
-                                </a>
-                                <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($subOrder->getEntityId())) : ?>
-                                    <a href="#" data-post='<?php /* @escapeNotVerified */ echo
-                                    $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
-                                        ->getPostData($block->getReorderUrl($subOrder))
-                                    ?>' class="action order">
-                                        <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
+                                <?php if ($this->helper('SITC\Sublogins\Helper\Data')->getCanViewOrder()) : ?>
+                                    <a href="<?php /* @escapeNotVerified */ echo $block->getViewUrl($subOrder) ?>" class="action view">
+                                        <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
                                     </a>
                                 <?php endif ?>
                             </td>
