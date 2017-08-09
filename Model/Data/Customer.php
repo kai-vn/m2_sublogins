@@ -3,7 +3,7 @@
 
 namespace SITC\Sublogins\Model\Data;
 
-use \Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Customer
@@ -22,6 +22,7 @@ class Customer extends \Magento\Customer\Model\Data\Customer implements
     {
         return $this->_get(self::PARENT);
     }
+
     public function setParent($parent)
     {
         return $this->setData(self::PARENT, $parent);
@@ -31,6 +32,7 @@ class Customer extends \Magento\Customer\Model\Data\Customer implements
     {
         return $this->_get(self::EXPIRE_DATE);
     }
+
     public function setExpireDate($expireDate)
     {
         return $this->setData(self::EXPIRE_DATE, $expireDate);

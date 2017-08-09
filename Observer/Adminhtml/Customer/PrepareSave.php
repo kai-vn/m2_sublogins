@@ -2,11 +2,11 @@
 
 namespace SITC\Sublogins\Observer\Adminhtml\Customer;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 class PrepareSave implements ObserverInterface
@@ -38,7 +38,7 @@ class PrepareSave implements ObserverInterface
     {
         $this->_customerRepository = $customerRepository;
         $this->_encryptor = $encryptor;
-        $this->_customerRegistry   = $customerRegistry;
+        $this->_customerRegistry = $customerRegistry;
         $this->collectionFactory = $collectionFactory;
         $this->customerFactory = $customerFactory;
         $this->_customerSession = $customerSession;
@@ -48,6 +48,7 @@ class PrepareSave implements ObserverInterface
         $this->customerDataFactory = $customerDataFactory;
         $this->_coreRegistry = $coreRegistry;
     }
+
     public function beforeAuthenticate(\Magento\Customer\Model\AccountManagement $subject, ...$args)
     {
         if (!empty($args[0]) && !empty($args[1])) {
@@ -68,6 +69,7 @@ class PrepareSave implements ObserverInterface
 
         return $args;
     }
+
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $parentId = $this->getSession()->getSubParentId();
@@ -76,12 +78,12 @@ class PrepareSave implements ObserverInterface
             $parent = $this->customerFactory->create()->load($parentId);
             $countSubAccounts = $this->helper->getCountSubAccounts($parentId);
             $maxSubAccounts = $parent->getMaxSubLogins();
-            if($maxSubAccounts && $countSubAccounts + 1 > $maxSubAccounts) {
+            if ($maxSubAccounts && $countSubAccounts + 1 > $maxSubAccounts) {
                 $this->getSession()->unsSubParentId();
                 throw new LocalizedException(__('You cannot create more than %1 sub accounts for this customer.', $maxSubAccounts));
             }
             $customer->setCustomAttribute('sublogin_parent_id', $parentId);
-            $customer->setCustomAttribute('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
+            $customer->setCustomAttribute('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
         }
         $this->getSession()->unsSubParentId();
         return $customer;

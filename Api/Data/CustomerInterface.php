@@ -3,6 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Api\Data;
 
 /**
@@ -13,6 +14,7 @@ interface CustomerInterface extends \Magento\Customer\Api\Data\CustomerInterface
 {
     const PARENT = 'parent';
     const EXPIRE_DATE = 'expire_date';
+
     /**
      * Get parent id
      *

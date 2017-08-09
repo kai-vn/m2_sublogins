@@ -3,6 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Block\Adminhtml\EditSubAccount;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -55,12 +56,53 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Helper\View $viewHelper,
         array $data = []
-    ) {
+    )
+    {
         $this->_coreRegistry = $registry;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->_viewHelper = $viewHelper;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Retrieve the header text, either the name of an existing customer or 'New Customer'.
+     *
+     * @return \Magento\Framework\Phrase|string
+     */
+    public function getHeaderText()
+    {
+        $customerId = $this->getCustomerId();
+        if ($customerId) {
+            $customerData = $this->customerRepository->getById($customerId);
+            return $this->escapeHtml($this->_viewHelper->getCustomerName($customerData));
+        } else {
+            return __('New Customer');
+        }
+    }
+
+    /**
+     * Prepare form Html. Add block for configurable product modification interface.
+     *
+     * @return string
+     */
+    public function getFormHtml()
+    {
+        $html = parent::getFormHtml();
+        $html .= $this->getLayout()->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Product\Composite\Configure'
+        )->toHtml();
+        return $html;
+    }
+
+    /**
+     * Retrieve customer validation Url.
+     *
+     * @return string
+     */
+    public function getValidationUrl()
+    {
+        return $this->getUrl('customer/*/validate', ['_current' => true]);
     }
 
     /**
@@ -129,16 +171,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Retrieve the Url for creating an order.
-     *
-     * @return string
-     */
-    public function getCreateOrderUrl()
-    {
-        return $this->getUrl('sales/order_create/start', ['customer_id' => $this->getCustomerId()]);
-    }
-
-    /**
      * Return the customer Id.
      *
      * @return int|null
@@ -150,43 +182,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Retrieve the header text, either the name of an existing customer or 'New Customer'.
-     *
-     * @return \Magento\Framework\Phrase|string
-     */
-    public function getHeaderText()
-    {
-        $customerId = $this->getCustomerId();
-        if ($customerId) {
-            $customerData = $this->customerRepository->getById($customerId);
-            return $this->escapeHtml($this->_viewHelper->getCustomerName($customerData));
-        } else {
-            return __('New Customer');
-        }
-    }
-
-    /**
-     * Prepare form Html. Add block for configurable product modification interface.
+     * Retrieve the Url for creating an order.
      *
      * @return string
      */
-    public function getFormHtml()
+    public function getCreateOrderUrl()
     {
-        $html = parent::getFormHtml();
-        $html .= $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Composite\Configure'
-        )->toHtml();
-        return $html;
-    }
-
-    /**
-     * Retrieve customer validation Url.
-     *
-     * @return string
-     */
-    public function getValidationUrl()
-    {
-        return $this->getUrl('customer/*/validate', ['_current' => true]);
+        return $this->getUrl('sales/order_create/start', ['customer_id' => $this->getCustomerId()]);
     }
 
     /**

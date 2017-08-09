@@ -9,8 +9,6 @@ namespace SITC\Sublogins\Block\Form;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
-use Magento\Customer\Controller\RegistryConstants;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Customer edit form block
@@ -25,6 +23,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     protected $_customerCollectionFactory;
     protected $request;
     protected $customerFactory;
+
     /**
      * Restore entity data from session. Entity and form code must be defined for the form.
      *
@@ -64,28 +63,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         return $this;
     }
 
-    public function getExpireDate()
-    {
-        $customerId = $this->request->getParam('editsubac');
-        $customer = $this->customerFactory->create()->load($customerId);
-        $expireDate = $customer->getExpireDate();
-        return $expireDate;
-    }
-
-    public function getEmailSublogins() {
-        $customerId = $this->request->getParam('editsubac');
-        $customer = $this->customerFactory->create()->load($customerId);
-        $emailSublogins = $customer->getEmail();
-        return $emailSublogins;
-
-    }
-
-    public function getIddata()
-    {
-        $this->request->getParams();
-        return $this->request->getParam('editsubac');
-    }
-
     /**
      * Retrieve form data
      *
@@ -104,6 +81,29 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
             $this->setData('form_data', $data);
         }
         return $data;
+    }
+
+    public function getExpireDate()
+    {
+        $customerId = $this->request->getParam('editsubac');
+        $customer = $this->customerFactory->create()->load($customerId);
+        $expireDate = $customer->getExpireDate();
+        return $expireDate;
+    }
+
+    public function getEmailSublogins()
+    {
+        $customerId = $this->request->getParam('editsubac');
+        $customer = $this->customerFactory->create()->load($customerId);
+        $emailSublogins = $customer->getEmail();
+        return $emailSublogins;
+
+    }
+
+    public function getIddata()
+    {
+        $this->request->getParams();
+        return $this->request->getParam('editsubac');
     }
 
     /**

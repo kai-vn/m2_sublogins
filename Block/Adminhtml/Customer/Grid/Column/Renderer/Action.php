@@ -2,7 +2,6 @@
 
 namespace SITC\Sublogins\Block\Adminhtml\Customer\Grid\Column\Renderer;
 
-
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -47,6 +46,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         );
         return $this->_actionsToHtml();
     }
+
     /**
      * Add one action array to all options data storage
      *

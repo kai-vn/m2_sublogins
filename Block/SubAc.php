@@ -5,11 +5,14 @@
  */
 
 namespace SITC\Sublogins\Block;
+
 use Magento\Customer\Model\Session as CustomerSession;
+
 class SubAc extends \Magento\Framework\View\Element\Template
 {
     protected $_customerSession;
     protected $helper;
+
     public function __construct(
         \SITC\Sublogins\Helper\Data $helper,
         \Magento\Framework\View\Element\Template\Context $context,
@@ -24,11 +27,11 @@ class SubAc extends \Magento\Framework\View\Element\Template
 
     protected function _prepareLayout()
     {
-        if($this->helper->isSublogin()) {
+        if ($this->helper->isSublogin()) {
             return parent::_prepareLayout();
         }
 
-       if ($this->helper->getCreateSublogin()) {
+        if ($this->helper->getCreateSublogin()) {
             $this->addChild(
                 'create-sub-account',
                 'Magento\Framework\View\Element\Html\Link\Current',

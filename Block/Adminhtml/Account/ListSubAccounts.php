@@ -6,7 +6,6 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerC
 
 class ListSubAccounts extends \Magento\Backend\Block\Widget\Grid\Extended
 {
-
     protected $customerCollectionFactory;
 
     /**
@@ -26,6 +25,11 @@ class ListSubAccounts extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $this->customerCollectionFactory = $customerCollectionFactory;
         parent::__construct($context, $backendHelper, $data);
+    }
+
+    public function getRowUrl($row)
+    {
+        return $this->getUrl('sublogins/editsubac/edit', ['id' => $row->getEntityId()]);
     }
 
     /**
@@ -48,7 +52,7 @@ class ListSubAccounts extends \Magento\Backend\Block\Widget\Grid\Extended
         $collection = $this->customerCollectionFactory->create()
             ->addFieldToSelect('*')
             ->addAttributeToSelect('expire_date', true)
-            ->addAttributeToFilter('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
+            ->addAttributeToFilter('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -146,7 +150,6 @@ class ListSubAccounts extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-
         $this->addColumn(
             'action',
             [
@@ -158,13 +161,7 @@ class ListSubAccounts extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-
         return parent::_prepareColumns();
-    }
-
-    public function getRowUrl($row)
-    {
-        return $this->getUrl('sublogins/editsubac/edit', ['id' => $row->getEntityId()]);
     }
 
 }

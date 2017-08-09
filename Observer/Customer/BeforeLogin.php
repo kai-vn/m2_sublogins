@@ -54,7 +54,7 @@ class BeforeLogin implements ObserverInterface
             }
         }
 
-        if($statusAccount == 0 && $isSubAccount == \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN) {
+        if ($statusAccount == 0 && $isSubAccount == \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN) {
             throw new LocalizedException(__('Your account is currently not available. Please contact to us for further information.'));
         }
     }

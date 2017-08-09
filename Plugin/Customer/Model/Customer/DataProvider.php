@@ -29,16 +29,17 @@ class DataProvider
      * @var \Magento\Customer\Model\CustomerRegistry
      */
     protected $_customerRegistry;
+
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-          \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Encryption\Encryptor $encryptor,
         \Magento\Customer\Model\CustomerRegistry $customerRegistry
     )
     {
         $this->_customerRepository = $customerRepository;
-        $this->_encryptor          = $encryptor;
-        $this->_customerRegistry   = $customerRegistry;
+        $this->_encryptor = $encryptor;
+        $this->_customerRegistry = $customerRegistry;
         $this->_request = $request;
     }
 
@@ -60,6 +61,7 @@ class DataProvider
         }
         return $this->session;
     }
+
     public function beforeAuthenticate(\Magento\Customer\Model\AccountManagement $subject, ...$args)
     {
         if (!empty($args[0]) && !empty($args[1])) {

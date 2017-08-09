@@ -3,29 +3,30 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Model\Customer;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Customer\Model\Attribute;
-use Magento\Customer\Model\FileProcessor;
-use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Customer\Model\Address;
-use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\ResourceModel\Customer\Collection;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -59,17 +60,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var array
      */
     protected $loadedData;
-
-    /**
-     * @var CountryWithWebsites
-     */
-    private $countryByWebsiteSource;
-
-    /**
-     * @var \Magento\Customer\Model\Config\Share
-     */
-    private $shareConfig;
-
     /**
      * EAV attribute properties to fetch from meta storage
      * @var array
@@ -84,7 +74,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         'default' => 'default_value',
         'size' => 'multiline_count',
     ];
-
     /**
      * Form element mapping
      *
@@ -95,16 +84,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         'hidden' => 'input',
         'boolean' => 'checkbox',
     ];
-
     /**
      * @var EavValidationRules
      */
     protected $eavValidationRules;
+    /**
+     * @var CountryWithWebsites
+     */
+    private $countryByWebsiteSource;
+    /**
+     * @var \Magento\Customer\Model\Config\Share
+     */
+    private $shareConfig;
 
     /**
      * @var SessionManagerInterface
      */
-
     /**
      * @var FileProcessorFactory
      */
@@ -165,23 +160,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Get session object
-     *
-     * @return SessionManagerInterface
-     *
-     * @deprecated
-     */
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            $this->session = ObjectManager::getInstance()->get(
-                \Magento\Framework\Session\SessionManagerInterface::class
-            );
-        }
-        return $this->session;
-    }
-
-    /**
      * Get data
      *
      * @return array
@@ -237,6 +215,23 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Get session object
+     *
+     * @return SessionManagerInterface
+     *
+     * @deprecated
+     */
+    protected function getSession()
+    {
+        if ($this->session === null) {
+            $this->session = ObjectManager::getInstance()->get(
+                \Magento\Framework\Session\SessionManagerInterface::class
+            );
+        }
+        return $this->session;
+    }
+
+    /**
      * Override file uploader UI component data
      *
      * Overrides data for attributes with frontend_input equal to 'image' or 'file'.
@@ -273,7 +268,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         Type $entityType,
         Attribute $attribute,
         array $customerData
-    ) {
+    )
+    {
         $attributeCode = $attribute->getAttributeCode();
 
         $file = isset($customerData[$attributeCode])
@@ -308,6 +304,47 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ];
         }
         return [];
+    }
+
+    /**
+     * Get FileProcessorFactory instance
+     *
+     * @return FileProcessorFactory
+     *
+     * @deprecated
+     */
+    private function getFileProcessorFactory()
+    {
+        if ($this->fileProcessorFactory === null) {
+            $this->fileProcessorFactory = ObjectManager::getInstance()
+                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
+        }
+        return $this->fileProcessorFactory;
+    }
+
+    /**
+     * Prepare address data
+     *
+     * @param int $addressId
+     * @param array $addresses
+     * @param array $customer
+     * @return void
+     */
+    protected function prepareAddressData($addressId, array &$addresses, array $customer)
+    {
+        if (isset($customer['default_billing'])
+            && $addressId == $customer['default_billing']
+        ) {
+            $addresses[$addressId]['default_billing'] = $customer['default_billing'];
+        }
+        if (isset($customer['default_shipping'])
+            && $addressId == $customer['default_shipping']
+        ) {
+            $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
+        }
+        if (isset($addresses[$addressId]['street']) && !is_array($addresses[$addressId]['street'])) {
+            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
+        }
     }
 
     /**
@@ -360,6 +397,39 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Process attributes by frontend input type
+     *
+     * @param AttributeInterface $attribute
+     * @param array $meta
+     * @return void
+     */
+    private function processFrontendInput(AttributeInterface $attribute, array &$meta)
+    {
+        $code = $attribute->getAttributeCode();
+        if ($attribute->getFrontendInput() === 'boolean') {
+            $meta[$code]['arguments']['data']['config']['prefer'] = 'toggle';
+            $meta[$code]['arguments']['data']['config']['valueMap'] = [
+                'true' => '1',
+                'false' => '0',
+            ];
+        }
+    }
+
+    /**
+     * Retrieve Country With Website options Source
+     * @deprecated
+     * @return CountryWithWebsites
+     */
+    private function getCountryByWebsiteSource()
+    {
+        if (!$this->countryByWebsiteSource) {
+            $this->countryByWebsiteSource = ObjectManager::getInstance()->get(CountryWithWebsites::class);
+        }
+
+        return $this->countryByWebsiteSource;
+    }
+
+    /**
      * Override file uploader UI component metadata
      *
      * Overrides metadata for attributes with frontend_input equal to 'image' or 'file'.
@@ -373,7 +443,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         Type $entityType,
         AbstractAttribute $attribute,
         array &$config
-    ) {
+    )
+    {
         if (in_array($attribute->getFrontendInput(), $this->fileUploaderTypes)) {
             $maxFileSize = self::MAX_FILE_SIZE;
 
@@ -416,20 +487,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Retrieve metadata value
-     *
-     * @param array $config
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     */
-    private function getMetadataValue($config, $name, $default = null)
-    {
-        $value = isset($config[$name]) ? $config[$name] : $default;
-        return $value;
-    }
-
-    /**
      * Retrieve URL to file upload
      *
      * @param string $entityTypeCode
@@ -454,31 +511,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Retrieve Country With Website options Source
-     * @deprecated
-     * @return CountryWithWebsites
+     * Retrieve metadata value
+     *
+     * @param array $config
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
      */
-    private function getCountryByWebsiteSource()
+    private function getMetadataValue($config, $name, $default = null)
     {
-        if (!$this->countryByWebsiteSource) {
-            $this->countryByWebsiteSource = ObjectManager::getInstance()->get(CountryWithWebsites::class);
-        }
-
-        return $this->countryByWebsiteSource;
-    }
-
-    /**
-     * Retrieve Customer Share Config
-     * @deprecated
-     * @return \Magento\Customer\Model\Config\Share
-     */
-    private function getShareConfig()
-    {
-        if (!$this->shareConfig) {
-            $this->shareConfig = ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
-        }
-
-        return $this->shareConfig;
+        $value = isset($config[$name]) ? $config[$name] : $default;
+        return $value;
     }
 
     /**
@@ -500,62 +543,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Process attributes by frontend input type
-     *
-     * @param AttributeInterface $attribute
-     * @param array $meta
-     * @return void
-     */
-    private function processFrontendInput(AttributeInterface $attribute, array &$meta)
-    {
-        $code = $attribute->getAttributeCode();
-        if ($attribute->getFrontendInput() === 'boolean') {
-            $meta[$code]['arguments']['data']['config']['prefer'] = 'toggle';
-            $meta[$code]['arguments']['data']['config']['valueMap'] = [
-                'true' => '1',
-                'false' => '0',
-            ];
-        }
-    }
-
-    /**
-     * Prepare address data
-     *
-     * @param int $addressId
-     * @param array $addresses
-     * @param array $customer
-     * @return void
-     */
-    protected function prepareAddressData($addressId, array &$addresses, array $customer)
-    {
-        if (isset($customer['default_billing'])
-            && $addressId == $customer['default_billing']
-        ) {
-            $addresses[$addressId]['default_billing'] = $customer['default_billing'];
-        }
-        if (isset($customer['default_shipping'])
-            && $addressId == $customer['default_shipping']
-        ) {
-            $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
-        }
-        if (isset($addresses[$addressId]['street']) && !is_array($addresses[$addressId]['street'])) {
-            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
-        }
-    }
-
-    /**
-     * Get FileProcessorFactory instance
-     *
-     * @return FileProcessorFactory
-     *
+     * Retrieve Customer Share Config
      * @deprecated
+     * @return \Magento\Customer\Model\Config\Share
      */
-    private function getFileProcessorFactory()
+    private function getShareConfig()
     {
-        if ($this->fileProcessorFactory === null) {
-            $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
+        if (!$this->shareConfig) {
+            $this->shareConfig = ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
         }
-        return $this->fileProcessorFactory;
+
+        return $this->shareConfig;
     }
 }

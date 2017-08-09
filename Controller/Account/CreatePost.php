@@ -12,7 +12,6 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Helper\Address;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Metadata\FormFactory;
@@ -27,6 +26,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\UrlFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -81,17 +81,15 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @var Session
      */
     protected $session;
-
+    protected $pageFactory;
     /**
      * @var AccountRedirect
      */
     private $accountRedirect;
-
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private $cookieMetadataFactory;
-    protected $pageFactory;
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
@@ -194,7 +192,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             $currentCustomerId = $this->_customerSession->getCustomer()->getId();
             $customer->setCustomAttribute('sublogin_parent_id', $currentCustomerId);
             $data = (int)$this->getRequest()->getPostValue('active');
-            $customer->setCustomAttribute('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
+            $customer->setCustomAttribute('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
             $customer->setCustomAttribute('is_active_sublogin', $data);
             $dataDate = $this->getRequest()->getPostValue('expire_date');
             $dateFormat = $this->date->date('d-m-Y', $dataDate);
@@ -262,14 +260,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount'));
 
     }
-    protected function converToTz($dateTime="", $toTz='', $fromTz='')
-    {
-        // timezone by php friendly values
-        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
-        $date->setTimezone(new \DateTimeZone($toTz));
-        $dateTime = $date->format('m/d/Y H:i:s');
-        return $dateTime;
-    }
+
     /**
      * Add address to customer during create account
      *
@@ -333,6 +324,15 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         if ($password != $confirmation) {
             throw new InputException(__('Please make sure your passwords match.'));
         }
+    }
+
+    protected function converToTz($dateTime = "", $toTz = '', $fromTz = '')
+    {
+        // timezone by php friendly values
+        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
+        $date->setTimezone(new \DateTimeZone($toTz));
+        $dateTime = $date->format('m/d/Y H:i:s');
+        return $dateTime;
     }
 
     /**

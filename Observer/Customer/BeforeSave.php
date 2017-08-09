@@ -1,20 +1,19 @@
 <?php
+
 namespace SITC\Sublogins\Observer\Customer;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Customer\Model\CustomerRegistry;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 class BeforeSave implements ObserverInterface
 {
     protected $_responseFactory;
     protected $_url;
-    private $logger;
     protected $session;
     protected $_coreRegistry;
     /**
@@ -29,17 +28,19 @@ class BeforeSave implements ObserverInterface
     protected $request;
     protected $helper;
     protected $_customerRepositoryInterface;
+    protected $customerFactory;
+    protected $_customerSession;
+    protected $customerDataFactory;
+    private $logger;
     /**
      * @var CustomerRegistry
      */
     private $customerRegistry;
-    protected $customerFactory;
     /**
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
-    protected $_customerSession;
-    protected $customerDataFactory;
+
     /**
      * @param EncryptorInterface $encryptor
      * @param CustomerRegistry $customerRegistry
@@ -84,13 +85,13 @@ class BeforeSave implements ObserverInterface
         $model = $observer->getEvent()->getData('customer');
         $parentId = $this->request->getParam('sub_parent_id');
         $customerSublogin = $this->customerFactory->create()->load($parentId);
-        if($this->helper->isSublogin($customerSublogin)) {
+        if ($this->helper->isSublogin($customerSublogin)) {
             $password = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_hash'];
             $confirmPassword = $observer->getEvent()->getData('request')->getParams('customer')['customer']['password_confirmation'];
-            if($confirmPassword != $password) {
+            if ($confirmPassword != $password) {
                 throw new LocalizedException(__('Password do not match.'));
             }
-            if(empty($password) && empty($confirmPassword)) {
+            if (empty($password) && empty($confirmPassword)) {
                 return true;
             }
             $customer = $this->customerRepository->getById($model->getId());

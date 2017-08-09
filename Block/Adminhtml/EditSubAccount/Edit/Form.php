@@ -3,6 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace SITC\Sublogins\Block\Adminhtml\EditSubAccount\Edit;
 
 use Magento\Customer\Controller\RegistryConstants;
@@ -41,7 +42,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         array $data = []
-    ) {
+    )
+    {
         $this->_customerRepository = $customerRepository;
         $this->_extensibleDataObjectConverter = $extensibleDataObjectConverter;
         parent::__construct($context, $registry, $formFactory, $data);

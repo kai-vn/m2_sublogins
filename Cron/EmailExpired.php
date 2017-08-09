@@ -25,7 +25,7 @@ class EmailExpired
     {
         $collection = $this->customerCollectionFactory->create()
             ->addAttributeToSelect('expire_date', true)
-            ->addAttributeToFilter('is_sub_login',  \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
+            ->addAttributeToFilter('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
         $templateExpired = $this->helper->getEmailExpired();
         foreach ($collection as $customer) {
             $date = new \DateTime($customer->getExpireDate());

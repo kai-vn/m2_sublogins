@@ -1,8 +1,10 @@
 <?php
 
 namespace SITC\Sublogins\Block\Adminhtml\Account\Edit\Tab;
+
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Customer\Controller\RegistryConstants;
+
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -59,10 +61,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
+
     public function getCustomerId()
     {
         return $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
     }
+
     public function getTabLabel()
     {
         return __('Account Informations');
@@ -131,7 +135,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'value' => $yesnoSource
             ]
         );
-         $fieldset->addField(
+        $fieldset->addField(
             'sub_parent_id',
             'hidden',
             [
@@ -142,12 +146,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'value' => $this->getRequest()->getParam('sub_parent_id')
             ]
         );
-        $fieldMaps['change_password'] =   $fieldset->addField(
+        $fieldMaps['change_password'] = $fieldset->addField(
             'password_hash',
             'password',
             ['name' => 'password', 'label' => __('Password'), 'title' => __('Password'), 'required' => true]
         );
-        $fieldMaps['change_password'] =   $fieldset->addField(
+        $fieldMaps['change_password'] = $fieldset->addField(
             'password_confirmation',
             'password',
             ['name' => 'password_confirmation', 'label' => __('Confirm Password'), 'title' => __('Confirm Password'), 'required' => true]
@@ -181,12 +185,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setForm($form);
         return parent::_prepareForm();
     }
-    public function getDependencyField($refField, $negative = false, $separator = ',', $fieldPrefix = '')
-    {
-        return $this->_fieldFactory->create(
-            ['fieldData' => ['value' => (string)$refField, 'negative' => $negative, 'separator' => $separator], 'fieldPrefix' => $fieldPrefix]
-        );
-    }
+
     public function getMappingFieldDependence()
     {
         return [
@@ -197,6 +196,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ],
 
         ];
+    }
+
+    public function getDependencyField($refField, $negative = false, $separator = ',', $fieldPrefix = '')
+    {
+        return $this->_fieldFactory->create(
+            ['fieldData' => ['value' => (string)$refField, 'negative' => $negative, 'separator' => $separator], 'fieldPrefix' => $fieldPrefix]
+        );
     }
 
     /**

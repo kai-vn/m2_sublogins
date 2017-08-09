@@ -7,9 +7,9 @@
 namespace SITC\Sublogins\Controller\Account;
 
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\UrlFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 class Deactive extends \Magento\Customer\Controller\AbstractAccount
 {

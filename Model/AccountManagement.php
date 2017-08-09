@@ -2,26 +2,26 @@
 
 namespace SITC\Sublogins\Model;
 
-use SITC\Sublogins\Api\AccountManagementInterface;
-use SITC\Sublogins\Api\Data\CustomerInterface;
-use Magento\Framework\Stdlib\StringUtils as StringHelper;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Config\Share as ConfigShare;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\State\InputMismatchException;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Framework\Math\Random;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Framework\Exception\MailException;
 use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\State\InputMismatchException;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use SITC\Sublogins\Api\AccountManagementInterface;
+use SITC\Sublogins\Api\Data\CustomerInterface;
 
 class AccountManagement implements AccountManagementInterface
 {
@@ -44,26 +44,26 @@ class AccountManagement implements AccountManagementInterface
 
     protected $accountManagement;
     protected $stringHelper;
-    private $scopeConfig;
-    private $encryptor;
     protected $_logger;
-    private $customerRepository;
-    private $storeManager;
-    private $addressRepository;
-    private $mathRandom;
-    private $customerRegistry;
     protected $dateTime;
-    private $emailNotification;
     protected $registry;
-    /**
-     * @var ConfigShare
-     */
-    private $configShare;
     /**
      * @var CustomerModel
      */
     protected $customerModel;
     protected $customerFactory;
+    private $scopeConfig;
+    private $encryptor;
+    private $customerRepository;
+    private $storeManager;
+    private $addressRepository;
+    private $mathRandom;
+    private $customerRegistry;
+    private $emailNotification;
+    /**
+     * @var ConfigShare
+     */
+    private $configShare;
 
     public function __construct(
         StringHelper $stringHelper,
@@ -98,37 +98,34 @@ class AccountManagement implements AccountManagementInterface
         $this->registry = $registry;
     }
 
-    protected function getMinPasswordLength()
+    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH);
+
+        if ($password !== null) {
+            $this->checkPasswordStrength($password);
+            $hash = $this->createPasswordHash($password);
+        } else {
+            $hash = null;
+        }
+
+        $customer->setCustomAttribute('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
+        $customer->setCustomAttribute('expire_date', $customer->getExpireDate());
+
+        if ($customer->getParent()) {
+            $parent = $this->customerFactory->create();
+            $parent->setWebsiteId($customer->getWebsiteId());
+            $parent->loadByEmail($customer->getParent());
+            if ($parent->getEntityId()) {
+                $customer->setCustomAttribute('sublogin_parent_id', $parent->getId());
+            } else {
+                throw new InputException(__('The email of Parent does not exists in this store.'));
+            }
+        } else {
+            throw new InputException(__('Please add Email of Parent.'));
+        }
+
+        return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl);
     }
-
-    protected function makeRequiredCharactersCheck($password)
-    {
-        $counter = 0;
-        $requiredNumber = $this->scopeConfig->getValue(self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
-        $return = 0;
-
-        if (preg_match('/[0-9]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[A-Z]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[a-z]+/', $password)) {
-            $counter++;
-        }
-        if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
-            $counter++;
-        }
-
-        if ($counter < $requiredNumber) {
-            $return = $requiredNumber;
-        }
-
-        return $return;
-    }
-
 
     protected function checkPasswordStrength($password)
     {
@@ -166,38 +163,40 @@ class AccountManagement implements AccountManagementInterface
         }
     }
 
+    protected function getMinPasswordLength()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH);
+    }
+
+    protected function makeRequiredCharactersCheck($password)
+    {
+        $counter = 0;
+        $requiredNumber = $this->scopeConfig->getValue(self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
+        $return = 0;
+
+        if (preg_match('/[0-9]+/', $password)) {
+            $counter++;
+        }
+        if (preg_match('/[A-Z]+/', $password)) {
+            $counter++;
+        }
+        if (preg_match('/[a-z]+/', $password)) {
+            $counter++;
+        }
+        if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
+            $counter++;
+        }
+
+        if ($counter < $requiredNumber) {
+            $return = $requiredNumber;
+        }
+
+        return $return;
+    }
+
     protected function createPasswordHash($password)
     {
         return $this->encryptor->getHash($password, true);
-    }
-
-    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
-    {
-
-        if ($password !== null) {
-            $this->checkPasswordStrength($password);
-            $hash = $this->createPasswordHash($password);
-        } else {
-            $hash = null;
-        }
-
-        $customer->setCustomAttribute('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
-        $customer->setCustomAttribute('expire_date', $customer->getExpireDate());
-
-        if ($customer->getParent()) {
-            $parent = $this->customerFactory->create();
-            $parent->setWebsiteId($customer->getWebsiteId());
-            $parent->loadByEmail($customer->getParent());
-            if ($parent->getEntityId()) {
-                $customer->setCustomAttribute('sublogin_parent_id', $parent->getId());
-            } else {
-                throw new InputException(__('The email of Parent does not exists in this store.'));
-            }
-        } else {
-            throw new InputException(__('Please add Email of Parent.'));
-        }
-
-        return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl);
     }
 
     /**
@@ -353,17 +352,6 @@ class AccountManagement implements AccountManagementInterface
         );
     }
 
-    private function getEmailNotification()
-    {
-        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                EmailNotificationInterface::class
-            );
-        } else {
-            return $this->emailNotification;
-        }
-    }
-
     protected function canSkipConfirmation($customer)
     {
         if (!$customer->getId()) {
@@ -379,6 +367,17 @@ class AccountManagement implements AccountManagementInterface
         }
 
         return strtolower($skipConfirmationIfEmail) === strtolower($customer->getEmail());
+    }
+
+    private function getEmailNotification()
+    {
+        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                EmailNotificationInterface::class
+            );
+        } else {
+            return $this->emailNotification;
+        }
     }
 
 

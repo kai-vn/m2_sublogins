@@ -55,5 +55,4 @@ class Actions
         }
         return $result;
     }
-
 }

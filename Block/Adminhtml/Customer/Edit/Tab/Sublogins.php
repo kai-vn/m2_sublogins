@@ -41,7 +41,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
      */
     public function getTabLabel()
     {
-        return __('List Sub-Account');
+        return __('Sub Accounts');
     }
 
     /**
@@ -49,7 +49,7 @@ class Sublogins extends \Magento\Backend\Block\Template implements TabInterface
      */
     public function getTabTitle()
     {
-        return __('List Sub-Account');
+        return __('Sub Accounts');
     }
 
     /**

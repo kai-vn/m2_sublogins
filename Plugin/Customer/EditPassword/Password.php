@@ -1,4 +1,5 @@
 <?php
+
 namespace SITC\Sublogins\Plugin\Customer\EditPassword;
 
 
@@ -29,23 +30,25 @@ class Password
      * AccountManagementPlugin constructor.
      *
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Framework\Encryption\Encryptor           $encryptor
-     * @param \Magento\Customer\Model\CustomerRegistry          $customerRegistry
+     * @param \Magento\Framework\Encryption\Encryptor $encryptor
+     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
      */
     public function __construct(
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Encryption\Encryptor $encryptor,
         \Magento\Customer\Model\CustomerRegistry $customerRegistry
-    ) {
+    )
+    {
         $this->_customerRepository = $customerRepository;
-        $this->_encryptor          = $encryptor;
-        $this->_customerRegistry   = $customerRegistry;
+        $this->_encryptor = $encryptor;
+        $this->_customerRegistry = $customerRegistry;
     }
+
     /**
      * Authenticate Customer by Hash from Old site and update info in DB.
      *
      * @param \Magento\Customer\Model\AccountManagement $subject
-     * @param array                                     $args
+     * @param array $args
      *
      * @return array
      */

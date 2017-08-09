@@ -72,39 +72,6 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
-     */
-    public function getsubOrders()
-    {
-        if (!$this->subOrders) {
-            $customerId = $this->_customerSession->getCustomerId();
-            $this->subOrders = $this->_orderCollectionFactory->create()
-                ->addFieldToSelect('*')
-                ->addFieldToFilter('customer_id', $customerId);
-            die($this->subOrders->getSelect());
-
-        }
-        return $this->subOrders;
-    }
-    protected function _prepareLayout()
-    {
-        parent::_prepareLayout();
-        if ($this->getsubOrders()) {
-            $pager = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
-                'sitc.sublogins.record.pager'
-            )
-                ->setAvailableLimit([1 => 1, 2 => 2, 3 => 3])
-                ->setShowPerPage(true)
-                ->setCollection($this->getsubOrders());
-
-            $this->setChild('pager', $pager);
-
-            $this->getsubOrders()->load();
-        }
-        return $this;
-    }
-    /**
      * @param object $order
      * @return string
      */
@@ -121,10 +88,6 @@ class History extends \Magento\Framework\View\Element\Template
     {
         return $this->getUrl('sales/order/track', ['order_id' => $order->getId()]);
     }
-
-    /**
-     * @return $this
-     */
 
     /**
      * @param object $order
@@ -144,6 +107,45 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return $this
+     */
+
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+        if ($this->getsubOrders()) {
+            $pager = $this->getLayout()->createBlock(
+                'Magento\Theme\Block\Html\Pager',
+                'sitc.sublogins.record.pager'
+            )
+                ->setAvailableLimit([1 => 1, 2 => 2, 3 => 3])
+                ->setShowPerPage(true)
+                ->setCollection($this->getsubOrders());
+
+            $this->setChild('pager', $pager);
+
+            $this->getsubOrders()->load();
+        }
+        return $this;
+    }
+
+    /**
+     * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
+     */
+    public function getsubOrders()
+    {
+        if (!$this->subOrders) {
+            $customerId = $this->_customerSession->getCustomerId();
+            $this->subOrders = $this->_orderCollectionFactory->create()
+                ->addFieldToSelect('*')
+                ->addFieldToFilter('customer_id', $customerId);
+            die($this->subOrders->getSelect());
+
+        }
+        return $this->subOrders;
+    }
+
+    /**
      * @return void
      */
     protected function _construct()
@@ -151,7 +153,6 @@ class History extends \Magento\Framework\View\Element\Template
         parent::_construct();
         $this->pageConfig->getTitle()->set(__('My Orders'));
     }
-
 
 
 }

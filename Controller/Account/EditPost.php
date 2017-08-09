@@ -14,7 +14,6 @@ use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -22,6 +21,7 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class EditPost
@@ -59,26 +59,24 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @var Session
      */
     protected $session;
-
-    /** @var EmailNotificationInterface */
-    private $emailNotification;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var AuthenticationInterface
-     */
-    private $authentication;
     protected $customerCollectionFactory;
     /**
      * @var Mapper
      */
     protected $request;
-    private $customerMapper;
     protected $_customerSession;
+    /** @var EmailNotificationInterface */
+    private $emailNotification;
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+    /**
+     * @var AuthenticationInterface
+     */
+    private $authentication;
+    private $customerMapper;
+
     /**
      * @param Context $context
      * @param Session $customerSession
@@ -106,7 +104,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $this->helper = $helper;
         $this->request = $request;
         $this->customerFactory = $customerFactory;
-        $this->customerCollectionFactory  = $customerCollectionFactory;
+        $this->customerCollectionFactory = $customerCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->date = $date;
         parent::__construct($context);
@@ -128,7 +126,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
-        $customerId = (int) $this->request->getParam('subid');
+        $customerId = (int)$this->request->getParam('subid');
 
         if ($validFormKey && $this->getRequest()->isPost() && $customerId) {
             $currentCustomerDataObject = $this->getCustomerDataObject($customerId);

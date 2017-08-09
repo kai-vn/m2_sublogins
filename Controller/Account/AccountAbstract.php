@@ -1,9 +1,10 @@
 <?php
+
 namespace SITC\Sublogins\Controller\Account;
 
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 class AccountAbstract extends Action
 {
@@ -12,6 +13,7 @@ class AccountAbstract extends Action
      */
     protected $pageFactory;
     protected $_customerSession;
+
     /**
      * @param Context $context
      * @param PageFactory $pageFactory
@@ -20,11 +22,13 @@ class AccountAbstract extends Action
         Context $context,
         \Magento\Customer\Model\Session $customerSession,
         PageFactory $pageFactory
-    ) {
+    )
+    {
         $this->_customerSession = $customerSession;
         $this->pageFactory = $pageFactory;
         parent::__construct($context);
     }
+
     /**
      * Index Action
      *
@@ -40,7 +44,7 @@ class AccountAbstract extends Action
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        if(!$this->_customerSession->isLoggedIn()) {
+        if (!$this->_customerSession->isLoggedIn()) {
             $this->_forward('customer/account/login');
             return $resultRedirect->setUrl($this->_url->getUrl('customer/account/login'));
         }

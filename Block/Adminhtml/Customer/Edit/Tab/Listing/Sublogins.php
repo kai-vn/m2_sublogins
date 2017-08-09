@@ -7,7 +7,6 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerC
 
 class Sublogins extends \Magento\Backend\Block\Widget\Grid\Extended
 {
-
     protected $_coreRegistry = null;
     protected $customerCollectionFactory;
 
@@ -100,7 +99,6 @@ class Sublogins extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-
         $this->addColumn(
             'group',
             [
@@ -147,7 +145,6 @@ class Sublogins extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-
         $this->addColumn(
             'action',
             [
@@ -158,7 +155,6 @@ class Sublogins extends \Magento\Backend\Block\Widget\Grid\Extended
                 'renderer' => 'SITC\Sublogins\Block\Adminhtml\Customer\Grid\Column\Renderer\Action'
             ]
         );
-
 
         return parent::_prepareColumns();
     }
