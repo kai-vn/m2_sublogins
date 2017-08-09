@@ -80,6 +80,7 @@ class InstallData implements InstallDataInterface
             'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
             'required' => false,
             'sort_order' => 900,
+            'is_used_in_grid' => true,
             'visible' => false,
             'system' => false,
             'user_defined' => true,
