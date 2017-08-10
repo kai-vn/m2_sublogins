@@ -61,45 +61,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
-                </item>
-            </argument>
-        </field>
-        <field name="sublogin_parent_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">customer</item>
-                </item>
-            </argument>
-        </field>
-        <field name="created_in">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">customer</item>
-                </item>
-            </argument>
-        </field>
-        <field name="default_billing">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="source" xsi:type="string">customer</item>
-                </item>
-            </argument>
-        </field>
-        <field name="default_shipping">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="source" xsi:type="string">customer</item>
+                    <item name="sortOrder" xsi:type="number">0</item>
                 </item>
             </argument>
         </field>
@@ -111,6 +73,7 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">Prefix</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
         </field>
@@ -121,6 +84,7 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">FirstName</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
@@ -135,6 +99,7 @@
                     <item name="label" xsi:type="string" translate="true">Middlename</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
                 </item>
             </argument>
         </field>
@@ -145,6 +110,7 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">LastName</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
@@ -158,6 +124,7 @@
                     <item name="formElement" xsi:type="string">email</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="label" xsi:type="string" translate="true">Emai</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                         <item name="validate-email" xsi:type="boolean">true</item>
@@ -173,6 +140,7 @@
                     <item name="formElement" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Date Of Birth</item>
                     <item name="source" xsi:type="string">customer</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
                     <item name="validation" xsi:type="array">
                         <item name="validate-date" xsi:type="boolean">true</item>
                     </item>
@@ -189,7 +157,7 @@
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="source" xsi:type="string">item</item>
                     <item name="dataScope" xsi:type="string">is_change_password</item>
-                    <item name="sortOrder" xsi:type="number">19</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
                     <item name="prefer" xsi:type="string">toggle</item>
                     <item name="valueMap" xsi:type="array">
                         <item name="true" xsi:type="string">1</item>
@@ -208,6 +176,7 @@
                     <item name="elementTmpl" xsi:type="string">SITC_Sublogins/form/element/input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="dataScope" xsi:type="string">password_hash</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
                     <item name="label" xsi:type="string" translate="true">New password</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="string">true</item>
@@ -225,6 +194,7 @@
                     <item name="elementTmpl" xsi:type="string">SITC_Sublogins/form/element/input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="dataScope" xsi:type="string">password_confirmation</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
                     <item name="label" xsi:type="string" translate="true">Confirm password</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="string">true</item>
@@ -240,6 +210,7 @@
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="label" xsi:type="string" translate="true">Is Active</item>
                     <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
                     <item name="valueMap" xsi:type="array">
                         <item name="true" xsi:type="string">1</item>
                         <item name="false" xsi:type="string">0</item>
@@ -255,6 +226,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">date</item>
                     <item name="source" xsi:type="string">customer</item>
+                    <item name="sortOrder" xsi:type="number">110</item>
                     <item name="label" xsi:type="string" translate="true">Expire Date</item>
                 </item>
             </argument>
