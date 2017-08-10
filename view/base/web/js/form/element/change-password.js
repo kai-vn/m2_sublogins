@@ -1,21 +1,25 @@
 define([
     'jquery',
+    'uiRegistry',
     'Magento_Ui/js/form/element/single-checkbox'
-], function ($, SingleCheckbox) {
+], function ($, registry, SingleCheckbox) {
     'use strict';
 
     return SingleCheckbox.extend({
+        defaults: {
+            password: '${ $.parentName }.password_hash',
+            passwordConfirmation: '${ $.parentName }.password_confirmation'
+        },
         /**
          * @inheritdoc
          */
         onCheckedChanged: function (newChecked) {
-            if(newChecked) {
-                $('div[data-index="password_hash"]').show();
-                $('div[data-index="password_confirmation"]').show();
-            } else {
-                $('div[data-index="password_hash"]').hide();
-                $('div[data-index="password_confirmation"]').hide();
-            }
+            registry.get(this.password, function (passwordInput) {
+                passwordInput.setVisible(newChecked);
+            });
+            registry.get(this.passwordConfirmation, function (input) {
+                input.setVisible(newChecked);
+            });
             return this._super(newChecked);
         }
     });
