@@ -19,9 +19,6 @@
     <type name="Magento\Customer\Model\Customer\DataProvider">
         <plugin name="prepare_parent_id_before_save_customer" type="SITC\Sublogins\Plugin\Customer\Model\Customer\DataProvider"/>
     </type>
-    <type name="\Magento\Customer\Controller\Adminhtml\Index\Save">
-        <plugin name="set_redirect_url_after_save_sub_account" type="SITC\Sublogins\Plugin\Customer\Redirect\RedirectSublogin"/>
-    </type>
     <type name="\Magento\Sales\Controller\AbstractController\OrderViewAuthorization">
         <plugin name="allow_parrent_view_order_sub_account" type="SITC\Sublogins\Plugin\Sales\Controller\AbstractController\OrderViewAuthorization"/>
     </type>

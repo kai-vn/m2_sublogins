@@ -37,7 +37,7 @@
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="submit_url" xsi:type="url" path="customer/index/save"/>
+                    <item name="submit_url" xsi:type="url" path="sublogins/account/save"/>
                     <item name="validate_url" xsi:type="url" path="customer/index/validate"/>
                 </item>
             </argument>
