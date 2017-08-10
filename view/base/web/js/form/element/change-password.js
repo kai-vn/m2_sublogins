@@ -1,26 +1,22 @@
 define([
     'jquery',
-    'Magento_Ui/js/form/element/select'
-], function ($, Select) {
+    'Magento_Ui/js/form/element/single-checkbox'
+], function ($, SingleCheckbox) {
     'use strict';
 
-    return Select.extend({
-        defaults: {
-            customName: '${ $.parentName }.${ $.index }_input'
-        },
+    return SingleCheckbox.extend({
         /**
-         * Change currently selected option
-         *
-         * @param {String} id
+         * @inheritdoc
          */
-        selectOption: function(id){
-            if(($("#"+id).val() == 0)||($("#"+id).val() == undefined)) {
-                $('div[data-index="password_hash"]').hide();
-                $('div[data-index="password_confirmation"]').hide();
-            } else if($("#"+id).val() == 1) {
+        onCheckedChanged: function (newChecked) {
+            if(newChecked) {
                 $('div[data-index="password_hash"]').show();
                 $('div[data-index="password_confirmation"]').show();
+            } else {
+                $('div[data-index="password_hash"]').hide();
+                $('div[data-index="password_confirmation"]').hide();
             }
-        },
+            return this._super(newChecked);
+        }
     });
 });
