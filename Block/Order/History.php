@@ -36,6 +36,7 @@ class History extends \Magento\Framework\View\Element\Template
 
     /** @var \Magento\Sales\Model\ResourceModel\Order\Collection */
     protected $orders;
+    protected $_resource;
 
     /**
      * @var CollectionFactoryInterface
@@ -54,12 +55,14 @@ class History extends \Magento\Framework\View\Element\Template
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $data = []
     )
     {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
+        $this->_resource = $resource;
         parent::__construct($context, $data);
     }
 
@@ -118,7 +121,7 @@ class History extends \Magento\Framework\View\Element\Template
                 'Magento\Theme\Block\Html\Pager',
                 'sitc.sublogins.record.pager'
             )
-                ->setAvailableLimit([1 => 1, 2 => 2, 3 => 3])
+                ->setAvailableLimit([10 => 10])
                 ->setShowPerPage(true)
                 ->setCollection($this->getsubOrders());
 
@@ -136,13 +139,26 @@ class History extends \Magento\Framework\View\Element\Template
     {
         if (!$this->subOrders) {
             $customerId = $this->_customerSession->getCustomerId();
+            $subIds = $this->getSubIds($customerId);
             $this->subOrders = $this->_orderCollectionFactory->create()
                 ->addFieldToSelect('*')
-                ->addFieldToFilter('customer_id', $customerId);
-            die($this->subOrders->getSelect());
+                ->addFieldToFilter('customer_id', ['in' => $subIds]);
 
         }
         return $this->subOrders;
+    }
+
+    public function getSubIds($customerId){
+        $connection = $this->_resource->getConnection();
+
+        $select = $connection->select()
+            ->from(
+                ['main_table' => $connection->getTableName('customer_grid_flat')],'entity_id'
+            )
+            ->where('main_table.sublogin_parent_id = :customer_id');
+
+        $bind = ['customer_id' => $customerId];
+        return $connection->fetchCol($select, $bind);
     }
 
     /**
