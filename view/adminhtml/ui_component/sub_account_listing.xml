@@ -173,6 +173,16 @@
                 </item>
             </argument>
         </column>
+        <column name="sublogin_parent_id" class="SITC\Sublogins\Ui\Component\Listing\Column\ParentCustomer">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Parent Name</item>
+                    <item name="sortOrder" xsi:type="number">41</item>
+                </item>
+            </argument>
+        </column>
         <column name="group_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
