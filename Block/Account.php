@@ -104,6 +104,11 @@ class Account extends \Magento\Directory\Block\Data
         return $data;
     }
 
+    protected function _getSession()
+    {
+        return $this->_session;
+    }
+
     /**
      * Retrieve customer region identifier
      *

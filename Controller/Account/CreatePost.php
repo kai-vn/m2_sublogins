@@ -76,12 +76,9 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     protected $dataObjectHelper;
     protected $_customerSession;
     protected $date;
-    protected $_cacheTypeList;
-    protected $_cacheFrontendPool;
     /**
      * @var Session
      */
-    protected $session;
     protected $pageFactory;
     /**
      * @var AccountRedirect
@@ -120,7 +117,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function __construct(
         Context $context,
-        Session $customerSession,
         \SITC\Sublogins\Helper\Data $helper,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Customer\Model\Session $customerSession,
@@ -150,7 +146,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->helper = $helper;
         $this->date = $date;
         $this->pageFactory = $pageFactory;
-        $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->url = $url;
@@ -172,8 +167,6 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->accountRedirect = $accountRedirect;
 
         parent::__construct($context);
-        $this->_cacheTypeList = $cacheTypeList;
-        $this->_cacheFrontendPool = $cacheFrontendPool;
     }
 
     /**
@@ -191,16 +184,16 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         try {
             $canCreateSubLogin = $this->_customerSession->getCustomer()->getCanCreateSubLogin();
             if (!$canCreateSubLogin) {
-                $this->messageManager->addError(__('Your account is currently not available. Please contact to us for further information.'));
+                $this->messageManager->addError(__('Your account is not allowed to create sub-accounts.'));
                 return $resultRedirect->setUrl($this->url->getUrl('customer/account'));
             }
-
             $parentId = $this->_customerSession->getCustomer()->getId();
             $countSubAccounts = $this->helper->getCountSubAccounts($parentId);
             $maxSublogins = $this->_customerSession->getCustomer()->getMaxSubLogins();
             if ($maxSublogins && $countSubAccounts + 1 > $maxSublogins) {
+                $this->_customerSession->setCustomerFormData($this->getRequest()->getPostValue());
                 $this->messageManager->addError(__('You cannot create more than %1 sub accounts for this customer.', $maxSublogins));
-                return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount'));
+                return $resultRedirect->setUrl($this->url->getUrl('sublogins/create/account/'));
             }
             $address = $this->extractAddress();
             $addresses = $address === null ? [] : [$address];
@@ -216,7 +209,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             $customer->setCustomAttribute('expire_date', $dateFormat);
             $password = $this->getRequest()->getParam('password');
             $confirmation = $this->getRequest()->getParam('password_confirmation');
-            $redirectUrl = $this->session->getBeforeAuthUrl();
+            $redirectUrl = $this->_customerSession->getBeforeAuthUrl();
             $this->checkPasswordConfirmation($password, $confirmation);
             $customer = $this->accountManagement
                 ->createAccount($customer, $password, $redirectUrl);
@@ -235,15 +228,14 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
                 $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
                 // @codingStandardsIgnoreStart
                 $this->messageManager->addSuccess(
-                    __(
-                        'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
-                        $email
-                    )
-                );
+                    __('You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.', $email));
                 // @codingStandardsIgnoreEnd
-                $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
-                $resultRedirect->setUrl($this->_redirect->success($url));
             }
+
+            $this->_customerSession->setCustomerFormData([]);
+            $defaultUrl = $this->urlModel->getUrl('sublogins/account/listsubaccount', ['_secure' => true]);
+            $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
+            return $resultRedirect;
         } catch (StateException $e) {
             $url = $this->urlModel->getUrl('customer/account/forgotpassword');
             // @codingStandardsIgnoreStart
@@ -263,19 +255,13 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t save the customer.'));
         }
-        $this->session->setCustomerFormData($this->getRequest()->getPostValue());
-        $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
+        if(empty($this->_customerSession->setCustomerFormData($this->getRequest()->getPostValue()))) {
+            $this->_customerSession->getCustomer()->getData();
+        }
+        $this->_customerSession->setCustomerFormData($this->getRequest()->getPostValue());
+        $defaultUrl = $this->urlModel->getUrl('sublogins/create/account', ['_secure' => true]);
         $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
-
-        $types = array('config', 'layout', 'block_html', 'collections', 'reflection', 'db_ddl', 'eav', 'config_integration', 'config_integration_api', 'full_page', 'translate', 'config_webservice');
-        foreach ($types as $type) {
-            $this->_cacheTypeList->cleanType($type);
-        }
-        foreach ($this->_cacheFrontendPool as $cacheFrontend) {
-            $cacheFrontend->getBackend()->clean();
-        }
-        return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount'));
-
+        return $resultRedirect;
     }
 
     /**
@@ -352,6 +338,10 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         return $dateTime;
     }
 
+    protected function _getSession()
+    {
+        return $this->session;
+    }
     /**
      * Retrieve success message
      *

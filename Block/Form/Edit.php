@@ -86,7 +86,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     {
         $data = $this->getData('form_data');
         if ($data === null) {
-            $formData = $this->customerSession->getCustomerFormData(true);
+            $formData = $this->customerSession->getCustomer()->getCustomerFormData(true);
             $data = [];
             if ($formData) {
                 $data['data'] = $formData;

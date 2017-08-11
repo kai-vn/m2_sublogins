@@ -50,10 +50,7 @@ class Account extends \Magento\Customer\Controller\AbstractAccount
     public function execute()
     {
         $resultPage = $this->_resultPageFactory->create();
-
         $resultPage->getConfig()->getTitle()->prepend(__(' Create Account '));
-
-
         return $resultPage;
     }
 }

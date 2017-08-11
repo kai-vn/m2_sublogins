@@ -29,8 +29,6 @@ class Delete extends \Magento\Framework\App\Action\Action
     protected $_messageManager;
     protected $_coreRegistry = null;
     protected $url;
-    protected $_cacheTypeList;
-    protected $_cacheFrontendPool;
     /**
      * @var CustomerRepositoryInterface
      */
@@ -50,8 +48,6 @@ class Delete extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\Customer $customer,
@@ -71,8 +67,6 @@ class Delete extends \Magento\Framework\App\Action\Action
         $this->_customer = $customer;
         $this->registry = $registry;
         parent::__construct($context, $registry);
-        $this->_cacheTypeList = $cacheTypeList;
-        $this->_cacheFrontendPool = $cacheFrontendPool;
 
     }
 
@@ -89,13 +83,6 @@ class Delete extends \Magento\Framework\App\Action\Action
         $this->registry->register('isSecureArea', true);
         $customer = $this->customerFactory->create()->load($customerId);
         $customer->delete();
-        $types = array('config', 'layout', 'block_html', 'collections', 'reflection', 'db_ddl', 'eav', 'config_integration', 'config_integration_api', 'full_page', 'translate', 'config_webservice');
-        foreach ($types as $type) {
-            $this->_cacheTypeList->cleanType($type);
-        }
-        foreach ($this->_cacheFrontendPool as $cacheFrontend) {
-            $cacheFrontend->getBackend()->clean();
-        }
         return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount'));
     }
 
