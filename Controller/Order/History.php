@@ -41,7 +41,7 @@ class History extends \Magento\Framework\App\Action\Action implements OrderInter
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->set(__('My Orders'));
+        $resultPage->getConfig()->getTitle()->set(__('Sub-accounts Orders'));
 
         $block = $resultPage->getLayout()->getBlock('SITC\Sublogins\Order\History');
         if ($block) {
