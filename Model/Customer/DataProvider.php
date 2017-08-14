@@ -172,6 +172,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $subLoginParentId = $this->_request->getParam('sub_parent_id');
         if (!empty($subLoginParentId)) {
             $this->getSession()->setSubParentId($subLoginParentId);
+        } else {
+            $this->getSession()->unsSubParentId();
         }
 
         $items = $this->collection->getItems();

@@ -149,8 +149,8 @@
         <field name="is_change_password">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">SITC_Sublogins/js/form/element/change-password</item>
                     <item name="visible" xsi:type="string">true</item>
+                    <item name="component" xsi:type="string">SITC_Sublogins/js/form/element/change-password</item>
                     <item name="label" xsi:type="string" translate="true">Change Password</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>

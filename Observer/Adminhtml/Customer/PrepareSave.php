@@ -27,7 +27,6 @@ class PrepareSave implements ObserverInterface
     {
         $parentId = $this->getSession()->getSubParentId();
         $customer = $observer->getCustomer();
-
         if (!empty($parentId)) {
             $parent = $this->customerFactory->create()->load($parentId);
             if (!$customer->getId()) {
@@ -38,7 +37,6 @@ class PrepareSave implements ObserverInterface
                     throw new LocalizedException(__('You cannot create more than %1 sub accounts for this customer.', $maxSubAccounts));
                 }
             }
-
             $requestParams = $observer->getEvent()->getRequest()->getParams('customer');
             if (!$customer->getId() && (empty($requestParams['customer']['password_hash']) || empty($requestParams['customer']['password_confirmation']))) {
                 $this->getSession()->unsSubParentId();
@@ -50,14 +48,11 @@ class PrepareSave implements ObserverInterface
                 $this->getSession()->unsSubParentId();
                 throw new LocalizedException(__('Please make sure your passwords match.'));
             }
-
             $customer->setCustomAttribute('sublogin_parent_id', $parentId);
             $customer->setCustomAttribute('is_sub_login', \SITC\Sublogins\Model\Config\Source\Customer\IsSubLogin::SUB_ACCOUNT_IS_SUB_LOGIN);
             $customer->setCustomAttribute('is_active_sublogin', $requestParams['customer']['is_active_sublogins']);
         }
-
         $this->getSession()->unsSubParentId();
-
         return $customer;
     }
 
