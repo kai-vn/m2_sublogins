@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
@@ -57,7 +56,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
         if ($isExistingCustomer) {
             $resultPage->getConfig()->getTitle()->prepend($this->_viewHelper->getCustomerName($customer));
         } else {
-            $resultPage->getConfig()->getTitle()->prepend(__('New Customer'));
+            $resultPage->getConfig()->getTitle()->prepend(__('New Subaccount'));
         }
         return $resultPage;
     }

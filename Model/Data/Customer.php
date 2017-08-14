@@ -1,6 +1,7 @@
 <?php
-
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Model\Data;
 
 use Magento\Framework\Api\AttributeValueFactory;

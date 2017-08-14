@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
 use Magento\Backend\App\Action;
@@ -40,8 +42,7 @@ class Index extends Action
         $resultPage->setActiveMenu('SITC_Sublogins::account');
         $resultPage->addBreadcrumb(__('Sublogins'), __('Sublogins'));
         $resultPage->addBreadcrumb(__('Manage Accounts'), __('Manage Accounts'));
-        $resultPage->getConfig()->getTitle()->prepend(__('Account'));
-
+        $resultPage->getConfig()->getTitle()->prepend(__('List Sub-Account'));
         return $resultPage;
     }
 }

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Plugin\Customer\Model\Customer;
 
 use Magento\Customer\Model\Customer\DataProvider as CustomerDataProvider;

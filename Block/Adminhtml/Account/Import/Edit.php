@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Block\Adminhtml\Account\Import;
 
 class Edit extends \Magento\Backend\Block\Widget\Form\Container

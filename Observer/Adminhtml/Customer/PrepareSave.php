@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Observer\Adminhtml\Customer;
 
 use Magento\Framework\App\ObjectManager;
@@ -8,21 +10,15 @@ use Magento\Framework\Exception\LocalizedException;
 
 class PrepareSave implements ObserverInterface
 {
-    protected $_customerRepository;
-    protected $_encryptor;
     protected $session;
     protected $helper;
     protected $customerFactory;
 
     public function __construct(
         \SITC\Sublogins\Helper\Data $helper,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Framework\Encryption\Encryptor $encryptor
+        \Magento\Customer\Model\CustomerFactory $customerFactory
     )
     {
-        $this->_customerRepository = $customerRepository;
-        $this->_encryptor = $encryptor;
         $this->helper = $helper;
         $this->customerFactory = $customerFactory;
     }

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -12,7 +14,6 @@ class Edit extends \SITC\Sublogins\Controller\Account\AccountAbstract
 {
     /** @var CustomerRepositoryInterface */
     protected $customerRepository;
-    protected $_customerSession;
     protected $pageFactory;
     /** @var DataObjectHelper */
     protected $dataObjectHelper;
@@ -38,14 +39,12 @@ class Edit extends \SITC\Sublogins\Controller\Account\AccountAbstract
         Context $context,
         PageFactory $pageFactory,
         Session $customerSession,
-        \Magento\Customer\Model\Session $customerSession,
         PageFactory $resultPageFactory,
         CustomerRepositoryInterface $customerRepository,
         DataObjectHelper $dataObjectHelper
     )
     {
         $this->session = $customerSession;
-        $this->_customerSession = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->customerRepository = $customerRepository;
         $this->dataObjectHelper = $dataObjectHelper;

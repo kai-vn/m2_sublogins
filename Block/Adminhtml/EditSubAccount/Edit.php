@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Block\Adminhtml\EditSubAccount;

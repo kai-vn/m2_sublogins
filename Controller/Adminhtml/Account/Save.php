@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;

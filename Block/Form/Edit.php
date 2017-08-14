@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Block\Form;
@@ -18,10 +17,8 @@ use Magento\Customer\Model\AccountManagement;
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
     protected $_coreRegistry;
-    protected $subAccounts;
     protected $_customerSession;
     protected $_customerCollectionFactory;
-    protected $request;
     protected $customerFactory;
 
     /**
@@ -34,7 +31,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\App\RequestInterface $request,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory,
@@ -44,7 +40,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         array $data = [])
     {
         $this->_coreRegistry = $registry;
-        $this->request = $request;
         $this->customerFactory = $customerFactory;
         $this->_customerCollectionFactory = $customerCollectionFactory;
         $this->_customerSession = $customerSession;
@@ -70,7 +65,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      */
     public function getCustomer()
     {
-        $idSublogins = $this->request->getParam('editsubac');
+        $idSublogins = $this->_request->getParam('editsubac');
         return $this->customerRepository->getById($idSublogins);
     }
     public function showPrefix()
@@ -107,7 +102,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
 
     public function getEmailSublogins()
     {
-        $customerId = $this->request->getParam('editsubac');
+        $customerId = $this->_request->getParam('editsubac');
         $customer = $this->customerFactory->create()->load($customerId);
         $emailSublogins = $customer->getEmail();
         return $emailSublogins;
@@ -116,8 +111,8 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
 
     public function getIddata()
     {
-        $this->request->getParams();
-        return $this->request->getParam('editsubac');
+        $this->_request->getParams();
+        return $this->_request->getParam('editsubac');
     }
 
     /**

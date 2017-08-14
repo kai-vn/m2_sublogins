@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2016 www.tigren.com
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Block\Adminhtml\Customer\Grid\Column\Renderer;

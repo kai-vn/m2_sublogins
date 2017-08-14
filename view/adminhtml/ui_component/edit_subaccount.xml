@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -135,7 +134,7 @@
         <field name="dob">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="visible" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Date Of Birth</item>
@@ -151,8 +150,8 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">SITC_Sublogins/js/form/element/change-password</item>
+                    <item name="visible" xsi:type="string">true</item>
                     <item name="label" xsi:type="string" translate="true">Change Password</item>
-                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="source" xsi:type="string">item</item>
@@ -170,9 +169,9 @@
         <field name="password_hash">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="visible" xsi:type="string">true</item>
                     <item name="elementTmpl" xsi:type="string">SITC_Sublogins/form/element/input</item>
                     <item name="source" xsi:type="string">customer</item>
                     <item name="dataScope" xsi:type="string">password_hash</item>
@@ -188,8 +187,8 @@
         <field name="password_confirmation">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="visible" xsi:type="string">true</item>
                     <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">SITC_Sublogins/form/element/input</item>
                     <item name="source" xsi:type="string">customer</item>

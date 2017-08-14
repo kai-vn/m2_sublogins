@@ -1,8 +1,6 @@
 <?php
 /**
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Controller\Account;
@@ -20,13 +18,10 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
     /**
      * @var Session
      */
-    protected $session;
-
     /**
      * @var PageFactory
      */
     protected $resultPageFactory;
-
     /**
      * @param Context $context
      * @param Session $customerSession
@@ -35,14 +30,12 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
      */
     public function __construct(
         Context $context,
-        Session $customerSession,
         \Magento\Customer\Model\Session $customerSession,
         PageFactory $pageFactory,
         PageFactory $resultPageFactory,
         Registration $registration
     )
     {
-        $this->_customerSession = $customerSession;
         $this->pageFactory = $pageFactory;
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;

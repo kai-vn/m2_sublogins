@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Observer\Customer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -8,20 +10,16 @@ use Magento\Framework\Exception\LocalizedException;
 class BeforeLogin implements ObserverInterface
 {
     protected $customerRepository;
-    protected $messageManager;
-    protected $accountRedirect;
     protected $storeManager;
     protected $request;
 
     public function __construct(
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request
     )
     {
         $this->customerRepository = $customerRepository;
-        $this->messageManager = $messageManager;
         $this->storeManager = $storeManager;
         $this->request = $request;
     }

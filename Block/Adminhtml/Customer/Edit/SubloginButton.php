@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Block\Adminhtml\Customer\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;

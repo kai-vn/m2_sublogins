@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 ini_set('memory_limit', '2048M');
 

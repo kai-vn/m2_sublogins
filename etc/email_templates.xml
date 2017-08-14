@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
+-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
     <template id="sublogins_email_email_expired" label="Email notification for customer when sub account expired" file="sublogins_email_expired.html" type="html" module="SITC_Sublogins" area="frontend"/>
     <template id="sublogins_email_email_new_sub" label="New Sub-Account Email Template" file="sublogins_email_new_sub.html" type="html" module="SITC_Sublogins" area="frontend"/>

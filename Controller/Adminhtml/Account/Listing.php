@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2016 www.tigren.com
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
@@ -16,7 +16,6 @@ class Listing extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $this->initCurrentCustomer();
         $resultLayout = $this->resultLayoutFactory->create();
-
         return $resultLayout;
     }
 }

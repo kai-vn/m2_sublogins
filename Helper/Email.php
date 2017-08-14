@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Helper;
 
 use Magento\Framework\App\Helper\Context;
@@ -14,7 +16,6 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
     protected $messageManager;
     protected $countryFactory;
     protected $regionFactory;
-    protected $logger;
     protected $helper;
 
     public function __construct(
@@ -25,7 +26,6 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Psr\Log\LoggerInterface $logger,
         \SITC\Sublogins\Helper\Data $helper
 
     )
@@ -37,7 +37,6 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
         $this->messageManager = $messageManager;
         $this->countryFactory = $countryFactory;
         $this->regionFactory = $regionFactory;
-        $this->logger = $logger;
         $this->helper = $helper;
     }
 
@@ -59,7 +58,7 @@ class Email extends \Magento\Framework\App\Helper\AbstractHelper
             $this->inlineTranslation->resume();
             return true;
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->_logger->critical($e->getMessage());
             return false;
         }
     }

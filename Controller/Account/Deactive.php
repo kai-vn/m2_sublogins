@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Controller\Account;
@@ -14,26 +13,19 @@ use Magento\Framework\View\Result\PageFactory;
 class Deactive extends \Magento\Customer\Controller\AbstractAccount
 {
     protected $customerFactory;
-    protected $url;
     protected $pageFactory;
-    protected $_customerRepository;
-    protected $request;
 
     public function __construct(
         Context $context,
         PageFactory $pageFactory,
         UrlFactory $urlFactory,
-        \Magento\Framework\UrlInterface $url,
         CustomerInterfaceFactory $customerDataFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Customer\Model\CustomerFactory $customerFactory
     )
     {
         $this->pageFactory = $pageFactory;
-        $this->request = $request;
         $this->urlModel = $urlFactory->create();
         $this->customerFactory = $customerFactory;
-        $this->url = $url;
         parent::__construct($context);
     }
 
@@ -46,7 +38,7 @@ class Deactive extends \Magento\Customer\Controller\AbstractAccount
         $customerData->setCustomAttribute('is_active_sublogin', 0);
         $customer->updateData($customerData);
         $customer->save();
-        return $resultRedirect->setUrl($this->url->getUrl('sublogins/account/listsubaccount/'));
+        return $resultRedirect->setUrl($this->_url->getUrl('sublogins/account/listsubaccount/'));
 
     }
 

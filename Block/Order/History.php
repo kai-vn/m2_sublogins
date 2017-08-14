@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Block\Order;
@@ -22,8 +21,6 @@ class History extends \Magento\Framework\View\Element\Template
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_orderCollectionFactory;
-
-    protected $_parrent;
     /**
      * @var \Magento\Customer\Model\Session
      */
@@ -169,6 +166,4 @@ class History extends \Magento\Framework\View\Element\Template
         parent::_construct();
         $this->pageConfig->getTitle()->set(__('My Orders'));
     }
-
-
 }

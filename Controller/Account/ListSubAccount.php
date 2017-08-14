@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Controller\Account;
 
 use Magento\Framework\App\Action\Action;
@@ -12,7 +14,6 @@ class ListSubAccount extends Action
 
     public function __construct(
         Context $context,
-        \Magento\Customer\Model\Session $customerSession,
         PageFactory $pageFactory
     )
     {

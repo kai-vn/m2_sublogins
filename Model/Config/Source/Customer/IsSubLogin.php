@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Model\Config\Source\Customer;
 
 class IsSubLogin implements \Magento\Framework\Option\ArrayInterface

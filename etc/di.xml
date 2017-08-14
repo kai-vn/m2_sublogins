@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
+-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-
     <preference for="SITC\Sublogins\Api\Data\CustomerInterface" type="SITC\Sublogins\Model\Data\Customer" />
     <preference for="SITC\Sublogins\Api\AccountManagementInterface" type="SITC\Sublogins\Model\AccountManagement" />
 
@@ -11,10 +15,8 @@
             </argument>
         </arguments>
     </type>
-
     <type name="Magento\Customer\Ui\Component\Listing\Column\Actions">
-        <plugin name="add_action_create_sublogins_customer_grid"
-                type="SITC\Sublogins\Plugin\Customer\Ui\Component\Listing\Column\Actions"/>
+        <plugin name="add_action_create_sublogins_customer_grid" type="SITC\Sublogins\Plugin\Customer\Ui\Component\Listing\Column\Actions"/>
     </type>
     <type name="Magento\Customer\Model\Customer\DataProvider">
         <plugin name="prepare_parent_id_before_save_customer" type="SITC\Sublogins\Plugin\Customer\Model\Customer\DataProvider"/>

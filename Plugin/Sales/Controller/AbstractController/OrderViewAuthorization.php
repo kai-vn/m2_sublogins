@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2017 www.tigren.com
+ */
 namespace SITC\Sublogins\Plugin\Sales\Controller\AbstractController;
 
 use Magento\Sales\Controller\AbstractController\OrderViewAuthorization as SalesOrderViewAuthorization;

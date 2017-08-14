@@ -1,8 +1,6 @@
 <?php
 /**
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2017 www.tigren.com
  */
 
 namespace SITC\Sublogins\Controller\Account;
@@ -63,7 +61,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * @var Mapper
      */
-    protected $request;
     protected $_customerSession;
     /** @var EmailNotificationInterface */
     private $emailNotification;
@@ -90,7 +87,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         \Magento\Customer\Model\Session $customerSession,
         Session $customerSession,
         \SITC\Sublogins\Helper\Data $helper,
-        \Magento\Framework\App\RequestInterface $request,
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory,
         PageFactory $pageFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
@@ -102,7 +98,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     )
     {
         $this->helper = $helper;
-        $this->request = $request;
         $this->customerFactory = $customerFactory;
         $this->customerCollectionFactory = $customerCollectionFactory;
         $this->_customerSession = $customerSession;
@@ -126,7 +121,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
-        $customerId = (int)$this->request->getParam('subid');
+        $customerId = (int)$this->_request->getParam('subid');
 
         if ($validFormKey && $this->getRequest()->isPost() && $customerId) {
             $currentCustomerDataObject = $this->getCustomerDataObject($customerId);
