@@ -11,6 +11,12 @@
             <item name="deps" xsi:type="string">sub_account_listing.sub_account_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">customer_columns</item>
+        <item name="buttons" xsi:type="array">
+            <item name="add" xsi:type="array">
+                <item name="name" xsi:type="string">add</item>
+                <item name="url" xsi:type="string">*/*/new</item>
+            </item>
+        </item>
         <item name="acl" xsi:type="string">Magento_Customer::manage</item>
     </argument>
     <dataSource name="sub_account_listing_data_source">
