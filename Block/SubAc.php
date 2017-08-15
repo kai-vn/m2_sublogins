@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 www.tigren.com
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace SITC\Sublogins\Block;
@@ -26,6 +27,7 @@ class SubAc extends \Magento\Framework\View\Element\Template
 
     protected function _prepareLayout()
     {
+        $canViewOrder = $this->helper->getCanViewOrder();
         if ($this->helper->isSublogin()) {
             return parent::_prepareLayout();
         }
@@ -47,14 +49,17 @@ class SubAc extends \Magento\Framework\View\Element\Template
                     'path' => 'sublogins/account/listsubaccount'
                 ]
             );
-            $this->addChild(
-                'order-sub-account',
-                'Magento\Framework\View\Element\Html\Link\Current',
-                [
-                    'label' => 'My Sub Account Order',
-                    'path' => 'sublogins/order/history'
-                ]
-            );
+
+            if($canViewOrder) {
+                $this->addChild(
+                    'order-sub-account',
+                    'Magento\Framework\View\Element\Html\Link\Current',
+                    [
+                        'label' => 'My Sub Account Order',
+                        'path' => 'sublogins/order/history'
+                    ]
+                );
+            }
         }
     }
 }
