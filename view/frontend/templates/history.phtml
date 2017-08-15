@@ -4,9 +4,8 @@ $storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface'
 $customer = $block->getCustomer();
 ?>
 <?php $subOrders = $block->getsubOrders(); ?>
-<?php if ($subOrders && count($subOrders)): ?>
+<?php if ($subOrders && count($subOrders) && $this->helper('SITC\Sublogins\Helper\Data')->getCanViewOrder()): ?>
 <?php echo $block->getChildHtml('info'); ?>
-<?php if ($this->helper('SITC\Sublogins\Helper\Data')->getCanViewOrder()) : ?>
     <div class="table-wrapper orders-history">
         <table class="data table table-order-items history" id="my-orders-table">
             <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Orders') ?></caption>
@@ -57,13 +56,6 @@ $customer = $block->getCustomer();
     <?php if ($block->getPagerHtml()): ?>
         <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); // for display pager block which we create in block file.   ?></div>
     <?php endif ?>
-    <?php endif ?>
 <?php else: ?>
     <div class="message info empty"><span><?php echo __('Your sub-accounts have placed no orders.'); ?></span></div>
 <?php endif ?>
-
-
-
-
-
-
