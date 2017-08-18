@@ -65,13 +65,15 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      */
     public function getCustomer()
     {
-        $idSublogins = $this->_request->getParam('editsubac');
-        return $this->customerRepository->getById($idSublogins);
+        $customerId = $this->_request->getParam('id');
+        return $this->customerRepository->getById($customerId);
     }
+
     public function showPrefix()
     {
         return $this->_isAttributeVisible('prefix');
     }
+
     /**
      * Retrieve form data
      *
@@ -94,7 +96,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
 
     public function getExpireDate()
     {
-        $customerId = $this->request->getParam('editsubac');
+        $customerId = $this->request->getParam('id');
         $customer = $this->customerFactory->create()->load($customerId);
         $expireDate = $customer->getExpireDate();
         return $expireDate;
@@ -102,17 +104,17 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
 
     public function getEmailSublogins()
     {
-        $customerId = $this->_request->getParam('editsubac');
+        $customerId = $this->_request->getParam('id');
         $customer = $this->customerFactory->create()->load($customerId);
         $emailSublogins = $customer->getEmail();
         return $emailSublogins;
 
     }
 
-    public function getIddata()
+    public function getCustomerId()
     {
         $this->_request->getParams();
-        return $this->_request->getParam('editsubac');
+        return $this->_request->getParam('id');
     }
 
     /**

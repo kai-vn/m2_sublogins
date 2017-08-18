@@ -7,8 +7,8 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">edit_subaccount.edit_subaccount_data_source</item>
-            <item name="deps" xsi:type="string">edit_subaccount.edit_subaccount_data_source</item>
+            <item name="provider" xsi:type="string">edit_sub_account.edit_sub_account_data_source</item>
+            <item name="deps" xsi:type="string">edit_sub_account.edit_sub_account_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Customer Information</item>
         <item name="layout" xsi:type="array">
@@ -28,10 +28,10 @@
         </item>
         <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
     </argument>
-    <dataSource name="edit_subaccount_data_source">
+    <dataSource name="edit_sub_account_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">SITC\Sublogins\Model\Customer\DataProvider</argument>
-            <argument name="name" xsi:type="string">edit_subaccount_data_source</argument>
+            <argument name="name" xsi:type="string">edit_sub_account_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
@@ -202,7 +202,7 @@
                 </item>
             </argument>
         </field>
-        <field name="is_active_sublogins">
+        <field name="is_active_sublogin">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">boolean</item>

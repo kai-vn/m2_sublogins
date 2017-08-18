@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2017 www.tigren.com
  */
 
-namespace SITC\Sublogins\Block\Adminhtml\EditSubAccount;
+namespace SITC\Sublogins\Block\Adminhtml\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;

@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2017 www.tigren.com
  */
 
-namespace SITC\Sublogins\Block\Adminhtml\EditSubAccount\Edit;
+namespace SITC\Sublogins\Block\Adminhtml\Account\Edit;
 
 use Magento\Customer\Controller\RegistryConstants;
 

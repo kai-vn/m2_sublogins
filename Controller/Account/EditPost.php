@@ -121,7 +121,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
-        $customerId = (int)$this->_request->getParam('subid');
+        $customerId = (int)$this->_request->getParam('sub_account_id');
 
         if ($validFormKey && $this->getRequest()->isPost() && $customerId) {
             $currentCustomerDataObject = $this->getCustomerDataObject($customerId);

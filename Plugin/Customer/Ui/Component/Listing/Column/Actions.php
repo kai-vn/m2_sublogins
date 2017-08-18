@@ -57,7 +57,7 @@ class Actions
                     if ($isSublogin == 1) {
                         $item[$subject->getData('name')]['edit'] = [
                             'href' => $this->urlBuilder->getUrl(
-                                'sublogins/editsubac/edit',
+                                'sublogins/account/edit',
                                 ['id' => $item['entity_id'], 'store' => $storeId]
                             ),
                             'label' => __('Edit'),

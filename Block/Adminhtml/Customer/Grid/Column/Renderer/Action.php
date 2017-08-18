@@ -36,7 +36,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         $this->_actions = [];
         $action = [
             '@' => [
-                'href' => $this->getUrl('sublogins/editsubac/edit', ['id' => $row->getId()]),
+                'href' => $this->getUrl('sublogins/account/edit', ['id' => $row->getId()]),
             ],
             '#' => __('Edit'),
         ];

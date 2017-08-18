@@ -54,7 +54,7 @@ $customer = $block->getCustomer();
                     <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
                         <ul class="sub-ac">
                             <li>
-                                <a href="<?php /* @escapeNotVerified */ echo $redirect . 'sublogins/account/edit/editsubac/' . $subAccount->getId()?>" class="action view">
+                                <a href="<?php /* @escapeNotVerified */ echo $redirect . 'sublogins/account/edit/id/' . $subAccount->getId()?>" class="action view">
                                     <span><?php /* @escapeNotVerified */ echo __('Edit Account') ?></span>
                                 </a>
                             </li>
@@ -65,13 +65,13 @@ $customer = $block->getCustomer();
                             </li>
                             <?php if($subAccount->getIsActiveSublogin()) :  ?>
                                 <li>
-                                    <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/deactive/deac/' . $subAccount->getId() ?>" class="action deactive">
+                                    <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/deactive/id/' . $subAccount->getId() ?>" class="action deactive">
                                         <span class="warning-subac">Deactive Account</span>
                                     </a>
                                 </li>
                             <?php else : ?>
                                 <li>
-                                    <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/active/ac/' . $subAccount->getId() ?>" class="action active">
+                                    <a  href="<?php /* @escapeNotVerified */echo $redirect . 'sublogins/account/active/id/' . $subAccount->getId() ?>" class="action active">
                                         <span>Active Account</span>
                                     </a>
                                 </li>

@@ -72,7 +72,7 @@
             <button type="submit" class="action save primary" title="<?php /* @escapeNotVerified */ echo __('Save') ?>">
                 <span><?php /* @escapeNotVerified */ echo __('Save')?></span>
             </button>
-            <input type="hidden" name="subid" id="subid" value="<?php echo $block->getIddata() ?>" >
+            <input type="hidden" name="sub_account_id" id="sub-account-id" value="<?php echo $block->getCustomerId() ?>" >
         </div>
         <div class="secondary">
             <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Go back') ?></span></a>

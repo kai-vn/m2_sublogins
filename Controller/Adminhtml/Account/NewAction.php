@@ -2,40 +2,20 @@
 /**
  * @copyright Copyright (c) 2017 www.tigren.com
  */
+
 namespace SITC\Sublogins\Controller\Adminhtml\Account;
 
-use Magento\Backend\App\Action;
-
-class NewAction extends Action
+class NewAction extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\Forward
-     */
-    protected $_resultForwardFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-    )
-    {
-        $this->_resultForwardFactory = $resultForwardFactory;
-        parent::__construct($context);
-    }
-
-    /**
-     * Forward to edit
+     * Create new customer action
      *
      * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
-        $resultForward = $this->_resultForwardFactory->create();
-        return $resultForward->forward('edit');
+        $resultForward = $this->resultForwardFactory->create();
+        $resultForward->forward('edit');
+        return $resultForward;
     }
-
 }
